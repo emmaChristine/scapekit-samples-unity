@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 222351783958584138}
   - component: {fileID: 114712608684301408}
   - component: {fileID: 114004903404871972}
-  - component: {fileID: 114171742573710934}
+  - component: {fileID: 114830609173694808}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114171742573710934}
+      - m_Target: {fileID: 114830609173694808}
         m_MethodName: GetMeasurements
         m_Mode: 1
         m_Arguments:
@@ -134,18 +134,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114171742573710934
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1390112490162342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f06321d8baf4144deb92ef75075adb49, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UIText: {fileID: 114377617131764750}
 --- !u!114 &114377617131764750
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -222,6 +210,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114830609173694808
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1390112490162342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f06321d8baf4144deb92ef75075adb49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIText: {fileID: 114377617131764750}
 --- !u!114 &114937556642236038
 MonoBehaviour:
   m_ObjectHideFlags: 1

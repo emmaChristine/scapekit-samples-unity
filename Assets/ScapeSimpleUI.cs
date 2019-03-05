@@ -20,7 +20,7 @@ namespace ScapeKitUnity
         void initScape()
         {
             // Start ScapeClient
-            ScapeClient.Instance.WithResApiKey().StartClient();
+            ScapeClient.Instance.WithResApiKey().WithDebugSupport(true).StartClient();
 
             // Register callbacks
             ScapeClient.Instance.ScapeSession.ScapeMeasurementsEvent += OnScapeMeasurementsEvent;

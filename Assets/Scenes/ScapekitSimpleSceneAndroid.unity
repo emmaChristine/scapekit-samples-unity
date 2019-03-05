@@ -278,18 +278,13 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 20155940112608238, guid: c10877f7cd5764de18d46d7b777d1faa,
     type: 2}
   m_PrefabInternal: {fileID: 97747990}
---- !u!1001 &969862487
+--- !u!1001 &1215064508
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 224063601382295544, guid: 5099a612a72024cce9ea9fc1fea399b4,
-        type: 2}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 224063601382295544, guid: 5099a612a72024cce9ea9fc1fea399b4,
         type: 2}
       propertyPath: m_LocalPosition.x
