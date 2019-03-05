@@ -10,6 +10,8 @@ Currently samples are platform specific. Sample scenes are provided for Android 
 
 To begin check out this repo and open it at it's root folder into Unity.
 
+These samples were built using Unity 2018.2.1f1.
+
 ## Aquire a Scapekit Developer key
 
 https://developer.scape.io/documentation/ 
