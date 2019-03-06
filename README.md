@@ -19,7 +19,7 @@ https://developer.scape.io/documentation/
 Once Unity has started find the ScapeKit menu, and select "Build And Deploy"
 ScapeKit's build helper will appear in a panel in Unity. Here you will need to add your Scapekit developer's API Key.
 
-Here there are options to build and deply the apps at the press of a button. Howerver this is a work in progress so below are details of the steps to manually export the sample scenes for both Android. and iOS.
+Here there are options to build and deploy the apps at the press of a button. Howerver this is a work in progress so below are details of the steps to manually export the sample scenes for both Android. and iOS.
 
 ## Building Simple Scene for Android
 
