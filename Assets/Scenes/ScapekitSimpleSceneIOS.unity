@@ -591,6 +591,106 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 188.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0.008724224
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0.008724224
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.9999239
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0.009000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 340.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 105
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177556402103440, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 160.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 224098137347751344, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 174
+      objectReference: {fileID: 0}
+    - target: {fileID: 224098137347751344, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -40.949997
+      objectReference: {fileID: 0}
+    - target: {fileID: 224098137347751344, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224098137347751344, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114377617131764750, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_FontData.m_FontSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 114377617131764750, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: m_FontData.m_MinSize
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5099a612a72024cce9ea9fc1fea399b4, type: 2}
   m_IsPrefabAsset: 0
