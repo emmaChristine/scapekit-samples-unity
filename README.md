@@ -49,7 +49,7 @@ Gradle Sync: "Would you like to recreate the gradle wrapper..."
 
  Android Gradle Plugin Upgrade Recommended
 
- - Don't remind me agin for this project.
+ - Don't remind me again for this project.
 
 ### Permissions!
 
