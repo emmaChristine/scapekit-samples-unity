@@ -19,7 +19,7 @@ https://developer.scape.io/documentation/
 Once Unity has started find the ScapeKit menu, and select "Build And Deploy"
 ScapeKit's build helper will appear in a panel in Unity. Here you will need to add your Scapekit developer's API Key.
 
-Here there are options to build and deply the apps at the press of a button. Howerver this is a work in progress so below are details of the steps to manually export teh sample scenes for both Android. and iOS.
+Here there are options to build and deply the apps at the press of a button. Howerver this is a work in progress so below are details of the steps to manually export the sample scenes for both Android. and iOS.
 
 ## Building Simple Scene for Android
 
@@ -39,6 +39,25 @@ Back in Build Settings on the Android tab check "Export project".
 Then hit the "Export" button.
 Unity will show a file dialog for you to choose the folder to export your Android project too. Once this is finished, open the project in Android Studio to complete the deployment process to device.
 
+### Android Studio
+
+The first time you open the sample app in Android Studio, if you are using the latest (3.3.1), you maybe asked some inital questions regarding the inttegration of hte project. Our recommendations are:
+
+Gradle Sync: "Would you like to recreate the gradle wrapper..."
+
+ - Put OK for this.
+
+ Android Gradle Plugin Upgrade Recommended
+
+ - Don't remind me agin for this project.
+
+### Permissions!
+
+The current examples do not include a method of requesting permissins from the user. After installing the sample for the first time, go into the device's settings, find the sample app and enable permissions for Camera and Location.
+
+A simple implementation to request permissions from the user in Unity can be found here:
+
+https://github.com/Over17/UnityAndroidPermissions
 
 ## Building Simple Scene for iOS
 
