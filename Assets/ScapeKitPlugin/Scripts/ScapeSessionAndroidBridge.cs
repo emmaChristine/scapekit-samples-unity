@@ -124,7 +124,7 @@ namespace ScapeKitUnity
             {"NO_ERROR", ScapeSessionState.NoError},
             {"LOCATION_SENSORS_ERROR", ScapeSessionState.LocationSensorsError},
             {"MOTION_SENSORS_ERROR", ScapeSessionState.MotionSensorsError},
-            {"VISION_ENGINE_ERROR", ScapeSessionState.VisionEngineError},
+            {"LOCKING_POSITION_ERROR", ScapeSessionState.LockingPositionError},
             {"AUTHENTICATION_ERROR", ScapeSessionState.AuthenticationError},
             {"UNEXPECTED_ERROR", ScapeSessionState.UnexpectedError}
         };
@@ -243,9 +243,9 @@ namespace ScapeKitUnity
         // region ScapeSessionObserver JavaProxy
 
         public void onScapeSessionError(AndroidJavaObject scapeSession, AndroidJavaObject state, string message)
-        {       
+        {   
             if(this.ScapeSessionErrorEvent != null) 
-            {   
+            {      
                 this.ScapeSessionErrorEvent(new ScapeSessionError() 
                 {
                     state = GetScapeSessionStateFromJava(state),
@@ -255,7 +255,7 @@ namespace ScapeKitUnity
         }
 
         public void onDeviceLocationMeasurementsUpdated(AndroidJavaObject scapeSession, AndroidJavaObject result)
-        {   
+        {
             if(this.LocationMeasurementsEvent != null) 
             {
                 this.LocationMeasurementsEvent( new LocationMeasurements 
@@ -274,7 +274,7 @@ namespace ScapeKitUnity
         }
 
         public void onDeviceMotionMeasurementsUpdated(AndroidJavaObject scapeSession, AndroidJavaObject result)
-        {   
+        {
             if(this.MotionMeasurementsEvent != null) 
             {
                 this.MotionMeasurementsEvent( new MotionMeasurements 
@@ -293,7 +293,7 @@ namespace ScapeKitUnity
         }
 
         public void onScapeMeasurementsUpdated(AndroidJavaObject scapeSession, AndroidJavaObject result)
-        {   
+        {
             if(this.ScapeMeasurementsEvent != null) 
             {
                 this.ScapeMeasurementsEvent( new ScapeMeasurements 

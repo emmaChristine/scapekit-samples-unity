@@ -15,8 +15,8 @@ typedef NS_ENUM(NSInteger, SCKScapeSessionState)
     SCKScapeSessionStateLocationSensorsError,
     /** Motion sensors (gyro, magnetometer) error */
     SCKScapeSessionStateMotionSensorsError,
-    /** Scape Vision Engine error */
-    SCKScapeSessionStateVisionEngineError,
+    /** Locking position and orientation error */
+    SCKScapeSessionStateLockingPositionError,
     /** Authentication error */
     SCKScapeSessionStateAuthenticationError,
     /** Fetching measurements resulted in an unexpected error */

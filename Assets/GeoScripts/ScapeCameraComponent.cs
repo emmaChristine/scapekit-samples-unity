@@ -68,15 +68,15 @@ namespace ScapeKitUnity
     	{
     		Coordinates LocalCoordinates = GeoConversions.CoordinatesFromVector(new Vector2(PositionAtScapeMeasurements.x, PositionAtScapeMeasurements.z));
     		Coordinates OriginCoordinates = new Coordinates() {
-    			longitude = scapeMeasurements.coordinates.longitude.Value - LocalCoordinates.longitude.Value,
-    			latitude = scapeMeasurements.coordinates.latitude.Value - LocalCoordinates.latitude.Value
+    			longitude = scapeMeasurements.coordinates.longitude - LocalCoordinates.longitude,
+    			latitude = scapeMeasurements.coordinates.latitude - LocalCoordinates.latitude
     		};
 
     		ScapeLogging.Log(message: "SynchronizeARCamera() origincoords = " + GeoConversions.CoordinatesToString(OriginCoordinates));
 
             GeoWorldRoot.GetInstance().SetWorldOrigin(OriginCoordinates);
 
-            ScapeHeading = (float)scapeMeasurements.heading.Value;
+            ScapeHeading = (float)scapeMeasurements.heading;
 
     		ScapeDirectionFix = ScapeHeading - RotationAtScapeMeasurements.y;
     		ScapeLogging.Log(message: "SynchronizeARCamera() ScapeDirectionFixYAngle = " + ScapeDirectionFix);
