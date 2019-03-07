@@ -338,47 +338,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &555720247
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 555720248}
-  - component: {fileID: 555720249}
-  m_Layer: 0
-  m_Name: AR3DOFCameraManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &555720248
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 555720247}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &555720249
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 555720247}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ff614c6973544218b2c1e3036b8de0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_camera: {fileID: 10}
 --- !u!1 &630430744 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1450149793001234, guid: 5099a612a72024cce9ea9fc1fea399b4,
@@ -484,7 +443,7 @@ Prefab:
     - target: {fileID: 224063601382295544, guid: 5099a612a72024cce9ea9fc1fea399b4,
         type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 224063601382295544, guid: 5099a612a72024cce9ea9fc1fea399b4,
         type: 2}
@@ -524,7 +483,7 @@ Prefab:
     - target: {fileID: 224063601382295544, guid: 5099a612a72024cce9ea9fc1fea399b4,
         type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 224063601382295544, guid: 5099a612a72024cce9ea9fc1fea399b4,
         type: 2}
@@ -691,14 +650,11 @@ Prefab:
       propertyPath: m_FontData.m_MinSize
       value: 1
       objectReference: {fileID: 0}
-<<<<<<< HEAD
-=======
     - target: {fileID: 114830609173694808, guid: 5099a612a72024cce9ea9fc1fea399b4,
         type: 2}
       propertyPath: StartClient
       value: 1
       objectReference: {fileID: 0}
->>>>>>> ae9cd7a6fbcb723f1f24f17fbe2b0b2f5d3847c6
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5099a612a72024cce9ea9fc1fea399b4, type: 2}
   m_IsPrefabAsset: 0
@@ -762,48 +718,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2101518924
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2101518926}
-  - component: {fileID: 2101518925}
-  m_Layer: 0
-  m_Name: PointCloudExample
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &2101518925
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2101518924}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5ab0fdfbf2334e8dbbcdda6ceada7e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numPointsToShow: 400
-  PointCloudPrefab: {fileID: 1845574417345784, guid: 02d2a544d8d594d30b790e76398d0873,
-    type: 2}
---- !u!4 &2101518926
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2101518924}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.16720128, y: 0.18012214, z: 1.1454113}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
