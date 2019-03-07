@@ -691,6 +691,11 @@ Prefab:
       propertyPath: m_FontData.m_MinSize
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114830609173694808, guid: 5099a612a72024cce9ea9fc1fea399b4,
+        type: 2}
+      propertyPath: StartClient
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5099a612a72024cce9ea9fc1fea399b4, type: 2}
   m_IsPrefabAsset: 0
