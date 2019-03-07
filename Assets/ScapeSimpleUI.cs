@@ -11,6 +11,7 @@ namespace ScapeKitUnity
     {
 
         public Text UIText;
+        public bool StartClient = false;
 
         private string  newText;
         private bool    updateText = false;
@@ -20,7 +21,10 @@ namespace ScapeKitUnity
         void initScape()
         {
             // Start ScapeClient
-            ScapeClient.Instance.WithResApiKey().WithDebugSupport(true).StartClient();
+            if(StartClient) {
+
+                ScapeClient.Instance.WithResApiKey().WithDebugSupport(true).StartClient();
+            }
 
             // Register callbacks
             ScapeClient.Instance.ScapeSession.ScapeMeasurementsEvent += OnScapeMeasurementsEvent;
@@ -31,6 +35,9 @@ namespace ScapeKitUnity
 
         public void GetMeasurements()
         {
+            newText = "Fetching...";
+            updateText = true;
+
             if(!inited)
             {
                 initScape();

@@ -243,63 +243,78 @@ namespace ScapeKitUnity
         // region ScapeSessionObserver JavaProxy
 
         public void onScapeSessionError(AndroidJavaObject scapeSession, AndroidJavaObject state, string message)
-        {   
-            this.ScapeSessionErrorEvent(new ScapeSessionError() 
-            {
-                state = GetScapeSessionStateFromJava(state),
-                message = message
-            });
+        {       
+            if(this.ScapeSessionErrorEvent != null) 
+            {   
+                this.ScapeSessionErrorEvent(new ScapeSessionError() 
+                {
+                    state = GetScapeSessionStateFromJava(state),
+                    message = message
+                });
+            }
         }
 
         public void onDeviceLocationMeasurementsUpdated(AndroidJavaObject scapeSession, AndroidJavaObject result)
-        {
-            this.LocationMeasurementsEvent( new LocationMeasurements 
+        {   
+            if(this.LocationMeasurementsEvent != null) 
             {
-                timestamp = GetDoubleJavaFunction("getTimestamp", result),
-                coordinates = GetCoordsFromJava(result),
-                coordinatesAccuracy = GetDoubleJavaFunction("getCoordinatesAccuracy", result),
-                altitude = GetDoubleJavaFunction("getAltitude", result),
-                altitudeAccuracy = GetDoubleJavaFunction("getAltitudeAccuracy", result),
-                heading = GetDoubleJavaFunction("getHeading", result),
-                headingAccuracy = GetDoubleJavaFunction("getHeadingAccuracy", result),
-                course = GetLongValueJavaFunction("getCourse", result),
-                speed = GetLongValueJavaFunction("getSpeed", result)
-            });
+                this.LocationMeasurementsEvent( new LocationMeasurements 
+                {
+                    timestamp = GetDoubleJavaFunction("getTimestamp", result),
+                    coordinates = GetCoordsFromJava(result),
+                    coordinatesAccuracy = GetDoubleJavaFunction("getCoordinatesAccuracy", result),
+                    altitude = GetDoubleJavaFunction("getAltitude", result),
+                    altitudeAccuracy = GetDoubleJavaFunction("getAltitudeAccuracy", result),
+                    heading = GetDoubleJavaFunction("getHeading", result),
+                    headingAccuracy = GetDoubleJavaFunction("getHeadingAccuracy", result),
+                    course = GetLongValueJavaFunction("getCourse", result),
+                    speed = GetLongValueJavaFunction("getSpeed", result)
+                });
+            }
         }
 
         public void onDeviceMotionMeasurementsUpdated(AndroidJavaObject scapeSession, AndroidJavaObject result)
-        {
-            this.MotionMeasurementsEvent( new MotionMeasurements 
+        {   
+            if(this.MotionMeasurementsEvent != null) 
             {
-                acceleration = GetDoubleListJavaFunction("getAcceleration", result),
-                accelerationTimeStamp = GetDoubleJavaFunction("getAccelerationTimeStamp", result),
-                userAcceleration = GetDoubleListJavaFunction("getUserAcceleration", result),
-                gyro = GetDoubleListJavaFunction("getGyro", result),
-                gyroTimestamp = GetDoubleJavaFunction("getGyroTimestamp", result),
-                magnetometer = GetDoubleListJavaFunction("getMagnetometer", result),
-                magnetometerTimestamp = GetDoubleJavaFunction("getMagnetometerTimestamp", result),
-                gravity = GetDoubleListJavaFunction("getGravity", result),
-                attitude = GetDoubleListJavaFunction("getAttitude", result)
-            });
+                this.MotionMeasurementsEvent( new MotionMeasurements 
+                {
+                    acceleration = GetDoubleListJavaFunction("getAcceleration", result),
+                    accelerationTimeStamp = GetDoubleJavaFunction("getAccelerationTimeStamp", result),
+                    userAcceleration = GetDoubleListJavaFunction("getUserAcceleration", result),
+                    gyro = GetDoubleListJavaFunction("getGyro", result),
+                    gyroTimestamp = GetDoubleJavaFunction("getGyroTimestamp", result),
+                    magnetometer = GetDoubleListJavaFunction("getMagnetometer", result),
+                    magnetometerTimestamp = GetDoubleJavaFunction("getMagnetometerTimestamp", result),
+                    gravity = GetDoubleListJavaFunction("getGravity", result),
+                    attitude = GetDoubleListJavaFunction("getAttitude", result)
+                });
+            }
         }
 
         public void onScapeMeasurementsUpdated(AndroidJavaObject scapeSession, AndroidJavaObject result)
-        {
-            this.ScapeMeasurementsEvent( new ScapeMeasurements 
+        {   
+            if(this.ScapeMeasurementsEvent != null) 
             {
-                timestamp = GetDoubleJavaFunction("getTimestamp", result),
-                coordinates = GetCoordsFromJava(result),
-                heading = GetDoubleJavaFunction("getHeading", result),
-                orientation = GetOrientationFromJava(result),
-                rawHeightEstimate = GetDoubleJavaFunction("getRawHeightEstimate", result),
-                confidenceScore = GetLongValueJavaFunction("getConfidenceScore", result),
-                measurementsStatus = GetScapeMeasurementStatusFromJava(result.Call<AndroidJavaObject>("getMeasurementsStatus"))
-            });
+                this.ScapeMeasurementsEvent( new ScapeMeasurements 
+                {
+                    timestamp = GetDoubleJavaFunction("getTimestamp", result),
+                    coordinates = GetCoordsFromJava(result),
+                    heading = GetDoubleJavaFunction("getHeading", result),
+                    orientation = GetOrientationFromJava(result),
+                    rawHeightEstimate = GetDoubleJavaFunction("getRawHeightEstimate", result),
+                    confidenceScore = GetLongValueJavaFunction("getConfidenceScore", result),
+                    measurementsStatus = GetScapeMeasurementStatusFromJava(result.Call<AndroidJavaObject>("getMeasurementsStatus"))
+                });
+            }
         }
 
         public void onCameraTransformUpdated(AndroidJavaObject scapeSession, AndroidJavaObject result)
-        {
-            this.CameraTransformEvent(GetDoubleListFromJavaObject(result));
+        {   
+            if(this.CameraTransformEvent != null) 
+            {
+                this.CameraTransformEvent(GetDoubleListFromJavaObject(result));
+            }
         }
 
         public void onScapeSessionStarted(AndroidJavaObject scapeSession, AndroidJavaObject scapeDetails)
