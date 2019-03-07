@@ -5,13 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/ScapekitGeoSceneAndroid.unity
-    guid: 8d5f39d927f4444258830a3a46785928
   - enabled: 1
-    path: Assets/Scenes/ScapekitSimpleSceneIOS.unity
-    guid: 9bbdc53c686df478ca46d80330efbb8f
-  - enabled: 0
     path: Assets/Scenes/ScapekitSimpleSceneAndroid.unity
     guid: da9b006034726445791ee56a3c088077
   m_configObjects: {}

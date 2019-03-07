@@ -7,17 +7,17 @@ namespace ScapeKitUnity
     [Serializable]
     public class Coordinates
     {
-        public double? longitude;
-        public double? latitude;
+        public Double longitude;
+        public Double latitude;
     }
 
     [Serializable]
     public class ScapeOrientation
     {
-        public double? y;
-        public double? w;
-        public double? z;
-        public double? x;
+        public Double y;
+        public Double w;
+        public Double z;
+        public Double x;
     }
 
     public enum GeoSourceType 
@@ -39,7 +39,7 @@ namespace ScapeKitUnity
         NoError,
         LocationSensorsError,
         MotionSensorsError,
-        VisionEngineError,
+        LockingPositionError,
         AuthenticationError,
         UnexpectedError
     }
@@ -54,12 +54,12 @@ namespace ScapeKitUnity
     [Serializable]
     public class ScapeMeasurements
     {
-        public double? timestamp;
+        public Double timestamp;
         public Coordinates coordinates;
-        public double? heading;
+        public Double heading;
         public ScapeOrientation orientation;
-        public double? rawHeightEstimate;
-        public long? confidenceScore;
+        public Double rawHeightEstimate;
+        public long confidenceScore;
         public ScapeMeasurementStatus measurementsStatus;
     }
     

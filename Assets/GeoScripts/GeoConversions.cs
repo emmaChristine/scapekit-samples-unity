@@ -11,14 +11,7 @@ namespace ScapeKitUnity
     	}
 
     	public static Vector2 VectorFromCoordinates(Coordinates coords) {
-            double lon = -1.0;
-            double lat = -1.0;
-            if(coords.longitude != null && coords.latitude != null)
-            {
-                lon = coords.longitude.Value;
-                lat = coords.latitude.Value;
-            }
-            return new Vector2((float)LonToX(lon), (float)LatToY(lat));
+            return new Vector2((float)LonToX(coords.longitude), (float)LatToY(coords.latitude));
     	}
 
     	public static Coordinates CoordinatesFromVector(Vector2 pos) {

@@ -48,7 +48,7 @@ namespace ScapeKitUnity
 
         private void OnScapeSessionError([MarshalAs(UnmanagedType.LPStr)] string SessionErrorStr)
         {
-            Debug.Log("OnScapeSessionError" + SessionErrorStr);
+            ScapeLogging.Log(message: "OnScapeSessionError" + SessionErrorStr);
 
             ScapeSessionError scapeError = JsonUtility.FromJson<ScapeSessionError>(SessionErrorStr);
             if(scapeError != null) {
@@ -59,7 +59,7 @@ namespace ScapeKitUnity
 
         private void OnDeviceLocationMeasurementsUpdated([MarshalAs(UnmanagedType.LPStr)] string LocationMeasurementsJsonStr) 
         {
-            Debug.Log("OnDeviceLocationMeasurementsUpdated" + LocationMeasurementsJsonStr);
+            ScapeLogging.Log(message: "OnDeviceLocationMeasurementsUpdated" + LocationMeasurementsJsonStr);
 
             LocationMeasurements locationMeasurements = JsonUtility.FromJson<LocationMeasurements>(LocationMeasurementsJsonStr);
             if(locationMeasurements != null) {
@@ -69,7 +69,7 @@ namespace ScapeKitUnity
 
         private void OnDeviceMotionMeasurementsUpdated([MarshalAs(UnmanagedType.LPStr)] string MotionMeasurementsJsonStr) 
         {
-            Debug.Log("OnDeviceMotionMeasurementsUpdated" + MotionMeasurementsJsonStr);
+            ScapeLogging.Log(message: "OnDeviceMotionMeasurementsUpdated" + MotionMeasurementsJsonStr);
 
             MotionMeasurements motionMeasurements = JsonUtility.FromJson<MotionMeasurements>(MotionMeasurementsJsonStr);
             if(motionMeasurements != null) {
@@ -80,7 +80,7 @@ namespace ScapeKitUnity
 
         private void OnScapeMeasurementsUpdated([MarshalAs(UnmanagedType.LPStr)] string ScapeMeasurementsJsonStr) 
         {
-            Debug.Log("OnScapeMeasurementsUpdated" + ScapeMeasurementsJsonStr);
+            ScapeLogging.Log(message: "OnScapeMeasurementsUpdated" + ScapeMeasurementsJsonStr);
 
             ScapeMeasurements scapeMeasurements = JsonUtility.FromJson<ScapeMeasurements>(ScapeMeasurementsJsonStr);
             if(scapeMeasurements != null) {
@@ -90,7 +90,7 @@ namespace ScapeKitUnity
 
         private void OnCameraTransformUpdated([MarshalAs(UnmanagedType.LPStr)] string CameraTransformStr) 
         {
-            Debug.Log("OnCameraTransformUpdated" + CameraTransformStr);
+            ScapeLogging.Log(message: "OnCameraTransformUpdated" + CameraTransformStr);
 
             List<double> cameraTransform = JsonUtility.FromJson<List<double>>(CameraTransformStr);
             if(cameraTransform.Count == 16) {

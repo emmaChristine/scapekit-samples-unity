@@ -12,7 +12,6 @@ namespace ScapeKitUnity
     	private bool inited = false;
 
     	public bool scapeDebugModeOn = false;
-    	public bool fetchScapeVisionEngineEveryFrame = false;
         public GeoSourceType sourceType = GeoSourceType.RawSensorsAndScapeVisionEngine;
 
         void InitScape()
@@ -38,18 +37,6 @@ namespace ScapeKitUnity
 
             // Request scapeposition
             ScapeClient.Instance.ScapeSession.GetMeasurements(sourceType);
-        }
-
-        void Start()
-        {
-        }
-
-        void Update()
-        {
-            if (fetchScapeVisionEngineEveryFrame)
-            {
-                GetMeasurements();
-            }
         }
 
         void OnScapeMeasurementsEvent(ScapeMeasurements scapeMeasurements)

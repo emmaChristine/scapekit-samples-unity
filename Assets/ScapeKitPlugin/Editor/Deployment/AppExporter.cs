@@ -25,7 +25,6 @@ namespace ScapeKitUnity
             if(teamID.IsNullOrEmpty())
             {
                 throw new Exception("Set your Apple Development Team ID before building the application");
-                return;
             }
 
             buildPlayerOptions.locationPathName = buildPlayerOptions.locationPathName + "/iOS";
