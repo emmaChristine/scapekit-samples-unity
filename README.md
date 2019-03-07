@@ -74,6 +74,26 @@ Under "Camera Usage Description" and "lLcation Usage Description" enter somethin
 
 Back in "Build Settings" hit "Build". Unity will show a file dialog for you to choose the folder to export your XCode project too. Once this is finished, open the project in XCode to complete the deployment process to device.
 
+## Geo Samples
 
+Example scenes implementing geo located comtent are available for both ARKit and ARCore. Again these are platform specific:
 
+1. Assets/Scenes/ScapekitGeoSceneAndroid.unity
+2. Assets/Scenes/ScapekitGeoSceneIOS.unity
 
+### ScapeCameraCompoent
+
+The ScapeCameraComponent(ARCore|ARKit) still relies on the AR platfoms for immediate control of the camera.
+However with the replacement of the ScapeCameraComponent the AR camera system is placed into the context of real world geolocation and heading.
+
+The ScapeCameraComponent(s) replace key components of ARCore/Kit. 
+
+On ARCore the "TrackedPoseDriver" component is replaced, this is ususally applied to the main camera object.
+On ARKit the ScapeCamera replaces the ARCameraManager, again this compoenent can be applied to the main camera.
+
+This component responds to a successful Scape Vision Engine result by updating geo anchored objects positions in the scene relative to the camera and adjusting the camera's vertical orientation to make it match that of a compass.  
+
+### GeoAnchors
+
+In order to make 3D content geo located a "GeoAnchor" component should be added to a game object. The GeoAnchor component takes longitude and latitude variables.  
+When the ScapeCameraCompoent receives a successful Vision Engine result, all game objects parented to a GeoAnchor will be moved to the geo correct location within the scene, relative to the camera.
