@@ -1,20 +1,15 @@
 using UnityEngine;
-using UnityEngine.UI; 
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-using GoogleARCoreInternal;
-#endif
 using UnityEngine.XR;
 
 namespace ScapeKitUnity
 {
 
-    public class ScapeCameraComponent : MonoBehaviour
+    public abstract class ScapeCameraComponent : MonoBehaviour
     {
     	public Camera TheCamera;
 
-    	private Vector3 PositionAtScapeMeasurements;
-    	private Vector3 RotationAtScapeMeasurements;
+    	protected Vector3 PositionAtScapeMeasurements;
+    	protected Vector3 RotationAtScapeMeasurements;
 
         public float CameraHeadingOffset = 0.0f;
         public float CameraHeight = 0.0f;
@@ -29,41 +24,34 @@ namespace ScapeKitUnity
             ScapeClient.Instance.ScapeSession.ScapeMeasurementsEvent += OnScapeMeasurementsEvent;
         }
 
-        public void GetMeasurements()
-        {
+        public abstract void GetMeasurements();
 
-            PositionAtScapeMeasurements = new Vector3(GoogleARCore.Frame.Pose.position.x, 
-                                                        GoogleARCore.Frame.Pose.position.y,
-                                                        GoogleARCore.Frame.Pose.position.z);
+        public abstract void UpdateCameraFromAR();
 
-            RotationAtScapeMeasurements = new Quaternion(GoogleARCore.Frame.Pose.rotation.x, 
-                                                        GoogleARCore.Frame.Pose.rotation.y, 
-                                                        GoogleARCore.Frame.Pose.rotation.z, 
-                                                        GoogleARCore.Frame.Pose.rotation.w).eulerAngles;
-
-            ScapeLogging.Log(message: "RotationAtScapeMeasurements.eulerAngles.y = " + RotationAtScapeMeasurements.y);
-         }
-
-        void Awake() { 
+        public void Awake() { 
 
             initScape();
 
-        	if(!TheCamera) {
-        		TheCamera = Camera.main;
-        	}
+            if(!TheCamera) {
+                TheCamera = Camera.main;
+            }
         }
 
-    	void Update()
-    	{
-    		UpdateCameraFromARCore();
-    	}
-
-        void UpdateCameraFromARCore() {
-#if UNITY_ANDROID && !UNITY_EDITOR
-            TheCamera.transform.localPosition = GoogleARCore.Frame.Pose.position + new Vector3(0.0f, CameraHeight, 0.0f);
-            TheCamera.transform.localRotation = Quaternion.AngleAxis(ScapeDirectionFix+CameraHeadingOffset,  Vector3.up) * GoogleARCore.Frame.Pose.rotation;
-#endif
+        public void Update()
+        {
+            UpdateCameraFromAR();
         }
+
+        public Quaternion GetScapeHeading() 
+        {
+            return Quaternion.AngleAxis(ScapeDirectionFix+CameraHeadingOffset,  Vector3.up);
+        }
+
+        public Vector3 GetScapePosition() 
+        {
+            return new Vector3(0.0f, CameraHeight, 0.0f);
+        }
+
     	void SynchronizeARCamera(ScapeMeasurements scapeMeasurements) 
     	{
     		Coordinates LocalCoordinates = GeoConversions.CoordinatesFromVector(new Vector2(PositionAtScapeMeasurements.x, PositionAtScapeMeasurements.z));
