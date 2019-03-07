@@ -227,7 +227,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1637996540812124, guid: c10877f7cd5764de18d46d7b777d1faa,
     type: 2}
   m_PrefabInternal: {fileID: 97747990}
---- !u!114 &97747992
+--- !u!114 &97747995
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -235,12 +235,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 97747991}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc0db5f82f23146e2bbaded7b8929a35, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f0f54fca5a5c48f4b5854b47a23b3b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TheCamera: {fileID: 0}
-  DisplayText: {fileID: 0}
   CameraHeadingOffset: 0
+  CameraHeight: 0
 --- !u!1001 &177350293
 Prefab:
   m_ObjectHideFlags: 0
@@ -433,7 +433,7 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 97747992}
+      objectReference: {fileID: 97747995}
     - target: {fileID: 114004903404871972, guid: 5099a612a72024cce9ea9fc1fea399b4,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
