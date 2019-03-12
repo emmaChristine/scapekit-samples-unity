@@ -8,66 +8,75 @@ namespace ScapeKitUnity
 		public double Latitude;
 		public double MaxDistance = 1000.0;
 
-		private Vector2 WorldPos;
-		private Vector2 ScenePos;
-		private Coordinates WorldCoordinates;
+		//this Vector2 corresponds to the x,z unity position corrected to be relatively correct to Unity's origin
+		//this is only true after a succesful scape measurement.
+		protected Vector2 _sceenPos;
+		public Vector2 ScenePos
+		{
+			protected set { _sceenPos = value; }
+			get { return _sceenPos; }
+		}
+
+		protected Coordinates _worldCoordinates;
+		public Coordinates WorldCoordinates
+		{
+			set { _worldCoordinates = value; }
+			get { return _worldCoordinates; }
+		}
+
+		public bool WithinMaxDistance() 
+		{
+			return ScenePos.magnitude < MaxDistance;
+		}
+
 		private bool needsUpdate = false;
-		private bool isActive = false;
 
 		private string gameObjectName;
 
-		void OriginEvent(Coordinates SceneOriginCoordinates) {
-			
-			ScapeLogging.Log(message: "OriginEvent() " + gameObjectName);
+		//The OriginEvent function has been connected to the GeoWorldRoot's GeoOriginEvent action
+		//which is triggered when the main camera receives a successful scape measurement. 
+		//The GeoWorldRoot passes the WorldCoordinates for the origin of the Unity scene. 
+		//The UnityRelativePosition function calculates the position of this GameObject within the Unity scene
+		//relative to GeoWorldRoot's world location.
+		public void OriginEvent(Coordinates SceneOriginCoordinates) {
 
-			Vector2 SceneOrigin = GeoConversions.VectorFromCoordinates(SceneOriginCoordinates);
+			ScenePos = GeoConversions.UnityRelativePosition(SceneOriginCoordinates, WorldCoordinates);
 
-			ScenePos = WorldPos - SceneOrigin;
+			ScapeLogging.Log(message: "GeoAnchor::OriginEvent() " + gameObjectName + " ScenePos = " + ScenePos.ToString());
 
-			ScapeLogging.Log(message: "OriginEvent() " + gameObjectName + " ScenePos = " + ScenePos.ToString());
-			ScapeLogging.Log(message: "OriginEvent() " + gameObjectName + " WorldCoords = " + GeoConversions.CoordinatesToString(WorldCoordinates));
-
-			if(ScenePos.magnitude < MaxDistance) {
-
-				needsUpdate = true;
-				isActive = true;
-			}
-			else {
-				ScapeLogging.Log(message: "OriginEvent() "+ gameObjectName +" beyond max distance (" + ScenePos.magnitude + ")");
-				ScenePos = new Vector3(0.0f, -10000.0f, 0.0f);
-				needsUpdate = true;
-			}
+			needsUpdate = true;
 		}
 
-		void hide() 
-		{
-			this.gameObject.transform.position = new Vector3(0.0f, -10000.0f, 0.0f);	
-		}
-
-		void Awake() {			
-
-			hide();
+		//Upon Start up the GeoAnchor creates it's WorldCoodinate object based on it's public
+		//Longitude and Latitude variables (these must be initalized to some world coordinate).
+		//It then register's itself with the GeoWorlRoot singleton which manages 
+		//much of it's lifetime going forward. 
+		//Usually the GeoWorldRoot will immediately deactivate the gameobject untill a scape measurement
+		//arrives and it's place in the local Unity coordinate system can be decided.
+		void Start() {		
 
 			gameObjectName = this.gameObject.name;
-
-			ScapeLogging.Log(message: "GeoAnchor::Awake " + this.gameObject.name);
-
-			GeoWorldRoot.GetInstance().RegisterGeoEvent(this.OriginEvent);
 			
-			WorldCoordinates = new Coordinates{longitude = Longitude, latitude = Latitude};
-			WorldPos = GeoConversions.VectorFromCoordinates(WorldCoordinates);
+			WorldCoordinates = new Coordinates(){longitude = Longitude, latitude = Latitude};
+			if(WorldCoordinates != null) {
+				ScapeLogging.Log(message: "GeoAnchor::Start() WorldCoords = " + GeoConversions.CoordinatesToString(WorldCoordinates));
+			}
+			else 
+			{
+				ScapeLogging.Log(message: "GeoAnchor::Start() WorldCoords = null");
+			}
+
+			GeoWorldRoot.Instance.RegisterGeoAnchor(this);
 		}
 
 		void Update() {
 
-			if(needsUpdate) {
+			if(needsUpdate) 
+			{
+				this.gameObject.transform.localPosition = new Vector3(ScenePos.x, 0.0f, ScenePos.y);
+				ScapeLogging.Log(message: "GeoAnchor::Update() " + this.gameObject.name + " @ " + this.gameObject.transform.position.ToString());
 
-				this.gameObject.transform.position = new Vector3(ScenePos.x, 0.0f, ScenePos.y);	
-
-				ScapeLogging.Log(message: "GameObject::Update() " + gameObjectName + " @ " + this.gameObject.transform.position.ToString());	
-	
 				needsUpdate = false;
-
 			}
 		}
 	} 

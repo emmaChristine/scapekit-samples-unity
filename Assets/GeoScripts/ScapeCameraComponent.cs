@@ -1,50 +1,75 @@
 using UnityEngine;
 using UnityEngine.XR;
+using UnityEngine.UI;
 
 namespace ScapeKitUnity
 {
 
     public abstract class ScapeCameraComponent : MonoBehaviour
     {
-    	public Camera TheCamera;
+        public Camera  TheCamera;
+        public Text    TextLogging;
 
-    	protected Vector3 PositionAtScapeMeasurements;
-    	protected Vector3 RotationAtScapeMeasurements;
+        public bool UseScapeLocation = true;
+        public bool UseDeviceLocation = false;
+
+        protected Vector3 PositionAtScapeMeasurements;
+        protected Vector3 RotationAtScapeMeasurements;
+
+        protected Coordinates OriginCoordinates;
 
         public float CameraHeadingOffset = 0.0f;
         public float CameraHeight = 0.0f;
 
         private float ScapeHeading = -1.0f;
-    	private float ScapeDirectionFix = 0.0f;
+        private float ScapeDirectionFix = 0.0f;
+
+        private bool updateRoot = false;
 
         private void initScape()
         {
             ScapeClient.Instance.WithResApiKey().WithDebugSupport(true).StartClient();
 
-            ScapeClient.Instance.ScapeSession.ScapeMeasurementsEvent += OnScapeMeasurementsEvent;
+            if(UseScapeLocation) 
+            {
+                ScapeClient.Instance.ScapeSession.ScapeMeasurementsEvent += OnScapeMeasurementsEvent;
+            }
+            if(UseDeviceLocation) 
+            {
+                ScapeClient.Instance.ScapeSession.DeviceLocationMeasurementsEvent += OnDeviceLocationMeasurementsEvent;
+            }
         }
 
         public abstract void GetMeasurements();
 
         public abstract void UpdateCameraFromAR();
 
-        public void Awake() { 
+        public abstract Quaternion GetARRotation();
+        public abstract Vector3 GetARPosition();
 
+        public void Awake() 
+        { 
             initScape();
 
             if(!TheCamera) {
                 TheCamera = Camera.main;
             }
         }
-
         public void Update()
         {
             UpdateCameraFromAR();
+            UpdateDisplay();
+            UpdateRoot();
         }
 
-        public Quaternion GetScapeHeading() 
+        public void UpdateDisplay() 
         {
-            return Quaternion.AngleAxis(ScapeDirectionFix+CameraHeadingOffset,  Vector3.up);
+            if(TextLogging != null)
+            {
+                TextLogging.text = "ARRotation = " + GetARRotation().eulerAngles.y + 
+                                    "\nScapeFixAngle = " + ScapeDirectionFix + 
+                                    "\nFinalAngle = " + ScapeDirectionFix + (GetARRotation()).eulerAngles.y;
+            }
         }
 
         public Vector3 GetScapePosition() 
@@ -52,30 +77,46 @@ namespace ScapeKitUnity
             return new Vector3(0.0f, CameraHeight, 0.0f);
         }
 
-    	void SynchronizeARCamera(ScapeMeasurements scapeMeasurements) 
-    	{
-    		Coordinates LocalCoordinates = GeoConversions.CoordinatesFromVector(new Vector2(PositionAtScapeMeasurements.x, PositionAtScapeMeasurements.z));
-    		Coordinates OriginCoordinates = new Coordinates() {
-    			longitude = scapeMeasurements.coordinates.longitude - LocalCoordinates.longitude,
-    			latitude = scapeMeasurements.coordinates.latitude - LocalCoordinates.latitude
-    		};
+        void UpdateRoot() {
 
-    		ScapeLogging.Log(message: "SynchronizeARCamera() origincoords = " + GeoConversions.CoordinatesToString(OriginCoordinates));
+            if(updateRoot) 
+            {
+                ScapeLogging.Log(message: "ScapeCameraComponent::UpdateRoot() ");
+                GeoWorldRoot.Instance.SetWorldOrigin(OriginCoordinates, -ScapeDirectionFix + CameraHeadingOffset);
+             
+                updateRoot = false;   
+            }
+        }
 
-            GeoWorldRoot.GetInstance().SetWorldOrigin(OriginCoordinates);
+        void SynchronizeARCamera(Coordinates scapeCoordinates, float heading) 
+        {
+            Coordinates LocalCoordinates = GeoConversions.CoordinatesFromVector(new Vector2(PositionAtScapeMeasurements.x, PositionAtScapeMeasurements.z));
+            OriginCoordinates = new Coordinates() {
+                longitude = scapeCoordinates.longitude - LocalCoordinates.longitude,
+                latitude = scapeCoordinates.latitude - LocalCoordinates.latitude
+            };
 
-            ScapeHeading = (float)scapeMeasurements.heading;
+            ScapeLogging.Log(message: "SynchronizeARCamera() OriginCoordinates = " + GeoConversions.CoordinatesToString(OriginCoordinates));
 
-    		ScapeDirectionFix = ScapeHeading - RotationAtScapeMeasurements.y;
-    		ScapeLogging.Log(message: "SynchronizeARCamera() ScapeDirectionFixYAngle = " + ScapeDirectionFix);
-    	}
+            ScapeHeading = heading;
+
+            ScapeDirectionFix = ScapeHeading - RotationAtScapeMeasurements.y;
+            ScapeLogging.Log(message: "SynchronizeARCamera() ScapeDirectionFixYAngle = " + ScapeDirectionFix);
+
+            updateRoot = true;
+        }
 
         void OnScapeMeasurementsEvent(ScapeMeasurements scapeMeasurements)
         {
-        	if(scapeMeasurements.measurementsStatus == ScapeMeasurementStatus.ResultsFound) 
-        	{
-				SynchronizeARCamera(scapeMeasurements);
-        	}	
+            if(scapeMeasurements.measurementsStatus == ScapeMeasurementStatus.ResultsFound) 
+            {
+                SynchronizeARCamera(scapeMeasurements.coordinates, (float)scapeMeasurements.heading);
+            }   
+        }
+        void OnDeviceLocationMeasurementsEvent(LocationMeasurements locationMeasurements)
+        {   
+            ScapeLogging.Log(message: "ScapeCameraComponent::OnDeviceLocationMeasurementsEvent"); 
+            SynchronizeARCamera(locationMeasurements.coordinates, (float)locationMeasurements.heading);
         }
     }
 }

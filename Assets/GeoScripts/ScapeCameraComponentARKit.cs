@@ -39,6 +39,29 @@ namespace ScapeKitUnity
             base.Update();
         }
 
+        public override Quaternion GetARRotation()
+        {
+            if(sessionStarted) 
+            {
+                return UnityARMatrixOps.GetRotation(m_session.GetCameraPose());
+            }
+            else 
+            {
+                return Quaternion.identity;
+            }
+        }
+        public override Vector3 GetARPosition()
+        {
+            if(sessionStarted)
+            {
+                return UnityARMatrixOps.GetPosition(m_session.GetCameraPose());
+            }
+            else
+            {
+                return new Vector3();
+            }
+        }
+
         // Use this for initialization
         void Start () {
 
@@ -95,8 +118,6 @@ namespace ScapeKitUnity
             }
         }
 
-        // Update is called once per frame
-
         public override void UpdateCameraFromAR()
         {
             if (TheCamera != null && sessionStarted)
@@ -104,9 +125,10 @@ namespace ScapeKitUnity
                 // JUST WORKS!
                 Matrix4x4 matrix = m_session.GetCameraPose();
                 TheCamera.transform.localPosition = UnityARMatrixOps.GetPosition(matrix) + GetScapePosition();
-                TheCamera.transform.localRotation = GetScapeHeading() * UnityARMatrixOps.GetRotation(matrix);
+                TheCamera.transform.localRotation = UnityARMatrixOps.GetRotation(matrix);
 
-                TheCamera.projectionMatrix = m_session.GetCameraProjection ();
+                TheCamera.projectionMatrix = m_session.GetCameraProjection();
+
             }
         }
 
@@ -120,5 +142,4 @@ namespace ScapeKitUnity
             } 
         }
     }
-
 }

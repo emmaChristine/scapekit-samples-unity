@@ -6,6 +6,7 @@ using GoogleARCoreInternal;
 namespace ScapeKitUnity
 {
 
+#if UNITY_ANDROID && !UNITY_EDITOR
     public class ScapeCameraComponentARCore : ScapeCameraComponent
     {
     	void Awake() 
@@ -17,17 +18,24 @@ namespace ScapeKitUnity
     	{
     		base.Update();
     	}
+
+        public override Quaternion GetARRotation()
+        {
+        	return GoogleARCore.Frame.Pose.rotation;
+        }
+        public override Vector3 GetARPosition()
+        {
+        	return GoogleARCore.Frame.Pose.position;
+        }
+
     	public override void UpdateCameraFromAR() 
     	{
-#if UNITY_ANDROID && !UNITY_EDITOR
             TheCamera.transform.localPosition = GoogleARCore.Frame.Pose.position + new Vector3(0.0f, CameraHeight, 0.0f);
-            TheCamera.transform.localRotation = GetScapeHeading() * GoogleARCore.Frame.Pose.rotation;
-#endif
+            TheCamera.transform.localRotation = GoogleARCore.Frame.Pose.rotation;
     	}
 
     	public override void GetMeasurements() 
     	{
-#if UNITY_ANDROID && !UNITY_EDITOR
             PositionAtScapeMeasurements = new Vector3(GoogleARCore.Frame.Pose.position.x, 
                                                         GoogleARCore.Frame.Pose.position.y,
                                                         GoogleARCore.Frame.Pose.position.z);
@@ -36,7 +44,7 @@ namespace ScapeKitUnity
                                                         GoogleARCore.Frame.Pose.rotation.y, 
                                                         GoogleARCore.Frame.Pose.rotation.z, 
                                                         GoogleARCore.Frame.Pose.rotation.w).eulerAngles;
-#endif
     	}
     }
+#endif
 }
