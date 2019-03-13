@@ -1,12 +1,8 @@
 using UnityEngine;
-#if UNITY_ANDROID && !UNITY_EDITOR
 using GoogleARCoreInternal;
-#endif
 
 namespace ScapeKitUnity
 {
-
-#if UNITY_ANDROID && !UNITY_EDITOR
     public class ScapeCameraComponentARCore : ScapeCameraComponent
     {
     	void Awake() 
@@ -46,5 +42,4 @@ namespace ScapeKitUnity
                                                         GoogleARCore.Frame.Pose.rotation.w).eulerAngles;
     	}
     }
-#endif
 }
