@@ -29,12 +29,12 @@ namespace ScapeKitUnity
             }
         }
 
-        void Awake() 
+        protected virtual void Awake() 
         {
             base.Awake();
         }
 
-        void Update()
+        protected virtual void Update()
         {
             base.Update();
         }

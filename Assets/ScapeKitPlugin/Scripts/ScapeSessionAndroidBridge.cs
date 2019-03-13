@@ -303,7 +303,7 @@ namespace ScapeKitUnity
                     heading = GetDoubleJavaFunction("getHeading", result),
                     orientation = GetOrientationFromJava(result),
                     rawHeightEstimate = GetDoubleJavaFunction("getRawHeightEstimate", result),
-                    confidenceScore = GetLongValueJavaFunction("getConfidenceScore", result),
+                    confidenceScore = GetDoubleJavaFunction("getConfidenceScore", result),
                     measurementsStatus = GetScapeMeasurementStatusFromJava(result.Call<AndroidJavaObject>("getMeasurementsStatus"))
                 });
             }

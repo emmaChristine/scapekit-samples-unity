@@ -59,7 +59,7 @@ namespace ScapeKitUnity
         public Double heading;
         public ScapeOrientation orientation;
         public Double rawHeightEstimate;
-        public long confidenceScore;
+        public Double confidenceScore;
         public ScapeMeasurementStatus measurementsStatus;
     }
     
