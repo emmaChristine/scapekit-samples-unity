@@ -27,8 +27,10 @@ namespace ScapeKitUnity
 		private bool isInstantiated = false;
 		private bool updateMain = false;
 
-		void Awake() 
+		protected override void Awake() 
 		{
+			base.Awake();
+
 			ScapeLogging.Log(message: "GeoWorldRoot::Awake()");
 
 			this.gameObject.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
