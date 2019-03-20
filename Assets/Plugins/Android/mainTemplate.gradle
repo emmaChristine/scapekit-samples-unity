@@ -1,6 +1,6 @@
 buildscript {
     ext.kotlin_version = '1.2.61'
-    ext.scapekit_version = '0.4.0'
+    ext.scapekit_version = '0.5.0'
     repositories {
         jcenter()
         google()
@@ -57,8 +57,8 @@ android {
 
     defaultConfig {
         minSdkVersion 24
-        targetSdkVersion 28
-        applicationId 'com.google.ar.core.examples.unity.helloar'
+        targetSdkVersion **TARGETSDKVERSION**
+        applicationId '**APPLICATIONID**'
         ndk {
             abiFilters 'arm64-v8a'
         }

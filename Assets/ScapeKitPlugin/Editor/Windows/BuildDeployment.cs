@@ -11,7 +11,7 @@ namespace ScapeKitUnity
 
         private static bool showApiKeySettings = true;
 
-        [MenuItem("ScapeKit/Build and Deploy", false, 1)]
+        [MenuItem("ScapeKit/Account", false, 1)]
         static void Init()
         {
             EditorWindow[] allWindows = Resources.FindObjectsOfTypeAll<EditorWindow>();
@@ -33,28 +33,6 @@ namespace ScapeKitUnity
         void OnGUI ()
         {
             ShowAccountSettings(); 
- 
-            DrawUILine(new Color(1, 1, 1, 0.35f));
-
-			showPlatforms = EditorGUILayout.Foldout(showPlatforms, "Platforms");
-            if(showPlatforms)
-            {
-            	selectedPlatform = GUILayout.Toolbar(selectedPlatform, new string[]{ "Android", "iOS"});
-
-	            if(selectedPlatform == 0)
-	            {
-	                BuildDeploymentAndroid.ShowSettings();
-	            }
-
-	            if(selectedPlatform == 1)
-	            {
-	                BuildDeploymentiOS.ShowSettings();
-	            }
-            }
-
-            DrawUILine(new Color(1, 1, 1, 0.35f));
-
-            ShowOpenScenesSettings();
         }
 
         private void ShowLogo() 
@@ -89,19 +67,16 @@ namespace ScapeKitUnity
                         apiKey = EditorGUILayout.TextField(apiKey);
                     }
                     EditorGUILayout.EndHorizontal();
+
                 }
                 EditorGUILayout.EndHorizontal();
+                
+                if (GUILayout.Button("Acquire API Key!"))
+                {
+                    this.Close();
+                    Application.OpenURL("https://developer.scape.io/download/");
+                }
             }
-        }
-
-        private void ShowOpenScenesSettings()
-        {
-        	if (OpenScenesSettings.Instance == null) 
-            {
-                new OpenScenesSettings();
-            }
-
-            OpenScenesSettings.Instance.ShowScenes();
         }
 
         internal static void DrawUILine(Color color, int thickness = 2, int padding = 10)

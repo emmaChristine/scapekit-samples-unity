@@ -193,19 +193,6 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 
 
 
-@class SCNScene;
-@class NSCoder;
-
-SWIFT_CLASS("_TtC8ScapeKit9SCKArView")
-@interface SCKArView : ARSCNView
-@property (nonatomic, readonly, strong) SCNScene * _Nonnull currentScene;
-- (nonnull instancetype)init;
-- (nonnull instancetype)initWithFrame:(CGRect)frame options:(NSDictionary<NSString *, id> * _Nullable)options OBJC_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
-- (void)layoutSubviews;
-- (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
-@end
-
 
 /// public
 /// The SCKConsole allows you to print your own logging to the a visual debugging console.
@@ -232,7 +219,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, copy) NSString * _No
 @end
 
 @class SCKScapeSession;
-@protocol SCKArSession;
+@protocol SCKXrSession;
 @protocol SCKScapeClientObserver;
 
 /// public
@@ -242,7 +229,7 @@ SWIFT_PROTOCOL("_TtP8ScapeKit14SCKScapeClient_")
 @protocol SCKScapeClient
 @property (nonatomic) BOOL isStarted;
 @property (nonatomic, readonly, strong) SCKScapeSession * _Nullable scapeSession;
-@property (nonatomic, readonly, strong) id <SCKArSession> _Nullable arSession;
+@property (nonatomic, readonly, strong) id <SCKXrSession> _Nullable xrSession;
 @property (nonatomic, weak) id <SCKScapeClientObserver> _Nullable scapeClientObserver;
 - (void)start;
 - (void)stop;
@@ -265,7 +252,7 @@ SWIFT_PROTOCOL("_TtP8ScapeKit14SCKScapeClient_")
 ///     Debug Support (for console logs and visual logs)
 ///   </li>
 ///   <li>
-///     AR Support (for using the simple SCKArSession wrapper built on top of ARKit)
+///     AR Support (for using the simple SCKXrSession wrapper built on top of ARKit)
 ///   </li>
 ///   <li>
 ///     Legacy Maps (for using the legacy maps in the area you are trying to use ScapeKit)
@@ -275,7 +262,7 @@ SWIFT_PROTOCOL("_TtP8ScapeKit21SCKScapeClientBuilder_")
 @protocol SCKScapeClientBuilder
 - (id <SCKScapeClientBuilder> _Nonnull)withApiKey:(NSString * _Nonnull)apiKey SWIFT_WARN_UNUSED_RESULT;
 - (id <SCKScapeClientBuilder> _Nonnull)withDebugSupport:(BOOL)isSupported SWIFT_WARN_UNUSED_RESULT;
-- (id <SCKScapeClientBuilder> _Nonnull)withArSupport:(BOOL)isSupported SWIFT_WARN_UNUSED_RESULT;
+- (id <SCKScapeClientBuilder> _Nonnull)withXrSupport:(BOOL)isSupported SWIFT_WARN_UNUSED_RESULT;
 - (id <SCKScapeClientBuilder> _Nonnull)withLegacyMapsSupport:(BOOL)isSupported SWIFT_WARN_UNUSED_RESULT;
 /// public
 /// Creates the resulting SCKScapeClient.
@@ -308,11 +295,24 @@ SWIFT_PROTOCOL("_TtP8ScapeKit22SCKScapeClientObserver_")
 
 @interface SCKScapeSession (SWIFT_EXTENSION(ScapeKit))
 /// (public)
-/// Set the ar frame manually (when SCKArSession is not used)
+/// Set the ar frame manually (when SCKXrSession is not used)
 - (void)setARFrame:(ARFrame * _Nonnull)arFrame :(CGSize)viewportSize;
 @end
 
 
+
+@class SCNScene;
+@class NSCoder;
+
+SWIFT_CLASS("_TtC8ScapeKit9SCKXrView")
+@interface SCKXrView : ARSCNView
+@property (nonatomic, readonly, strong) SCNScene * _Nonnull currentScene;
+- (nonnull instancetype)init;
+- (nonnull instancetype)initWithFrame:(CGRect)frame options:(NSDictionary<NSString *, id> * _Nullable)options OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+- (void)layoutSubviews;
+- (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
+@end
 
 
 
