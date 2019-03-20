@@ -27,14 +27,6 @@ namespace ScapeKitUnity
 		private bool isInstantiated = false;
 		private bool updateMain = false;
 
-		void Awake() 
-		{
-			ScapeLogging.Log(message: "GeoWorldRoot::Awake()");
-
-			this.gameObject.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
-			this.gameObject.transform.rotation = Quaternion.identity;
-		}
-
 		void Update() 
 		{
 			//upon receiving the SetWorldOrigin function from the camera/scape measurements, at the next update
@@ -69,6 +61,7 @@ namespace ScapeKitUnity
 
 			//rotate the GeoWorldRoot to align all GeoAnchored objects with true north according to 
 			//the scape measurements
+			this.gameObject.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
 			this.gameObject.transform.rotation = Quaternion.AngleAxis(heading,  Vector3.up);
 		}
 
