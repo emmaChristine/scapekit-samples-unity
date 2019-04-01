@@ -21,12 +21,14 @@ namespace ScapeKitUnity
         public float CameraHeadingOffset = 0.0f;
         public float CameraHeight = 0.0f;
 
-        private float ScapeHeading = -1.0f;
-        private float ScapeDirectionFix = 0.0f;
+        protected float ScapeHeading = -1.0f;
+        public float ScapeDirectionFix = 0.0f;
 
         private bool updateRoot = false;
 
-        private void initScape()
+        private GameObject GlobalCameraParent;
+
+        private void InitScapeSession()
         {
             ScapeClient.Instance.WithResApiKey().WithDebugSupport(true).StartClient();
 
@@ -41,19 +43,30 @@ namespace ScapeKitUnity
         }
 
         public abstract void GetMeasurements();
-
         public abstract void UpdateCameraFromAR();
-
         public abstract Quaternion GetARRotation();
         public abstract Vector3 GetARPosition();
 
-        public void Awake() 
-        { 
-            initScape();
+        private void SetupCameraParent() {
 
             if(!TheCamera) {
                 TheCamera = Camera.main;
             }
+
+            var cameraParent = TheCamera.transform.parent;
+
+            GlobalCameraParent = new GameObject();
+            TheCamera.transform.SetParent(GlobalCameraParent.transform, false);
+
+            if(cameraParent) {
+                GlobalCameraParent.transform.SetParent(cameraParent.transform);
+            }
+        }
+
+        public void Awake() 
+        {
+            InitScapeSession();
+            SetupCameraParent();
         }
         public void Update()
         {
@@ -82,9 +95,11 @@ namespace ScapeKitUnity
             if(updateRoot) 
             {
                 ScapeLogging.Log(message: "ScapeCameraComponent::UpdateRoot() ");
-                GeoWorldRoot.Instance.SetWorldOrigin(OriginCoordinates, -ScapeDirectionFix + CameraHeadingOffset);
-             
-                updateRoot = false;   
+
+                GlobalCameraParent.transform.rotation = Quaternion.AngleAxis(ScapeDirectionFix, Vector3.up);
+                GeoWorldRoot.Instance.SetWorldOrigin(OriginCoordinates, 0.0f);
+                
+                updateRoot = false;
             }
         }
 

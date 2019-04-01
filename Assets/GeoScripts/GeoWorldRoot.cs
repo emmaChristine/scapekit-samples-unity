@@ -62,7 +62,7 @@ namespace ScapeKitUnity
 			//rotate the GeoWorldRoot to align all GeoAnchored objects with true north according to 
 			//the scape measurements
 			this.gameObject.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
-			this.gameObject.transform.rotation = Quaternion.AngleAxis(heading,  Vector3.up);
+			// this.gameObject.transform.rotation = Quaternion.AngleAxis(heading,  Vector3.up);
 		}
 
 		//Each GeoAnchored GameObject registers itself to the GeoWorldRoot singleton.
