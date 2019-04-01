@@ -58,15 +58,10 @@ namespace ScapeKitUnity
 			gameObjectName = this.gameObject.name;
 			
 			WorldCoordinates = new Coordinates(){longitude = Longitude, latitude = Latitude};
-			if(WorldCoordinates != null) {
-				ScapeLogging.Log(message: "GeoAnchor::Start() WorldCoords = " + GeoConversions.CoordinatesToString(WorldCoordinates));
-			}
-			else 
-			{
-				ScapeLogging.Log(message: "GeoAnchor::Start() WorldCoords = null");
-			}
-
+			
 			GeoWorldRoot.Instance.RegisterGeoAnchor(this);
+
+			ScapeLogging.Log(message: "GeoAnchor::Start() WorldCoords = " + GeoConversions.CoordinatesToString(WorldCoordinates));
 		}
 
 		void Update() {
@@ -74,7 +69,6 @@ namespace ScapeKitUnity
 			if(needsUpdate) 
 			{
 				this.gameObject.transform.localPosition = new Vector3(ScenePos.x, 0.0f, ScenePos.y);
-				ScapeLogging.Log(message: "GeoAnchor::Update() " + this.gameObject.name + " @ " + this.gameObject.transform.position.ToString());
 
 				needsUpdate = false;
 			}

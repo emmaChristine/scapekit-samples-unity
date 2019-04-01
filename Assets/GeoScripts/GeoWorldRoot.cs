@@ -47,7 +47,7 @@ namespace ScapeKitUnity
 
 		//SetWorldOrigin is called by the main camera when a successful scape meaasurements event happens.
 		//The Coordinates passed in are the Geo Location of Unity's origin.
-		public void SetWorldOrigin(Coordinates coordinates, float heading) {
+		public void SetWorldOrigin(Coordinates coordinates) {
 
 			OriginCoordinates = coordinates;
 
@@ -58,11 +58,6 @@ namespace ScapeKitUnity
 				GeoOriginEvent(coordinates);
 			}
 			updateMain = true;
-
-			//rotate the GeoWorldRoot to align all GeoAnchored objects with true north according to 
-			//the scape measurements
-			this.gameObject.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
-			// this.gameObject.transform.rotation = Quaternion.AngleAxis(heading,  Vector3.up);
 		}
 
 		//Each GeoAnchored GameObject registers itself to the GeoWorldRoot singleton.

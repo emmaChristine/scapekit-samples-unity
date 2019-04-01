@@ -105,6 +105,7 @@ namespace ScapeKitUnity
 
         private void SetupNewCamera(Camera newCamera)
         {
+            ScapeLogging.Log(message: "ScapeCameraComponentARKit::SetupNewCamera() ");
             TheCamera = newCamera;
 
             if (TheCamera != null) {
@@ -116,15 +117,16 @@ namespace ScapeKitUnity
                 unityARVideo = TheCamera.gameObject.AddComponent<UnityARVideo> ();
                 unityARVideo.m_ClearMaterial = savedClearMaterial;
             }
+
+            SetupCameraParent();
         }
 
         public override void UpdateCameraFromAR()
         {
             if (TheCamera != null && sessionStarted)
             {
-                // JUST WORKS!
                 Matrix4x4 matrix = m_session.GetCameraPose();
-                TheCamera.transform.localPosition = UnityARMatrixOps.GetPosition(matrix) + GetScapePosition();
+                TheCamera.transform.localPosition = UnityARMatrixOps.GetPosition(matrix);
                 TheCamera.transform.localRotation = UnityARMatrixOps.GetRotation(matrix);
 
                 TheCamera.projectionMatrix = m_session.GetCameraProjection();

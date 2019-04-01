@@ -18,10 +18,7 @@ namespace ScapeKitUnity
 
         protected Coordinates OriginCoordinates;
 
-        public float CameraHeadingOffset = 0.0f;
         public float CameraHeight = 0.0f;
-
-        protected float ScapeHeading = -1.0f;
         public float ScapeDirectionFix = 0.0f;
 
         private bool updateRoot = false;
@@ -47,7 +44,7 @@ namespace ScapeKitUnity
         public abstract Quaternion GetARRotation();
         public abstract Vector3 GetARPosition();
 
-        private void SetupCameraParent() {
+        protected void SetupCameraParent() {
 
             if(!TheCamera) {
                 TheCamera = Camera.main;
@@ -94,11 +91,11 @@ namespace ScapeKitUnity
 
             if(updateRoot) 
             {
-                ScapeLogging.Log(message: "ScapeCameraComponent::UpdateRoot() ");
+                ScapeLogging.Log(message: "ScapeCameraComponent::UpdateRoot()");
 
                 GlobalCameraParent.transform.rotation = Quaternion.AngleAxis(ScapeDirectionFix, Vector3.up);
-                GeoWorldRoot.Instance.SetWorldOrigin(OriginCoordinates, 0.0f);
-                
+                GeoWorldRoot.Instance.SetWorldOrigin(OriginCoordinates);
+
                 updateRoot = false;
             }
         }
@@ -113,9 +110,7 @@ namespace ScapeKitUnity
 
             ScapeLogging.Log(message: "SynchronizeARCamera() OriginCoordinates = " + GeoConversions.CoordinatesToString(OriginCoordinates));
 
-            ScapeHeading = heading;
-
-            ScapeDirectionFix = ScapeHeading - RotationAtScapeMeasurements.y;
+            ScapeDirectionFix = heading - RotationAtScapeMeasurements.y;
             ScapeLogging.Log(message: "SynchronizeARCamera() ScapeDirectionFixYAngle = " + ScapeDirectionFix);
 
             updateRoot = true;
