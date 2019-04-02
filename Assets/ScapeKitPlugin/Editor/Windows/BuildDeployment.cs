@@ -12,6 +12,10 @@ namespace ScapeKitUnity
 
         private static bool showApiKeySettings = true;
 
+        string latitudeStr;
+        string longitudeStr;
+        CoordinateAsset GeoRootCoords;
+
         [MenuItem("ScapeKit/Account", false, 1)]
         static void Init()
         {
@@ -28,10 +32,20 @@ namespace ScapeKitUnity
         }
 
         void Awake() {
+
             apiKey = ScapeClient.RetrieveKeyFromResources();
+
+            GeoRootCoords = (CoordinateAsset)Resources.Load<CoordinateAsset>("SceneGeoRoot");
+            if(!GeoRootCoords) {
+                GeoRootCoords = ScriptableObject.CreateInstance<CoordinateAsset>();
+                AssetDatabase.CreateAsset(GeoRootCoords, "Assets/Resources/SceneGeoRoot.asset");
+                AssetDatabase.SaveAssets();
+            }
+            latitudeStr = GeoRootCoords.latitude.ToString();
+            longitudeStr = GeoRootCoords.longitude.ToString();
         }
 
-        void OnGUI ()
+        void OnGUI()
         {
             ShowLogo();
             DrawUILine(Color.grey);
@@ -42,19 +56,7 @@ namespace ScapeKitUnity
 
         private void ShowLogo() 
         {
-            GUILayout.BeginVertical();
-            {
-                GUILayout.BeginVertical();
-                {
-                    GUILayout.BeginVertical();
-                    {
-                        GUILayout.Label(Utility.GetIcon("scape-logo.png"), GUILayout.Width(350), GUILayout.Height(140));
-                    }
-                    GUILayout.EndVertical();
-                }
-                GUILayout.EndVertical();
-            }
-            GUILayout.EndVertical();
+            GUILayout.Label(Utility.GetIcon("scape-logo.png"), GUILayout.Width(350), GUILayout.Height(140));
         }
 
         private void ShowAccountSettings() 
@@ -78,8 +80,6 @@ namespace ScapeKitUnity
             }
         }
 
-        private string latitudeStr;
-        private string longitudeStr;
 
         private void ShowGeoSimOptions() {
             {
@@ -94,12 +94,14 @@ namespace ScapeKitUnity
                 EditorGUILayout.EndHorizontal();
                 if(GUILayout.Button("Simulate")) {
                     try {
-                        float latitude = float.Parse(latitudeStr);
-                        float longitude = float.Parse(longitudeStr);
+                        GeoRootCoords.latitude = double.Parse(latitudeStr);
+                        GeoRootCoords.longitude = double.Parse(longitudeStr);
+
+                        if(GeoRootCoords.latitude == -1.0 || GeoRootCoords.longitude == -1.0) throw new Exception("Please enter valid geocoordinates");
 
                         var coords = new Coordinates {
-                            longitude = longitude,
-                            latitude = latitude
+                            longitude = GeoRootCoords.longitude,
+                            latitude = GeoRootCoords.latitude
                         };
 
                         object[] obj = GameObject.FindSceneObjectsOfType(typeof (GameObject));
@@ -112,15 +114,13 @@ namespace ScapeKitUnity
                                 anchor.gameObject.transform.localPosition = new Vector3(anchor.ScenePos.x, 0.0f, anchor.ScenePos.y);
                             }
                         }
-
+                        EditorUtility.SetDirty(GeoRootCoords); 
                     }
                     catch (Exception ex) {
                         EditorUtility.DisplayDialog("Couldn't parse Coordinates", ex.Message, "ok");
                     }
                 }
-
             }
-
         }
 
         internal static void DrawUILine(Color color, int thickness = 2, int padding = 10)
