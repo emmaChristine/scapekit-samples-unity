@@ -40,11 +40,20 @@ namespace ScapeKitUnity
 		//relative to GeoWorldRoot's world location.
 		public void OriginEvent(Coordinates SceneOriginCoordinates) {
 
+			GetWorldCoordinates();
+
 			ScenePos = GeoConversions.UnityRelativePosition(SceneOriginCoordinates, WorldCoordinates);
 
 			ScapeLogging.Log(message: "GeoAnchor::OriginEvent() " + gameObjectName + " ScenePos = " + ScenePos.ToString());
 
 			needsUpdate = true;
+		}
+
+		public void GetWorldCoordinates() {
+
+			WorldCoordinates = new Coordinates(){longitude = Longitude, latitude = Latitude};
+
+			ScapeLogging.Log(message: "GeoAnchor::Start() WorldCoords = " + GeoConversions.CoordinatesToString(WorldCoordinates));
 		}
 
 		//Upon Start up the GeoAnchor creates it's WorldCoodinate object based on it's public
@@ -57,11 +66,7 @@ namespace ScapeKitUnity
 
 			gameObjectName = this.gameObject.name;
 			
-			WorldCoordinates = new Coordinates(){longitude = Longitude, latitude = Latitude};
-			
 			GeoWorldRoot.Instance.RegisterGeoAnchor(this);
-
-			ScapeLogging.Log(message: "GeoAnchor::Start() WorldCoords = " + GeoConversions.CoordinatesToString(WorldCoordinates));
 		}
 
 		void Update() {
