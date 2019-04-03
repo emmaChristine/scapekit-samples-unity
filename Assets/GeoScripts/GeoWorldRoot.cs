@@ -33,7 +33,7 @@ namespace ScapeKitUnity
 			//we decide to activate the GeoAnchored gameobjects
 			if(updateMain)
 			{	
-				foreach(Transform child in this.gameObject.transform) 
+				foreach(Transform child in GeoWorldRoot.Instance.transform) 
 				{
 					var geoAnchor = child.GetComponent<GeoAnchor>();
 					if(geoAnchor != null) 
@@ -65,7 +65,7 @@ namespace ScapeKitUnity
 		//be called when a successful scape measurenment comes in.
 		public void RegisterGeoAnchor(GeoAnchor geoAnchor)
 		{
-			geoAnchor.transform.SetParent(this.gameObject.transform, false);
+			geoAnchor.transform.SetParent(GeoWorldRoot.Instance.transform, false);
 
 			//append the GeoAnchor's OriginEvent function to the GeoOriginEvent action
 			GeoOriginEvent += geoAnchor.OriginEvent;

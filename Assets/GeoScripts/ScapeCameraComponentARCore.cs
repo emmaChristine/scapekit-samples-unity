@@ -26,7 +26,7 @@ namespace ScapeKitUnity
 
     	public override void UpdateCameraFromAR() 
     	{
-            TheCamera.transform.localPosition = GoogleARCore.Frame.Pose.position + new Vector3(0.0f, CameraHeight, 0.0f);
+            TheCamera.transform.localPosition = GoogleARCore.Frame.Pose.position;
             TheCamera.transform.localRotation = GoogleARCore.Frame.Pose.rotation;
     	}
 

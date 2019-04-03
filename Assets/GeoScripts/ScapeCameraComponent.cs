@@ -56,7 +56,11 @@ namespace ScapeKitUnity
             TheCamera.transform.SetParent(GlobalCameraParent.transform, false);
 
             if(cameraParent) {
-                GlobalCameraParent.transform.SetParent(cameraParent.transform);
+                GlobalCameraParent.transform.SetParent(cameraParent.transform, false);
+                cameraParent.transform.SetParent(GeoWorldRoot.Instance.transform, false);
+            }
+            else {
+                GlobalCameraParent.transform.SetParent(GeoWorldRoot.Instance.transform, false);
             }
         }
 
