@@ -1,0 +1,32 @@
+{
+	"Objects": [
+		{
+			"Prefab": "Fir_Tree",
+			"LatLng": {
+				"Latitude": 51.523304, 
+				"Longitude": -0.083069
+			}
+		},
+		{
+			"Prefab": "Oak_Tree",
+			"LatLng": {
+				"Latitude": 51.524125, 
+				"Longitude": -0.082020
+			}
+		},
+		{
+			"Prefab": "Palm_Tree",
+			"LatLng": {
+				"Latitude": 51.524688, 
+				"Longitude": -0.083154
+			}
+		},
+		{
+			"Prefab": "Poplar_Tree",
+			"LatLng": {
+				"Latitude": 51.523994, 
+				"Longitude": -0.084200
+			}
+		}
+	]
+}

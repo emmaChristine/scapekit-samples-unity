@@ -14,10 +14,14 @@ namespace ScapeKitUnity
               "Assets/ScapeKitPlugin/Plugins/Android", // android aar module is here
               "Assets/Plugins/Android", // custom gradle file is here
               "Assets/ScapeKitPlugin/Scripts",
+              "Assets/ScapeKitPlugin/Examples",
               "Assets/ScapeKitPlugin/Prefabs",
               "Assets/ScapeKitPlugin/Editor", 
               "Assets/UnityARKitPlugin/Plugins/iOS/UnityARKit/NativeInterface/ARSessionNative.mm",
-              "Assets/UnityARKitPlugin/Plugins/iOS/UnityARKit/NativeInterface/ARVideoFormat.cs"
+              "Assets/UnityARKitPlugin/Plugins/iOS/UnityARKit/NativeInterface/ARVideoFormat.cs",
+              "Assets/JsonDotNet/Assemblies",
+              "Assets/GoogleARCore",
+              "Assets/UnityARkitPlugin"
             };
 
             string packageName = GetArg("-packageName");

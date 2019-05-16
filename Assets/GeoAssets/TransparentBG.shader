@@ -7,9 +7,6 @@
     }
     SubShader
     {
-        // Draw ourselves after all opaque geometry
-        Tags { "Queue" = "Transparent" }
-
         // Grab the screen behind the object into _BackgroundTexture
         GrabPass
         {
@@ -48,8 +45,9 @@
 
             half4 frag(v2f i) : SV_Target
             {
-                half4 output = tex2Dproj(_BackgroundTexture, i.grabPos);
-                return lerp(output, _color, _alpha);
+                half4 bgColor = tex2Dproj(_BackgroundTexture, i.grabPos);
+                bgColor.a = 1.0;
+                return lerp(bgColor, _color, _alpha);
             }
             ENDCG
         }

@@ -25,7 +25,7 @@ static ScapeClientUnity* _ScapeClientUnity;
     if(!_ScapeClientUnity)
     {
         _ScapeClientUnity = [[ScapeClientUnity alloc] init];
-        [SCKLog logdebug:@"SCKScapeClientUnity" msg:@"Create SCKScapeClientUnity client"];
+        [SCKLog log:SCKLogLevelLogInfo tag:@"SCKScapeClientUnity" msg:@"Create SCKScapeClientUnity client"];
     }
     return _ScapeClientUnity;
 }
@@ -42,23 +42,22 @@ static ScapeClientUnity* _ScapeClientUnity;
 
 - (void) start
 {
-    [SCKLog logdebug:@"SCKScapeClientUnity" msg:@"Start SCKScapeClientUnity client"];
+    [SCKLog log:SCKLogLevelLogInfo tag:@"SCKScapeClientUnity" msg:@"Start SCKScapeClientUnity client"];
 
     if(!_ScapeClientUnity.apiKey.length) {
-        [SCKLog logdebug:@"SCKScapeClientUnity" msg:@"Cannot start SCKScapeClientUnity client, reason: apiKey is empty"];
+        [SCKLog log:SCKLogLevelLogInfo tag:@"SCKScapeClientUnity" msg:@"Cannot start SCKScapeClientUnity client, reason: apiKey is empty"];
         return;
     }
 
     _ScapeClientUnity.scapeClient = [[[[SCKScape scapeClientBuilder] withApiKey:_ScapeClientUnity.apiKey] withDebugSupport:_ScapeClientUnity.isDebugEnabled] build];
-    [_ScapeClientUnity.scapeClient setScapeClientObserver:self];
-    [_ScapeClientUnity.scapeClient start];
+    [_ScapeClientUnity.scapeClient startWithObserver:self];
 }
 
 - (void) stop
 {
-    [SCKLog logdebug:@"SCKScapeClientUnity" msg:@"Stop SCKScapeClientUnity client"];
+    [SCKLog log:SCKLogLevelLogInfo tag:@"SCKScapeClientUnity" msg:@"Stop SCKScapeClientUnity client"];
 
-    [_ScapeClientUnity.scapeClient stop];
+    [_ScapeClientUnity.scapeClient stopWithObserver:self];
 }
 
 - (bool) isStarted
@@ -68,7 +67,7 @@ static ScapeClientUnity* _ScapeClientUnity;
 
 - (void) terminate
 {
-    [_ScapeClientUnity.scapeClient terminate];
+    [_ScapeClientUnity.scapeClient terminateWithObserver:self];
 }
 
 - (void)onClientStarted:(id <SCKScapeClient> _Nonnull)scapeClient
@@ -125,14 +124,6 @@ extern "C" {
     {
         std::cout << __func__ << "/n";
         [[ScapeClientUnity sharedInstance] terminate];
-    }
-
-    void _log(const char* tag, const char* message) 
-    {
-        std::cout << __func__ << "/n";
-        NSString* tagStr = [NSString stringWithUTF8String:tag];
-        NSString* messageStr = [NSString stringWithUTF8String:message];
-        [SCKLog logdebug:tagStr msg:messageStr];
     }
 }
 

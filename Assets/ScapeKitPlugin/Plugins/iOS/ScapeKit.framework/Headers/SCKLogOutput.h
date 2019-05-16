@@ -4,8 +4,12 @@
 #import <Foundation/Foundation.h>
 
 /** (internal) */
-typedef NS_ENUM(NSInteger, SCKLogOutput)
+typedef NS_OPTIONS(NSUInteger, SCKLogOutput)
 {
-    SCKLogOutputConsole,
-    SCKLogOutputOverlay,
+    SCKLogOutputNoOuput = 0,
+    SCKLogOutputConsole = 1 << 0,
+    SCKLogOutputFile = 1 << 1,
+    SCKLogOutputOverlay = 1 << 2,
+    SCKLogOutputNetwork = 1 << 3,
+    SCKLogOutputAllOuput = 0 | SCKLogOutputConsole | SCKLogOutputFile | SCKLogOutputOverlay | SCKLogOutputNetwork,
 };

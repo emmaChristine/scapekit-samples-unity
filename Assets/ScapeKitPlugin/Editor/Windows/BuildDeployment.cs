@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using System;
 
 namespace ScapeKitUnity
 {
@@ -11,10 +10,6 @@ namespace ScapeKitUnity
 		private string apiKey;
 
         private static bool showApiKeySettings = true;
-
-        string latitudeStr;
-        string longitudeStr;
-        CoordinateAsset GeoRootCoords;
 
         [MenuItem("ScapeKit/Account", false, 1)]
         static void Init()
@@ -32,93 +27,54 @@ namespace ScapeKitUnity
         }
 
         void Awake() {
-
             apiKey = ScapeClient.RetrieveKeyFromResources();
-
-            GeoRootCoords = (CoordinateAsset)Resources.Load<CoordinateAsset>("SceneGeoRoot");
-            if(!GeoRootCoords) {
-                GeoRootCoords = ScriptableObject.CreateInstance<CoordinateAsset>();
-                AssetDatabase.CreateAsset(GeoRootCoords, "Assets/Resources/SceneGeoRoot.asset");
-                AssetDatabase.SaveAssets();
-            }
-            latitudeStr = GeoRootCoords.latitude.ToString();
-            longitudeStr = GeoRootCoords.longitude.ToString();
         }
 
-        void OnGUI()
+        void OnGUI ()
         {
-            ShowLogo();
-            DrawUILine(Color.grey);
             ShowAccountSettings(); 
-            DrawUILine(Color.grey);
-            ShowGeoSimOptions();
         }
 
         private void ShowLogo() 
         {
-            GUILayout.Label(Utility.GetIcon("scape-logo.png"), GUILayout.Width(350), GUILayout.Height(140));
+            GUILayout.BeginVertical();
+            {
+                GUILayout.BeginVertical();
+                {
+                    GUILayout.BeginVertical();
+                    {
+                        GUILayout.Label(Utility.GetIcon("scape-logo.png"), GUILayout.Width(350), GUILayout.Height(140));
+                    }
+                    GUILayout.EndVertical();
+                }
+                GUILayout.EndVertical();
+            }
+            GUILayout.EndVertical();
         }
 
         private void ShowAccountSettings() 
         {
-            Rect DevelopmentSettings = EditorGUILayout.BeginHorizontal("box");
+            showApiKeySettings = EditorGUILayout.Foldout(showApiKeySettings, "Scape Account");
+            if(showApiKeySettings)
             {
-                Rect DevID = EditorGUILayout.BeginHorizontal("box");
+                ShowLogo();
+
+                Rect DevelopmentSettings = EditorGUILayout.BeginHorizontal("box");
                 {
-                    GUILayout.Label("Enter your Scape API Key here:");
-                    apiKey = EditorGUILayout.TextField(apiKey);
+                    Rect DevID = EditorGUILayout.BeginHorizontal("box");
+                    {
+                        GUILayout.Label("Enter your Scape API Key here:");
+                        apiKey = EditorGUILayout.TextField(apiKey);
+                    }
+                    EditorGUILayout.EndHorizontal();
+
                 }
                 EditorGUILayout.EndHorizontal();
-
-            }
-            EditorGUILayout.EndHorizontal();
-            
-            if (GUILayout.Button("Acquire API Key!"))
-            {
-                this.Close();
-                Application.OpenURL("https://developer.scape.io/download/");
-            }
-        }
-
-
-        private void ShowGeoSimOptions() {
-            {
-                GUILayout.Label("Enter Potential World Coordinates for the root of the Scene");
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("Latitude"); 
-                latitudeStr = GUILayout.TextField(latitudeStr);
-                EditorGUILayout.EndHorizontal();
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("Longitude"); 
-                longitudeStr = GUILayout.TextField(longitudeStr);
-                EditorGUILayout.EndHorizontal();
-                if(GUILayout.Button("Simulate")) {
-                    try {
-                        GeoRootCoords.latitude = double.Parse(latitudeStr);
-                        GeoRootCoords.longitude = double.Parse(longitudeStr);
-
-                        if(GeoRootCoords.latitude == -1.0 || GeoRootCoords.longitude == -1.0) throw new Exception("Please enter valid geocoordinates");
-
-                        var coords = new Coordinates {
-                            longitude = GeoRootCoords.longitude,
-                            latitude = GeoRootCoords.latitude
-                        };
-
-                        object[] obj = GameObject.FindSceneObjectsOfType(typeof (GameObject));
-                        foreach (object o in obj)
-                        {
-                            GameObject g = (GameObject) o;
-                            GeoAnchor anchor = g.GetComponent<GeoAnchor>();
-                            if(anchor) {
-                                anchor.OriginEvent(coords);
-                                anchor.gameObject.transform.localPosition = new Vector3(anchor.ScenePos.x, 0.0f, anchor.ScenePos.y);
-                            }
-                        }
-                        EditorUtility.SetDirty(GeoRootCoords); 
-                    }
-                    catch (Exception ex) {
-                        EditorUtility.DisplayDialog("Couldn't parse Coordinates", ex.Message, "ok");
-                    }
+                
+                if (GUILayout.Button("Acquire API Key!"))
+                {
+                    this.Close();
+                    Application.OpenURL("https://developer.scape.io/download/");
                 }
             }
         }

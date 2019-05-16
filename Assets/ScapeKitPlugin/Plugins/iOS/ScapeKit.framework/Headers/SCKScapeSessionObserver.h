@@ -15,6 +15,10 @@
  */
 @protocol SCKScapeSessionObserver
 
+/** Called whenever requesting a localization through getMeasurements */
+- (void)onScapeMeasurementsRequested:(nullable SCKScapeSession *)session
+                           timestamp:(double)timestamp;
+
 /** Called whenever any kind of error happens during the session lifetime */
 - (void)onScapeSessionError:(nullable SCKScapeSession *)session
                       state:(SCKScapeSessionState)state
