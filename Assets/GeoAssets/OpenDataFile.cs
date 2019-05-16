@@ -22,8 +22,6 @@ public class OpenDataFile : MonoBehaviour
 
     void Start()
     {
-    	Debug.Log( "OpenDataFile::Start()");
-
         var textAsset = Resources.Load<TextAsset>("streetdata");
 
         if (textAsset == null) {
