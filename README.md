@@ -15,10 +15,8 @@ These samples were built using Unity 2018.3.8f1.
 
 https://developer.scape.io/documentation/ 
 
-Once Unity has started find the ScapeKit menu, and select "Build And Deploy"
+Once Unity has started find the ScapeKit menu, and select "Account"
 ScapeKit's build helper will appear in a panel in Unity. Here you will need to add your Scapekit developer's API Key.
-
-Here there are options to build and deploy the apps at the press of a button. Howerver this is a work in progress so below are details of the steps to 
 
 ## Geo Samples
 
