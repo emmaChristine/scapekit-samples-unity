@@ -54,4 +54,3 @@ The data file can be found:
 
 Note that the prefabs that are loaded from the file are also located in the resources folder.
 
-Big thanks to **DARTH_ARTISAN** and his [Free Trees](https://assetstore.unity.com/publishers/31908) assets.
