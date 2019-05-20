@@ -25,7 +25,7 @@ namespace ScapeKitUnity
         /// <summary>
         /// scapeMeasurementTimeout, the period of time a measurement will be waited for after calling GetMeasurements
         /// </summary>
-        private const float ScapeMeasurementTimeout = 10.0f;
+        private const float ScapeMeasurementTimeout = 0.5f;
 
         /// <summary>
         /// theCamera, main camera object of Unity scene.
@@ -125,6 +125,12 @@ namespace ScapeKitUnity
         /// </summary>
         private UpdateState state = UpdateState.ClientNotStarted;
 
+
+        /// <summary>
+        /// checks whether the request has reached the native lib for execution
+        /// </summary>
+        private bool awaitingRequestDispatch = false;
+
         /// <summary>
         /// controls state of Session update
         /// </summary>
@@ -199,6 +205,7 @@ namespace ScapeKitUnity
                             ScapeLogging.LogDebug(message: "ScapeSessionManager UpdateState.NeedsMeasurements");
                             ScapeClient.Instance.ScapeSession.GetMeasurements();
                             ChangeState(UpdateState.TakingMeasurements);
+                            awaitingRequestDispatch = true;
                             timeSinceScapeMeasurement = 0.0f;
                         }
                         else
@@ -222,7 +229,7 @@ namespace ScapeKitUnity
                 case UpdateState.TakingMeasurements:
 
                     timeSinceScapeMeasurement += Time.deltaTime;
-                    if (timeSinceScapeMeasurement > ScapeMeasurementTimeout) 
+                    if (awaitingRequestDispatch && timeSinceScapeMeasurement > ScapeMeasurementTimeout) 
                     {
                         ScapeLogging.LogDebug(message: "ScapeSessionManager scapeMeasurementTimeout");
                         timeSinceScapeMeasurement = 0.0f;
@@ -248,6 +255,7 @@ namespace ScapeKitUnity
                     ScapeDebugSession.Instance.SetLogConfig(logLevel, logOutput);
                 }
 
+                ScapeClient.Instance.ScapeSession.ScapeMeasurementsRequested += OnScapeMeasurementsRequested;
                 ScapeClient.Instance.ScapeSession.ScapeMeasurementsEvent += OnScapeMeasurementsEvent;
                 ScapeClient.Instance.ScapeSession.DeviceLocationMeasurementsEvent += OnScapeLocationMeasurementsEvent;
                 ScapeClient.Instance.ScapeSession.DeviceMotionMeasurementsEvent += OnScapeMotionMeasurementsEvent;
@@ -305,6 +313,8 @@ namespace ScapeKitUnity
         /// </param>
         private void ChangeState(UpdateState st) 
         {
+            ScapeLogging.LogDebug("ChangeState " + st);
+
             state = st;
         }
 
@@ -383,6 +393,16 @@ namespace ScapeKitUnity
         }
 
         /// <summary>
+        /// Event returned from core when scape measurements are underway
+        /// </summary>
+        private void OnScapeMeasurementsRequested(double timestamp) {
+
+            ScapeLogging.LogDebug(message: "ScapeSessionManager::OnScapeMeasurementsRequested");
+
+            awaitingRequestDispatch = false;
+        }
+
+        /// <summary>
         /// Callback for LocationMeasurements update
         /// </summary>
         /// <param name="locationMeasurements">
@@ -417,6 +437,7 @@ namespace ScapeKitUnity
         private void OnScapeSessionError(ScapeSessionError scapeDetails)
         {
             ScapeLogging.LogError(message: scapeDetails.State.ToString() + ": " + scapeDetails.Message);
+            
             ChangeState(UpdateState.NeedsMeasurements);
 
             resetUpdateVars = true;

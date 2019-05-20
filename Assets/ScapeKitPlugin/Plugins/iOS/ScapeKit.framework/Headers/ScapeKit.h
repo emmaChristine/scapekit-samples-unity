@@ -14,10 +14,11 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 #import <SystemConfiguration/SystemConfiguration.h>
+#import <simd/simd.h>
 
 #import <ARKit/ARKit.h>
 #import <SceneKit/SceneKit.h>
-#import <simd/simd.h>
+#import <SpriteKit/SpriteKit.h>
 
 #import "SCKScapeSession.h"
 #import "SCKScapeSessionObserver.h"

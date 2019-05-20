@@ -71,7 +71,7 @@ static ScapeSessionUnity* _ScapeSessionUnity;
 
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
 
-        NSString* jsonError = [NSString stringWithFormat:@"{\n\t\"state\":%d,\n\t\"message\":\"%@\"}", (int)state, message];
+        NSString* jsonError = [NSString stringWithFormat:@"{\n\t\"State\":%d,\n\t\"Message\":\"%@\"}", (int)state, message];
         
         UnitySendMessage("ScapeSession", "OnScapeSessionError", [jsonError UTF8String]);    
     });
@@ -114,12 +114,12 @@ static ScapeSessionUnity* _ScapeSessionUnity;
 - (void)onCameraTransformUpdated:(nullable SCKScapeSession *)session
                        transform:(nullable NSArray<NSNumber *> *)transform;
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        NSData *jsonData = [transform JSONData];
-        const char * transformJsonStr = [[[NSString alloc] initWithData:jsonData  encoding:NSUTF8StringEncoding] UTF8String];
+    // dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+    //     NSData *jsonData = [transform JSONData];
+    //     const char * transformJsonStr = [[[NSString alloc] initWithData:jsonData  encoding:NSUTF8StringEncoding] UTF8String];
         
-        UnitySendMessage("ScapeSession", "OnCameraTransformUpdated", transformJsonStr);
-    });  
+    //     UnitySendMessage("ScapeSession", "OnCameraTransformUpdated", transformJsonStr);
+    // });  
 }
 
 @end

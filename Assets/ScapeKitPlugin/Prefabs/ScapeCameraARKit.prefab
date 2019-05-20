@@ -531,6 +531,16 @@ PrefabInstance:
       propertyPath: confidenceThreshold
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1125735014728799564, guid: 82d25aaf988cf43428f3b79c462dd1c5,
+        type: 3}
+      propertyPath: checkCameraPointsUp
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1125735014728799564, guid: 82d25aaf988cf43428f3b79c462dd1c5,
+        type: 3}
+      propertyPath: autoUpdate
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82d25aaf988cf43428f3b79c462dd1c5, type: 3}
 --- !u!4 &8546833185999197663 stripped

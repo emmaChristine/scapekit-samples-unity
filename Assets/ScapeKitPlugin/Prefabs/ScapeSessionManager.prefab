@@ -44,12 +44,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   theCamera: {fileID: 0}
-  autoUpdate: 1
   debugSupport: 0
   logLevel: 5
   logOutput: 1
+  confidenceThreshold: 3
+  checkCameraPointsUp: 0
+  useGPSFallback: 0
+  autoUpdate: 0
   timeoutUpdate: -1
   distanceUpdate: -1
-  confidenceThreshold: 4
-  checkCameraPointsUp: 1
-  useGPS: 0

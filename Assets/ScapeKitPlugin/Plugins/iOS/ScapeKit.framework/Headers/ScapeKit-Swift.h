@@ -212,14 +212,17 @@ SWIFT_PROTOCOL("_TtP8ScapeKit19SCKGeoAnchorManager_")
 @end
 
 @protocol SCKGeoSceneView;
+@protocol SCKGeoArSessionObserver;
 
 SWIFT_PROTOCOL("_TtP8ScapeKit15SCKGeoArSession_")
 @protocol SCKGeoArSession
 @property (nonatomic, readonly) BOOL useDeviceLocationMeasurementsAsFallback;
 @property (nonatomic, readonly, strong) id <SCKGeoSceneView> _Nullable geoSceneView;
-- (void)start;
+- (void)startWithObserver:(id <SCKGeoArSessionObserver> _Nonnull)observer;
 - (void)stop;
-- (void)reset;
+- (void)resetWithObserver:(id <SCKGeoArSessionObserver> _Nonnull)observer;
+- (void)startWithGeoSceneReady:(void (^ _Nonnull)(void))geoSceneReady geoSceneUpdated:(void (^ _Nonnull)(id <SCKGeoSceneView> _Nonnull))geoSceneUpdated geoArSessionError:(void (^ _Nonnull)(NSString * _Nonnull))geoArSessionError;
+- (void)resetWithGeoSceneReady:(void (^ _Nonnull)(void))geoSceneReady geoSceneUpdated:(void (^ _Nonnull)(id <SCKGeoSceneView> _Nonnull))geoSceneUpdated geoArSessionError:(void (^ _Nonnull)(NSString * _Nonnull))geoArSessionError;
 @end
 
 
@@ -227,11 +230,13 @@ SWIFT_PROTOCOL("_TtP8ScapeKit15SCKGeoArSession_")
 /// A SCKGeoArObserver handles SCKGeoArSession state changes
 SWIFT_PROTOCOL("_TtP8ScapeKit23SCKGeoArSessionObserver_")
 @protocol SCKGeoArSessionObserver
-- (void)onGeoSceneUpdated:(id <SCKGeoArSession> _Nonnull)geoArSession geoSceneView:(id <SCKGeoSceneView> _Nonnull)geoSceneView isReady:(BOOL)isReady;
-- (void)onGeoArSessionError:(id <SCKGeoArSession> _Nonnull)geoArSession errorMessage:(NSString * _Nonnull)errorMessage;
+- (void)onGeoSceneReady:(id <SCKGeoArSession> _Nullable)geoArSession;
+- (void)onGeoSceneUpdated:(id <SCKGeoArSession> _Nullable)geoArSession geoSceneView:(id <SCKGeoSceneView> _Nonnull)geoSceneView;
+- (void)onGeoArSessionError:(id <SCKGeoArSession> _Nullable)geoArSession errorMessage:(NSString * _Nonnull)errorMessage;
 @end
 
 @class UIView;
+@class UIColor;
 
 SWIFT_PROTOCOL("_TtP8ScapeKit15SCKGeoSceneView_")
 @protocol SCKGeoSceneView
@@ -239,6 +244,7 @@ SWIFT_PROTOCOL("_TtP8ScapeKit15SCKGeoSceneView_")
 @property (nonatomic, readonly, strong) id <SCKGeoAnchorManager> _Nullable geoAnchorManager;
 - (void)addWithNode:(SCNNode * _Nonnull)node latLng:(SCKLatLng * _Nonnull)latLng;
 - (void)addWithView:(UIView * _Nonnull)view latLng:(SCKLatLng * _Nonnull)latLng;
+- (void)addLabelWithLabel:(NSString * _Nonnull)label fontSize:(CGFloat)fontSize fontColor:(UIColor * _Nonnull)fontColor fontName:(NSString * _Nonnull)fontName latLng:(SCKLatLng * _Nonnull)latLng;
 - (void)removeWithNode:(SCNNode * _Nonnull)node;
 - (NSArray<SCNNode *> * _Nonnull)removeAllNodes SWIFT_WARN_UNUSED_RESULT;
 @end
