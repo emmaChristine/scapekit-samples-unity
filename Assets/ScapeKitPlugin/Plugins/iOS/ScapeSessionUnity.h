@@ -16,9 +16,12 @@
 
 - (void) stopScapeFetch;
 
-- (void) getMeasurements:(SCKGeoSourceType)srcType;
+- (void) getMeasurements;
 
 - (void) setARFrame:(ARFrame *)frame;
+
+- (void) onScapeMeasurementsRequested:(nullable SCKScapeSession *)session
+                           timestamp:(double)timestamp;
 
 - (void) onScapeSessionError:(nullable SCKScapeSession *)session
                       			state:(SCKScapeSessionState)state
@@ -41,5 +44,5 @@
 
 extern "C"
 {
-    void _getMeasurements(int);
+    void _getMeasurements();
 }

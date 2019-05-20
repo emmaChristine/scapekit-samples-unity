@@ -5,9 +5,10 @@
 
 typedef NS_ENUM(NSInteger, SCKLogLevel)
 {
-    SCKLogLevelSckLogVerbose,
-    SCKLogLevelSckLogDebug,
-    SCKLogLevelSckLogInfo,
-    SCKLogLevelSckLogWarn,
-    SCKLogLevelSckLogError,
+    SCKLogLevelLogOff,
+    SCKLogLevelLogVerbose,
+    SCKLogLevelLogDebug,
+    SCKLogLevelLogInfo,
+    SCKLogLevelLogWarn,
+    SCKLogLevelLogError,
 };

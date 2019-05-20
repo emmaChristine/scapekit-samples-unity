@@ -41,8 +41,8 @@ namespace ScapeKitUnity
 
             proj.AddBuildProperty(target, "LIBRARY_SEARCH_PATHS", "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos");
 
-            proj.AddBuildProperty(target, "LD_RUNPATH_SEARCH_PATHS", "$(inherited) @executable_path/Frameworks @loader_path/Frameworks @rpath/");
-            proj.AddBuildProperty(target, "OTHER_LDFLAGS", "-lz -lc++ -weak_framework CoreMotion -weak-lSystem -lswiftUIKit -lswiftSwiftOnoneSupport -lswiftSpriteKit -lswiftsimd -lswiftSceneKit -lswiftQuartzCore -lswiftObjectiveC -lswiftModelIO -lswiftMetal -lswiftGLKit -lswiftFoundation -lswiftDispatch -lswiftDarwin -lswiftCoreMedia -lswiftCoreLocation -lswiftARKit -lswiftAVFoundation -lswiftCore -lswiftCoreAudio -lswiftCoreFoundation -lswiftCoreGraphics -lswiftCoreImage -ObjC");
+            proj.AddBuildProperty(target, "LD_RUNPATH_SEARCH_PATHS", "/usr/lib/swift $(inherited) @executable_path/Frameworks @loader_path/Frameworks @rpath/");
+            proj.AddBuildProperty(target, "OTHER_LDFLAGS", "-lz -lc++ -weak_framework CoreMotion -weak-lSystem -ObjC");
 
             proj.WriteToFile(projPath); 
 #endif

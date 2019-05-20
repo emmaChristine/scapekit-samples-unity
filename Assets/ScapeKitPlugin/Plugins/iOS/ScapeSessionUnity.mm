@@ -25,30 +25,41 @@ static ScapeSessionUnity* _ScapeSessionUnity;
     return _ScapeSessionUnity;
 }
 
-- (void)getMeasurements:(SCKGeoSourceType)srcType
-{
-    [SCKLog logdebug:@"SCKScapeSessionUnity" msg:@" c# _getMeasurements"];
-    
+- (void)getMeasurements
+{   
     SCKScapeSession * scapeSession = [[[ScapeClientUnity sharedInstance] scapeClient] scapeSession];
-    [scapeSession getMeasurements:srcType observer:_ScapeSessionUnity];
+    [scapeSession getMeasurements:_ScapeSessionUnity];
 }
 
 - (void)setARFrame:(ARFrame *)frame
 {
     SCKScapeSession * scapeSession = [[[ScapeClientUnity sharedInstance] scapeClient] scapeSession];
-    [scapeSession setARFrame:frame :UIScreen.mainScreen.bounds.size];
+    [scapeSession setARFrame:frame];
 }
 
 - (void) startScapeFetch
 {
     SCKScapeSession * scapeSession = [[[ScapeClientUnity sharedInstance] scapeClient] scapeSession];
-    [scapeSession startFetch:SCKGeoSourceTypeRawSensorsAndScapeVisionEngine observer:_ScapeSessionUnity];
+    [scapeSession startFetch:_ScapeSessionUnity];
 }
 
 - (void) stopScapeFetch
 {
     SCKScapeSession * scapeSession = [[[ScapeClientUnity sharedInstance] scapeClient] scapeSession];
     [scapeSession stopFetch];
+}
+
+- (void) onScapeMeasurementsRequested:(nullable SCKScapeSession *)session
+                           timestamp:(double)timestamp;
+{
+  (void)session;
+
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        
+        NSString* tsStr = [[NSNumber numberWithDouble:timestamp] stringValue];
+        
+        UnitySendMessage("ScapeSession", "OnScapeMeasurementsRequested", [tsStr UTF8String]);  
+    });  
 }
 
 
@@ -103,20 +114,20 @@ static ScapeSessionUnity* _ScapeSessionUnity;
 - (void)onCameraTransformUpdated:(nullable SCKScapeSession *)session
                        transform:(nullable NSArray<NSNumber *> *)transform;
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        NSData *jsonData = [transform JSONData];
-        const char * transformJsonStr = [[[NSString alloc] initWithData:jsonData  encoding:NSUTF8StringEncoding] UTF8String];
+    // dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+    //     NSData *jsonData = [transform JSONData];
+    //     const char * transformJsonStr = [[[NSString alloc] initWithData:jsonData  encoding:NSUTF8StringEncoding] UTF8String];
         
-        UnitySendMessage("ScapeSession", "OnCameraTransformUpdated", transformJsonStr);
-    });  
+    //     UnitySendMessage("ScapeSession", "OnCameraTransformUpdated", transformJsonStr);
+    // });  
 }
 
 @end
 
-void _getMeasurements(int geoSourceType) 
+void _getMeasurements() 
 {
-    [SCKLog logdebug:@"SCKScapeSessionUnity" msg:@" C _getMeasurements"];
+    [SCKLog log:SCKLogLevelLogInfo tag:@"SCKScapeSessionUnity" msg:@" C _getMeasurements"];
     
-    [[ScapeSessionUnity sharedInstance] getMeasurements:(SCKGeoSourceType)geoSourceType];
+    [[ScapeSessionUnity sharedInstance] getMeasurements];
 }
 

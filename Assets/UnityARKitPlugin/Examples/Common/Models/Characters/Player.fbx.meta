@@ -1,7 +1,7 @@
 fileFormatVersion: 2
-guid: f1d84cc28597f5641a3d9cbc4df7e306
+guid: 12be6e4a604984677b7068ea86e07aa9
 ModelImporter:
-  serializedVersion: 16
+  serializedVersion: 23
   fileIDToRecycleName:
     100000: Ctrl_Grp
     100002: Gun
@@ -114,8 +114,8 @@ ModelImporter:
     400072: LeftWrist
     400074: LeftWrist_FK
     400076: LeftWrist_IK
-    400078: Player
-    400080: //RootNode
+    400078: //RootNode
+    400080: Player
     400082: PlayerCtrl
     400084: RightBrow1
     400086: RightBrow1End
@@ -147,583 +147,94 @@ ModelImporter:
     400138: Tail1
     400140: Tail2
     400142: Tail3
+    2100000: GunMaterial
+    2100002: PlayerMaterial
     4300000: Gun
     4300002: Player
-    7400000: Move
-    7400002: Idle
-    7400004: Death
+    7400000: Take 001
     9500000: //RootNode
     13700000: Gun
     13700002: Player
+  externalObjects: {}
   materials:
     importMaterials: 1
-    materialName: 1
+    materialName: 0
     materialSearch: 1
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    optimizeGameObjects: 1
+    resampleCurves: 1
+    optimizeGameObjects: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
-    animationRotationError: .5
-    animationPositionError: .5
-    animationScaleError: .5
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
     animationWrapMode: 0
-    extraExposedTransformPaths:
-    - PlayerCtrl/Ctrl_Grp/Gun 1/GunBarrelStretch/GunBarrelEnd
-    clipAnimations:
-    - serializedVersion: 16
-      name: Move
-      takeName: Take 001
-      firstFrame: 1
-      lastFrame: 25
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      loopTime: 1
-      loopBlend: 1
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask:
-      - path: 
-        weight: 1
-      - path: Gun
-        weight: 1
-      - path: Player
-        weight: 1
-      - path: PlayerCtrl
-        weight: 1
-      - path: PlayerCtrl/Ctrl_Grp
-        weight: 1
-      - path: PlayerCtrl/Ctrl_Grp/Gun 1
-        weight: 1
-      - path: PlayerCtrl/Ctrl_Grp/Gun 1/GunBarrelStretch
-        weight: 1
-      - path: PlayerCtrl/Ctrl_Grp/Gun 1/GunBarrelStretch/GunBarrelEnd
-        weight: 1
-      - path: PlayerCtrl/Root
-        weight: 1
-      - path: PlayerCtrl/Root/Hips
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway/LeftLeg
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway/LeftLeg/LeftToe
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway/RightLeg
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway/RightLeg/RightToe
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2/Hat3
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2/Hat3/Hat4
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2/Hat3/Hat4/Hat5
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2/Hat3/Hat4/Hat5/HatEnd
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow1/LeftBrow1End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow2/LeftBrow2End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow3
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow3/LeftBrow3End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow1/RightBrow1End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow2/RightBrow2End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow3
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow3/RightBrow3End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist/LeftHand1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist/LeftHand1/LeftHand2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist/LeftThumb1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist/LeftThumb1/LeftThumb2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_FK/LeftLowerArm_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_FK/LeftLowerArm_FK/LeftLowerArm_2_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_FK/LeftLowerArm_FK/LeftLowerArm_2_FK/LeftWrist_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_IK/LeftLowerArm_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_IK/LeftLowerArm_IK/LeftLowerArm2_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_IK/LeftLowerArm_IK/LeftLowerArm2_IK/LeftWrist_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist/RightHand1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist/RightHand1/RightHand2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist/RightThumb1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist/RightThumb1/RightThumb2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_FK/RightLowerArm_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_FK/RightLowerArm_FK/RightLowerArm2_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_FK/RightLowerArm_FK/RightLowerArm2_FK/RightWrist_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_IK/RightLowerArm_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_IK/RightLowerArm_IK/RightLowerArm2_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_IK/RightLowerArm_IK/RightLowerArm2_IK/RightWrist_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Tail1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Tail1/Tail2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Tail1/Tail2/Tail3
-        weight: 1
-      maskType: 0
-      maskSource: {instanceID: 0}
-    - serializedVersion: 16
-      name: Idle
-      takeName: Take 001
-      firstFrame: 137
-      lastFrame: 512
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask:
-      - path: 
-        weight: 1
-      - path: Gun
-        weight: 1
-      - path: Player
-        weight: 1
-      - path: PlayerCtrl
-        weight: 1
-      - path: PlayerCtrl/Ctrl_Grp
-        weight: 1
-      - path: PlayerCtrl/Ctrl_Grp/Gun 1
-        weight: 1
-      - path: PlayerCtrl/Ctrl_Grp/Gun 1/GunBarrelStretch
-        weight: 1
-      - path: PlayerCtrl/Ctrl_Grp/Gun 1/GunBarrelStretch/GunBarrelEnd
-        weight: 1
-      - path: PlayerCtrl/Root
-        weight: 1
-      - path: PlayerCtrl/Root/Hips
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway/LeftLeg
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway/LeftLeg/LeftToe
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway/RightLeg
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway/RightLeg/RightToe
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2/Hat3
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2/Hat3/Hat4
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2/Hat3/Hat4/Hat5
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2/Hat3/Hat4/Hat5/HatEnd
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow1/LeftBrow1End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow2/LeftBrow2End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow3
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow3/LeftBrow3End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow1/RightBrow1End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow2/RightBrow2End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow3
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow3/RightBrow3End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist/LeftHand1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist/LeftHand1/LeftHand2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist/LeftThumb1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist/LeftThumb1/LeftThumb2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_FK/LeftLowerArm_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_FK/LeftLowerArm_FK/LeftLowerArm_2_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_FK/LeftLowerArm_FK/LeftLowerArm_2_FK/LeftWrist_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_IK/LeftLowerArm_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_IK/LeftLowerArm_IK/LeftLowerArm2_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_IK/LeftLowerArm_IK/LeftLowerArm2_IK/LeftWrist_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist/RightHand1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist/RightHand1/RightHand2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist/RightThumb1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist/RightThumb1/RightThumb2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_FK/RightLowerArm_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_FK/RightLowerArm_FK/RightLowerArm2_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_FK/RightLowerArm_FK/RightLowerArm2_FK/RightWrist_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_IK/RightLowerArm_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_IK/RightLowerArm_IK/RightLowerArm2_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_IK/RightLowerArm_IK/RightLowerArm2_IK/RightWrist_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Tail1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Tail1/Tail2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Tail1/Tail2/Tail3
-        weight: 1
-      maskType: 0
-      maskSource: {instanceID: 0}
-    - serializedVersion: 16
-      name: Death
-      takeName: Take 001
-      firstFrame: 525
-      lastFrame: 650
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events:
-      - time: .997762918
-        functionName: RestartLevel
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      transformMask:
-      - path: 
-        weight: 1
-      - path: Gun
-        weight: 1
-      - path: Player
-        weight: 1
-      - path: PlayerCtrl
-        weight: 1
-      - path: PlayerCtrl/Ctrl_Grp
-        weight: 1
-      - path: PlayerCtrl/Ctrl_Grp/Gun 1
-        weight: 1
-      - path: PlayerCtrl/Ctrl_Grp/Gun 1/GunBarrelStretch
-        weight: 1
-      - path: PlayerCtrl/Ctrl_Grp/Gun 1/GunBarrelStretch/GunBarrelEnd
-        weight: 1
-      - path: PlayerCtrl/Root
-        weight: 1
-      - path: PlayerCtrl/Root/Hips
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway/LeftLeg
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway/LeftLeg/LeftToe
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway/RightLeg
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/HipSway/RightLeg/RightToe
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2/Hat3
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2/Hat3/Hat4
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2/Hat3/Hat4/Hat5
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/Hat1/Hat2/Hat3/Hat4/Hat5/HatEnd
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow1/LeftBrow1End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow2/LeftBrow2End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow3
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/LeftBrow3/LeftBrow3End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow1/RightBrow1End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow2/RightBrow2End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow3
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/Head/RightBrow3/RightBrow3End
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist/LeftHand1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist/LeftHand1/LeftHand2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist/LeftThumb1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm/LeftLowerArm/LeftLowerArm2/LeftWrist/LeftThumb1/LeftThumb2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_FK/LeftLowerArm_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_FK/LeftLowerArm_FK/LeftLowerArm_2_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_FK/LeftLowerArm_FK/LeftLowerArm_2_FK/LeftWrist_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_IK/LeftLowerArm_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_IK/LeftLowerArm_IK/LeftLowerArm2_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/LeftShoulder/LeftUpperArm_IK/LeftLowerArm_IK/LeftLowerArm2_IK/LeftWrist_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist/RightHand1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist/RightHand1/RightHand2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist/RightThumb1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm/RightLowerArm/RightLowerArm2/RightWrist/RightThumb1/RightThumb2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_FK/RightLowerArm_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_FK/RightLowerArm_FK/RightLowerArm2_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_FK/RightLowerArm_FK/RightLowerArm2_FK/RightWrist_FK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_IK/RightLowerArm_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_IK/RightLowerArm_IK/RightLowerArm2_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Spine/RightShoulder/RightUpperArm_IK/RightLowerArm_IK/RightLowerArm2_IK/RightWrist_IK
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Tail1
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Tail1/Tail2
-        weight: 1
-      - path: PlayerCtrl/Root/Hips/Tail1/Tail2/Tail3
-        weight: 1
-      maskType: 0
-      maskSource: {instanceID: 0}
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: .00999999978
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
+    importVisibility: 1
     importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
+    keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
-    normalSmoothAngle: 180
-    splitTangentsAcrossUV: 1
-    normalImportMode: 1
-    tangentImportMode: 1
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
+    serializedVersion: 2
     human: []
     skeleton: []
-    armTwist: .5
-    foreArmTwist: .5
-    upperLegTwist: .5
-    legTwist: .5
-    armStretch: .0500000007
-    legStretch: .0500000007
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
+  humanoidOversampling: 1
   additionalBone: 0
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

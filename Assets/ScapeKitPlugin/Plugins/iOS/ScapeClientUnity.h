@@ -48,8 +48,6 @@ extern "C"
     bool _isStarted();
 
     void _terminate();
-
-    void _log(const char*_Nonnull tag, const char*_Nonnull message);
 }
 
 @end

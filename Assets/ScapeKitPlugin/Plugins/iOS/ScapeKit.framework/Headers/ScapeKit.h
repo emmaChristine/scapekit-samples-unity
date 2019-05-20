@@ -14,36 +14,25 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 #import <SystemConfiguration/SystemConfiguration.h>
+#import <simd/simd.h>
 
 #import <ARKit/ARKit.h>
 #import <SceneKit/SceneKit.h>
-
-#import "SCKXrSession.h"
-#import "SCKXrSessionObserver.h"
-#import "SCKXrFrame.h"
-#import "SCKXrPlane.h"
-#import "SCKXrCamera.h"
-#import "SCKXrLight.h"
-#import "SCKXrNode.h"
-#import "SCKXrExtent.h"
-#import "SCKXrNode.h"
-#import "SCKXrAlignment.h"
-#import "SCKXrAnchor.h"
-#import "SCKXrEulerAngles.h"
-#import "SCKXrPointCloud.h"
+#import <SpriteKit/SpriteKit.h>
 
 #import "SCKScapeSession.h"
 #import "SCKScapeSessionObserver.h"
 #import "SCKScapeSessionState.h"
 #import "SCKScapeOrientation.h"
 
-#import "SCKCoordinates.h"
+#import "SCKLatLng.h"
 #import "SCKMeasurements.h"
 #import "SCKLocationMeasurements.h"
 #import "SCKMotionMeasurements.h"
 #import "SCKScapeMeasurements.h"
 #import "SCKScapeMeasurementsStatus.h"
 
+#import "SCKDebugSession.h"
 #import "SCKLog.h"
 #import "SCKLogLevel.h"
 #import "SCKLogOutput.h"

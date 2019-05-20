@@ -15,13 +15,13 @@
 @protocol SCKXrSession
 
 /** (public) */
-- (void)startTracking;
+- (void)startTracking:(nullable id<SCKXrSessionObserver>)observer;
 
 /** (public) */
 - (void)stopTracking;
 
 /** (public) */
-- (void)resetTracking;
+- (void)resetTracking:(nullable id<SCKXrSessionObserver>)observer;
 
 /** (public) */
 - (void)setWorldAlignment:(SCKXrWorldAlignment)alignment;
@@ -49,11 +49,5 @@
 
 /** (public) */
 - (nullable SCKXrFrame *)getLastFrame;
-
-/** (public) */
-- (nullable id<SCKXrSessionObserver>)getXrSessionObserver;
-
-/** (public) */
-- (void)setXrSessionObserver:(nullable id<SCKXrSessionObserver>)xrSessionObserver;
 
 @end
