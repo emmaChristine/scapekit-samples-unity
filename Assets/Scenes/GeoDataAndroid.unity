@@ -141,7 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6afe3c8995f5a4dd6ada034294b85815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectedPlanePrefab: {fileID: 0}
+  detectedPlanePrefab: {fileID: 1654175882956584, guid: 6a35c744e5010405c847fad90282d2be,
+    type: 3}
 --- !u!4 &880859856
 Transform:
   m_ObjectHideFlags: 0
