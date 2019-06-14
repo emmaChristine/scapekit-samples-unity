@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccf6d871853424a32a485708e7abd91b, type: 3}
+  m_Name: ScapeDebugConfig
+  m_EditorClassIdentifier: 
+  logLevel: 2
+  logOutput: 3
+  debugMockGPS: 0
+  mockGPSLatLng:
+    Latitude: 0
+    Longitude: 0
+  mockScapeResults: 0
+  mockScapeLatLng:
+    Latitude: 51.524059
+    Longitude: -0.083037
+  mockScapeHeading: 90
+  mockScapeMeasurementsDelay: 15

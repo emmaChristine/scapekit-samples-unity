@@ -213,26 +213,32 @@ SWIFT_PROTOCOL("_TtP8ScapeKit19SCKGeoAnchorManager_")
 
 @protocol SCKGeoSceneView;
 @protocol SCKGeoArSessionObserver;
+@class ARCamera;
+@class ARFrame;
 
 SWIFT_PROTOCOL("_TtP8ScapeKit15SCKGeoArSession_")
 @protocol SCKGeoArSession
-@property (nonatomic, readonly) BOOL useDeviceLocationMeasurementsAsFallback;
+@property (nonatomic) BOOL useDeviceLocationMeasurementsAsFallback;
 @property (nonatomic, readonly, strong) id <SCKGeoSceneView> _Nullable geoSceneView;
 - (void)startWithObserver:(id <SCKGeoArSessionObserver> _Nonnull)observer;
 - (void)stop;
 - (void)resetWithObserver:(id <SCKGeoArSessionObserver> _Nonnull)observer;
-- (void)startWithGeoSceneReady:(void (^ _Nonnull)(void))geoSceneReady geoSceneUpdated:(void (^ _Nonnull)(id <SCKGeoSceneView> _Nonnull))geoSceneUpdated geoArSessionError:(void (^ _Nonnull)(NSString * _Nonnull))geoArSessionError;
-- (void)resetWithGeoSceneReady:(void (^ _Nonnull)(void))geoSceneReady geoSceneUpdated:(void (^ _Nonnull)(id <SCKGeoSceneView> _Nonnull))geoSceneUpdated geoArSessionError:(void (^ _Nonnull)(NSString * _Nonnull))geoArSessionError;
+- (void)startWithGeoSceneReady:(void (^ _Nonnull)(void))geoSceneReady geoAnchorAdded:(void (^ _Nonnull)(id <SCKGeoAnchor> _Nonnull))geoAnchorAdded geoSceneUpdated:(void (^ _Nonnull)(id <SCKGeoSceneView> _Nullable))geoSceneUpdated geoArSessionError:(void (^ _Nonnull)(NSString * _Nonnull))geoArSessionError updateAtTime:(void (^ _Nonnull)(NSTimeInterval))updateAtTime trackingStateChanged:(void (^ _Nonnull)(ARCamera * _Nonnull))trackingStateChanged frameUpdated:(void (^ _Nonnull)(ARFrame * _Nonnull))frameUpdated;
+- (void)resetWithGeoSceneReady:(void (^ _Nonnull)(void))geoSceneReady geoAnchorAdded:(void (^ _Nonnull)(id <SCKGeoAnchor> _Nonnull))geoAnchorAdded geoSceneUpdated:(void (^ _Nonnull)(id <SCKGeoSceneView> _Nullable))geoSceneUpdated geoArSessionError:(void (^ _Nonnull)(NSString * _Nonnull))geoArSessionError updateAtTime:(void (^ _Nonnull)(NSTimeInterval))updateAtTime trackingStateChanged:(void (^ _Nonnull)(ARCamera * _Nonnull))trackingStateChanged frameUpdated:(void (^ _Nonnull)(ARFrame * _Nonnull))frameUpdated;
 @end
 
 
 /// (public)
-/// A SCKGeoArObserver handles SCKGeoArSession state changes
+/// A SCKGeoArSessionObserver handles SCKGeoArSession state changes
 SWIFT_PROTOCOL("_TtP8ScapeKit23SCKGeoArSessionObserver_")
 @protocol SCKGeoArSessionObserver
 - (void)onGeoSceneReady:(id <SCKGeoArSession> _Nullable)geoArSession;
-- (void)onGeoSceneUpdated:(id <SCKGeoArSession> _Nullable)geoArSession geoSceneView:(id <SCKGeoSceneView> _Nonnull)geoSceneView;
+- (void)onGeoAnchorAdded:(id <SCKGeoArSession> _Nullable)geoArSession geoAnchor:(id <SCKGeoAnchor> _Nonnull)geoAnchor;
+- (void)onGeoSceneUpdated:(id <SCKGeoArSession> _Nullable)geoArSession geoSceneView:(id <SCKGeoSceneView> _Nullable)geoSceneView;
 - (void)onGeoArSessionError:(id <SCKGeoArSession> _Nullable)geoArSession errorMessage:(NSString * _Nonnull)errorMessage;
+- (void)onUpdateAtTime:(id <SCKGeoArSession> _Nullable)geoArSession time:(NSTimeInterval)time;
+- (void)onTrackingStateChanged:(id <SCKGeoArSession> _Nullable)geoArSession camera:(ARCamera * _Nonnull)camera;
+- (void)onFrameUpdated:(id <SCKGeoArSession> _Nullable)geoArSession frame:(ARFrame * _Nonnull)frame;
 @end
 
 @class UIView;
@@ -242,11 +248,12 @@ SWIFT_PROTOCOL("_TtP8ScapeKit15SCKGeoSceneView_")
 @protocol SCKGeoSceneView
 @property (nonatomic, readonly, strong) UIView * _Nonnull nativeView;
 @property (nonatomic, readonly, strong) id <SCKGeoAnchorManager> _Nullable geoAnchorManager;
-- (void)addWithNode:(SCNNode * _Nonnull)node latLng:(SCKLatLng * _Nonnull)latLng;
-- (void)addWithView:(UIView * _Nonnull)view latLng:(SCKLatLng * _Nonnull)latLng;
-- (void)addLabelWithLabel:(NSString * _Nonnull)label fontSize:(CGFloat)fontSize fontColor:(UIColor * _Nonnull)fontColor fontName:(NSString * _Nonnull)fontName latLng:(SCKLatLng * _Nonnull)latLng;
+- (void)addWithNode:(SCNNode * _Nonnull)node latLng:(SCKLatLng * _Nonnull)latLng altitude:(double)altitude;
+- (SCNNode * _Nonnull)addWithView:(UIView * _Nonnull)view scale:(CGFloat)scale latLng:(SCKLatLng * _Nonnull)latLng altitude:(double)altitude SWIFT_WARN_UNUSED_RESULT;
+- (SCNNode * _Nullable)addWebViewWithUrl:(NSString * _Nonnull)url width:(CGFloat)width height:(CGFloat)height scale:(CGFloat)scale latLng:(SCKLatLng * _Nonnull)latLng altitude:(double)altitude SWIFT_WARN_UNUSED_RESULT;
+- (SCNNode * _Nonnull)addLabelWithLabel:(NSString * _Nonnull)label fontSize:(CGFloat)fontSize fontColor:(UIColor * _Nonnull)fontColor fontName:(NSString * _Nonnull)fontName depth:(CGFloat)depth latLng:(SCKLatLng * _Nonnull)latLng altitude:(double)altitude SWIFT_WARN_UNUSED_RESULT;
 - (void)removeWithNode:(SCNNode * _Nonnull)node;
-- (NSArray<SCNNode *> * _Nonnull)removeAllNodes SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<SCNNode *> * _Nonnull)removeAll SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
@@ -324,8 +331,6 @@ SWIFT_PROTOCOL("_TtP8ScapeKit22SCKScapeClientObserver_")
 @end
 
 
-
-
 @interface SCKScapeOrientation (SWIFT_EXTENSION(ScapeKit))
 /// public
 /// Convert ScapeKit orientation to an actual SceneKit Quaternion
@@ -335,15 +340,14 @@ SWIFT_PROTOCOL("_TtP8ScapeKit22SCKScapeClientObserver_")
 - (CGFloat)roll SWIFT_WARN_UNUSED_RESULT;
 @end
 
-@class ARFrame;
+
+
 
 @interface SCKScapeSession (SWIFT_EXTENSION(ScapeKit))
 /// (public)
 /// Set the ar frame manually
 - (void)setARFrame:(ARFrame * _Nonnull)arFrame;
 @end
-
-
 
 
 

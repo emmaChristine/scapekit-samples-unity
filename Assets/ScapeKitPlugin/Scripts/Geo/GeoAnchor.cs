@@ -10,6 +10,12 @@
 namespace ScapeKitUnity
 {
     using UnityEngine;
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+    using GoogleARCore;
+#elif UNITY_IPHONE && !UNITY_EDITOR
+    using UnityEngine.XR.iOS;
+#endif
  
     /// <summary>
     /// When attached to a [GameObject](https://docs.unity3d.com/ScriptReference/GameObject.html) 
@@ -24,19 +30,11 @@ namespace ScapeKitUnity
     /// Any scene containing one or more GeoAnchor components must have a GeoAnchorManager component attached to an active 
     /// GameObject somewhere in the scene.
     /// </summary>
-    public class GeoAnchor : MonoBehaviour
+    public class GeoAnchor : MonoBehaviour, IGeoOrigin
     {
-        /// <summary>
-        /// The World Coordinates Longitude in degrees.
-        /// </summary>
-        [SerializeField]
-        private double longitude;
 
-        /// <summary>
-        /// The World Coordinates Latitude in degrees.
-        /// </summary>
         [SerializeField]
-        private double latitude;
+        private LatLng latLng;
 
         /// <summary>
         /// The height from the ground in meters.
@@ -63,39 +61,25 @@ namespace ScapeKitUnity
         private bool isInstantiated = false; 
 
         /// <summary>
-        /// Gets or sets the Longitude. 
+        /// keep looking for ground position
+        /// </summary>
+        private bool needsGroundPos = false;
+
+        /// <summary>
+        /// Gets or sets the LatLng. 
         /// If setting on an active object, this will potentially update the GameObject's localPosition.
         /// This requires a conversion from LatLng coords to Unity coords, which may incur a performance penalty. 
         /// </summary>
-        public double Longitude 
+        public LatLng LatLng 
         {
             get
             { 
-                return longitude; 
+                return latLng; 
             }
             
             set 
             { 
-                longitude = value; 
-                CalculateLocalCoordinates();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the Latitude. 
-        /// If setting on an active object, this will potentially update the GameObject's localPosition.
-        /// This requires a conversion from LatLng coords to Unity coords, which may incur a performance penalty.
-        /// </summary>
-        public double Latitude 
-        {
-            get
-            { 
-                return latitude; 
-            }
-            
-            set 
-            { 
-                latitude = value; 
+                latLng = value; 
                 CalculateLocalCoordinates();
             }
         }
@@ -146,7 +130,15 @@ namespace ScapeKitUnity
 
             this.gameObject.SetActive(false);
             
-            GeoAnchorManager.Instance.RegisterGeoAnchor(this);
+            GeoAnchorManager.Instance.RegisterGeoInterface(this);
+        }
+
+        /// <summary>
+        /// called form amin thread, used to continually try to find an anchor point 
+        /// if one is wanted
+        /// </summary>
+        public void Update() 
+        {
         }
 
         /// <summary>
@@ -164,7 +156,10 @@ namespace ScapeKitUnity
 
             CalculateLocalCoordinates();
 
-            this.gameObject.SetActive(true);
+            if (WithinMaxDistance()) 
+            {
+                this.gameObject.SetActive(true);
+            }
         }
 
         /// <summary>
@@ -178,12 +173,12 @@ namespace ScapeKitUnity
                 return;
             }
 
-            ScapeLogging.LogDebug(message: "GeoAnchor::GetWorldCoordinates() WorldCoords = " + latitude + ", " + longitude);
+            ScapeLogging.LogDebug(message: "GeoAnchor::GetWorldCoordinates() WorldCoords = " + latLng.Latitude + ", " + latLng.Longitude);
 
-            Vector3 scenePos = ScapeUtils.WgsToLocal(latitude, longitude, altitude, GeoAnchorManager.Instance.S2CellId);
+            Vector3 scenePos = ScapeUtils.WgsToLocal(latLng.Latitude, latLng.Longitude, altitude, GeoAnchorManager.Instance.S2CellId);
 
             ScapeLogging.LogDebug(message: "GeoAnchor::GetWorldCoordinates() ScenePos = " + scenePos.ToString());
-
+            
             this.gameObject.transform.localPosition = scenePos;
         }
     } 

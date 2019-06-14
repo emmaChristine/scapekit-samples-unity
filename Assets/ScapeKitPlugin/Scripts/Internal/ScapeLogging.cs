@@ -1,4 +1,4 @@
-﻿//  <copyright file="ScapeLogging.cs" company="Scape Technologies Limited">
+//  <copyright file="ScapeLogging.cs" company="Scape Technologies Limited">
 //
 //  ScapeLogging.cs
 //  ScapeKitUnity
@@ -17,19 +17,31 @@ namespace ScapeKitUnity
     {
         public static void LogDebug(string tag = "SCKUnity_", string message = "")
         {
-#if UNITY_IPHONE && !UNITY_EDITOR
-            ScapeLoggingBridge._log((int)LogLevel.LOG_DEBUG, tag, message);
-#elif UNITY_ANDROID && !UNITY_EDITOR
-            ScapeLoggingBridge._log(LogLevel.LOG_DEBUG, tag, message);
-#endif
+            if(ScapeClient.Instance.IsStarted()) 
+            {
+    #if UNITY_IPHONE && !UNITY_EDITOR
+                ScapeLoggingBridge._log((int)LogLevel.LOG_DEBUG, tag, message);
+    #elif UNITY_ANDROID && !UNITY_EDITOR
+                ScapeLoggingBridge._log(LogLevel.LOG_DEBUG, tag, message);
+    #endif
+            }
+            else {
+                Debug.Log(tag + " [Debug] : " + message);
+            }
         }
         public static void LogError(string tag = "SCKUnity_", string message = "")
         {
+            if(ScapeClient.Instance.IsStarted()) 
+            {
 #if UNITY_IPHONE && !UNITY_EDITOR
-            ScapeLoggingBridge._log((int)LogLevel.LOG_ERROR, tag, message);
+                ScapeLoggingBridge._log((int)LogLevel.LOG_ERROR, tag, message);
 #elif UNITY_ANDROID && !UNITY_EDITOR
-            ScapeLoggingBridge._log(LogLevel.LOG_ERROR, tag, message);
+                ScapeLoggingBridge._log(LogLevel.LOG_ERROR, tag, message);
 #endif
+            }
+            else {
+                Debug.Log(tag + " [Error] : " + message);
+            }
         }
 
         private static class ScapeLoggingBridge

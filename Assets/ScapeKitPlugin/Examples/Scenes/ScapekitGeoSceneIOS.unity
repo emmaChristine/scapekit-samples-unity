@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 121701002}
   - component: {fileID: 121701001}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: CubeOffice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,8 +144,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9eb031aeed06f47e49e21b327f137523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  longitude: -0.083013
-  latitude: 51.524058
+  latLng:
+    Latitude: 51.524061
+    Longitude: -0.083
   altitude: 0
   maxDistance: 1000
 --- !u!65 &121701002
@@ -287,5 +288,79 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8546833185999197662, guid: 7836257f124174fb3b15b87083f555ad,
+        type: 3}
+      propertyPath: autoUpdate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546833185999197662, guid: 7836257f124174fb3b15b87083f555ad,
+        type: 3}
+      propertyPath: debugMockGPS
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546833185999197662, guid: 7836257f124174fb3b15b87083f555ad,
+        type: 3}
+      propertyPath: mockScapeResults
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546833185999197662, guid: 7836257f124174fb3b15b87083f555ad,
+        type: 3}
+      propertyPath: debugSupport
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546833185999197662, guid: 7836257f124174fb3b15b87083f555ad,
+        type: 3}
+      propertyPath: mockScapeLatitude
+      value: 51.523986
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546833185999197662, guid: 7836257f124174fb3b15b87083f555ad,
+        type: 3}
+      propertyPath: mockScapeLongitude
+      value: -0.084208
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546833185999197662, guid: 7836257f124174fb3b15b87083f555ad,
+        type: 3}
+      propertyPath: mockScapeHeading
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546833185999197662, guid: 7836257f124174fb3b15b87083f555ad,
+        type: 3}
+      propertyPath: debugConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: aede8a22c95fa450bb499d8129bbf1be,
+        type: 2}
+    - target: {fileID: 1377608550, guid: 7836257f124174fb3b15b87083f555ad, type: 3}
+      propertyPath: enableLightEstimation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1377608550, guid: 7836257f124174fb3b15b87083f555ad, type: 3}
+      propertyPath: m_camera
+      value: 
+      objectReference: {fileID: 3693467745671231677}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7836257f124174fb3b15b87083f555ad, type: 3}
+--- !u!1 &3693467745671231669 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8066437702077331397, guid: 7836257f124174fb3b15b87083f555ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 3693467745671231668}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3693467745671231670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693467745671231669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b58ecea7a196242dd879c814ac05084c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ClearMaterial: {fileID: 2100000, guid: f1d9352050a75486f878ab19fa578f16, type: 2}
+--- !u!20 &3693467745671231677 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 8066437702077331398, guid: 7836257f124174fb3b15b87083f555ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 3693467745671231668}
+  m_PrefabAsset: {fileID: 0}

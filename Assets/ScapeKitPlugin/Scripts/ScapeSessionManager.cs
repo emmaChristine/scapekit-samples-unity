@@ -9,6 +9,7 @@
 
 namespace ScapeKitUnity
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
@@ -35,22 +36,11 @@ namespace ScapeKitUnity
         private Camera theCamera;
 
         /// <summary>
-        /// DebugSupport, enables logging
+        /// A scriptable object which can be optionally added to provide 
+        /// debug support options
         /// </summary>
         [SerializeField]
-        private bool debugSupport = false;
-        
-        /// <summary>
-        /// LogLevel, controls the amount of logging that gets output
-        /// </summary>
-        [SerializeField]
-        private LogLevel logLevel = LogLevel.LOG_ERROR;
-        
-        /// <summary>
-        /// logOutput, controls where the logging gets output
-        /// </summary>
-        [SerializeField]
-        private LogOutput logOutput = LogOutput.CONSOLE;
+        private ScapeDebugConfig debugConfig;
 
         /// <summary>
         /// Returned scape measurements are filtered by confidence score.
@@ -125,11 +115,25 @@ namespace ScapeKitUnity
         /// </summary>
         private UpdateState state = UpdateState.ClientNotStarted;
 
-
         /// <summary>
         /// checks whether the request has reached the native lib for execution
         /// </summary>
         private bool awaitingRequestDispatch = false;
+
+        /// <summary>
+        /// used to call mocked scape measurements after some delay
+        /// </summary>
+        private IEnumerator coroutine;
+
+        /// <summary>
+        /// only becomes valid once we have a scape measurement and a ground plane 
+        /// </summary>
+        private ScapeCameraExt scapeCameraExt;
+
+        /// <summary>
+        /// a class used to ascertain the height of the ground from ARKit/Core 
+        /// </summary>
+        private GroundTracker groundTracker = null;
 
         /// <summary>
         /// controls state of Session update
@@ -164,11 +168,16 @@ namespace ScapeKitUnity
         public void Start()
         {
 #if UNITY_ANDROID
-            if(!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+            if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
             {
                 Permission.RequestUserPermission(Permission.FineLocation);
             }
+
+            groundTracker = new GroundTrackerARCore();
+#else 
+            groundTracker = new GroundTrackerARKit();
 #endif
+            scapeCameraExt.Reset();
 
             InitClient();
         }
@@ -178,6 +187,25 @@ namespace ScapeKitUnity
         /// </summary>
         public void Update()
         {
+            groundTracker.update();
+
+            if (scapeCameraExt.IsValid() == false)
+            {
+                bool success = false;
+                var groundHeight = groundTracker.GetGroundHeight(out success);
+                if (success)
+                {
+                    scapeCameraExt.Altitude = -groundHeight;
+                }
+            }
+
+            if (scapeCameraExt.IsValid())
+            {
+                InstantiateOrigin(scapeCameraExt);
+
+                scapeCameraExt.Reset();
+            }
+
             if (state == UpdateState.ClientNotStarted) 
             {
                 InitClient();
@@ -200,13 +228,26 @@ namespace ScapeKitUnity
                             geoCameraComponent.HoldCameraPose();
                         }
 
-                        if (ScapeClient.Instance.ScapeSession) 
+                        if (ScapeClient.Instance.ScapeSession || MockScapeResults()) 
                         {
                             ScapeLogging.LogDebug(message: "ScapeSessionManager UpdateState.NeedsMeasurements");
-                            ScapeClient.Instance.ScapeSession.GetMeasurements();
+
+                            if (!MockScapeResults()) 
+                            {
+                                ScapeClient.Instance.ScapeSession.GetMeasurements();
+                            }
+
                             ChangeState(UpdateState.TakingMeasurements);
                             awaitingRequestDispatch = true;
                             timeSinceScapeMeasurement = 0.0f;
+                            
+                            if (MockScapeResults())
+                            {
+                                OnScapeMeasurementsRequested(((DateTimeOffset)System.DateTime.Now).ToUnixTimeSeconds());
+                                ScapeLogging.LogDebug(message: "ScapeSessionManager::StartCoroutine");
+                                coroutine = MockScapeResultsDelayed(debugConfig.MockScapeMeasurementsDelay);
+                                StartCoroutine(coroutine);
+                            }
                         }
                         else
                         {
@@ -246,13 +287,15 @@ namespace ScapeKitUnity
         /// </summary>
         private void InitClient() 
         {
-            ScapeClient.Instance.WithDebugSupport(debugSupport).WithResApiKey().StartClient();
+            ScapeClient.Instance.WithDebugSupport(HaveDebugSupport()).WithResApiKey().StartClient();
 
+            // scape client can fail to start at this point due to waiting for user to grant 
+            // permissions, so we keep retrying every update
             if (ScapeClient.Instance.IsStarted())
             {
-                if (debugSupport) 
+                if (debugConfig != null) 
                 {
-                    ScapeDebugSession.Instance.SetLogConfig(logLevel, logOutput);
+                    debugConfig.ConfigureDebugSession();
                 }
 
                 ScapeClient.Instance.ScapeSession.ScapeMeasurementsRequested += OnScapeMeasurementsRequested;
@@ -270,12 +313,12 @@ namespace ScapeKitUnity
 
                         if (geoCameraComponent == null) 
                         {
-                            ScapeLogging.LogError(message: "ScapeSessionManager: The Camera assigned to the Scape Session does not have a geoCameraComponent");
+                            ScapeLogging.LogDebug(message: "ScapeSessionManager: The Camera assigned to the Scape Session does not have a geoCameraComponent");
                         }
                     }
                     else 
                     {
-                        ScapeLogging.LogError(message: "ScapeSessionManager: A Scape Camera has not been assigned to the Scape Session");
+                        ScapeLogging.LogDebug(message: "ScapeSessionManager: A Scape Camera has not been assigned to the Scape Session");
                     }
                 }
 
@@ -313,7 +356,7 @@ namespace ScapeKitUnity
         /// </param>
         private void ChangeState(UpdateState st) 
         {
-            ScapeLogging.LogDebug("ChangeState " + st);
+            ScapeLogging.LogDebug(message: "ChangeState " + st);
 
             state = st;
         }
@@ -362,6 +405,22 @@ namespace ScapeKitUnity
         }
 
         /// <summary>
+        /// instantiate the origin once we have a valid ScapeCameraExt 
+        /// </summary>
+        /// <param name="ext">
+        /// the ScapeCameraExt
+        /// </param>
+        private void InstantiateOrigin(ScapeCameraExt ext)
+        {
+            GeoAnchorManager.Instance.InstantiateOrigin(ext.Coords);
+
+            if (geoCameraComponent) 
+            {
+                geoCameraComponent.SynchronizeARCamera(ext.Coords, (float)ext.Heading, (float)ext.Altitude);
+            }
+        }
+
+        /// <summary>
         /// Callback for ScapeMeasurements update
         /// </summary>
         /// <param name="scapeMeasurements">
@@ -370,15 +429,12 @@ namespace ScapeKitUnity
         private void OnScapeMeasurementsEvent(ScapeMeasurements scapeMeasurements)
         {
             ScapeLogging.LogDebug(message: "ScapeSessionManager::OnScapeMeasurementsEvent");
+
             if (scapeMeasurements.MeasurementsStatus == ScapeMeasurementStatus.ResultsFound &&
                 scapeMeasurements.ConfidenceScore > confidenceThreshold) 
             {
-                GeoAnchorManager.Instance.InstantiateOrigin(scapeMeasurements.LatLng);
-
-                if (geoCameraComponent) 
-                {
-                    geoCameraComponent.SynchronizeARCamera(scapeMeasurements.LatLng, (float)scapeMeasurements.Heading);
-                }
+                scapeCameraExt.Coords = scapeMeasurements.LatLng;
+                scapeCameraExt.Heading = scapeMeasurements.Heading;
 
                 receivedScapeMeasurement = true;
                 ChangeState(UpdateState.HaveMeasurements);
@@ -390,13 +446,22 @@ namespace ScapeKitUnity
             }
 
             resetUpdateVars = true;
+
+            if (MockScapeResults()) 
+            {
+                ScapeLogging.LogDebug(message: "ScapeSessionManager::StopCoroutine");
+                StopCoroutine(coroutine);
+            }
         }
 
         /// <summary>
         /// Event returned from core when scape measurements are underway
         /// </summary>
-        private void OnScapeMeasurementsRequested(double timestamp) {
-
+        /// <param name="timestamp">
+        /// the timestamp the request was sent
+        /// </param>
+        private void OnScapeMeasurementsRequested(double timestamp) 
+        {
             ScapeLogging.LogDebug(message: "ScapeSessionManager::OnScapeMeasurementsRequested");
 
             awaitingRequestDispatch = false;
@@ -414,7 +479,8 @@ namespace ScapeKitUnity
 
             if (useGPSFallback && receivedScapeMeasurement == false) 
             {
-                geoCameraComponent.SynchronizeARCamera(locationMeasurements.LatLng, (float)locationMeasurements.Heading);   
+                scapeCameraExt.Coords = locationMeasurements.LatLng;
+                scapeCameraExt.Heading = locationMeasurements.Heading;
             }
         }
 
@@ -436,11 +502,95 @@ namespace ScapeKitUnity
         /// </param>
         private void OnScapeSessionError(ScapeSessionError scapeDetails)
         {
-            ScapeLogging.LogError(message: scapeDetails.State.ToString() + ": " + scapeDetails.Message);
+            ScapeLogging.LogDebug(message: scapeDetails.State.ToString() + ": " + scapeDetails.Message);
             
             ChangeState(UpdateState.NeedsMeasurements);
 
             resetUpdateVars = true;
+        }
+
+        /// <summary>
+        /// call the mocked measurements after some delay
+        /// </summary>
+        /// <param name="delayTime">
+        /// Delays the mocked result 
+        /// </param>
+        /// <returns>
+        /// IEnumerator to yield the function
+        /// </returns> 
+        private IEnumerator MockScapeResultsDelayed(float delayTime) 
+        {
+            yield return new WaitForSeconds(delayTime);
+
+            ScapeLogging.LogDebug(message: "ScapeSessionManager::Sending Mock Measurements");
+
+            OnScapeMeasurementsEvent(debugConfig.GetMockScapeMeasurements());
+        }
+
+        /// <summary>
+        /// Check whether debug session is in use and scape measurements are to be mocked
+        /// </summary>
+        /// <returns>
+        /// whether scape measurements should be mocked
+        /// </returns>
+        private bool MockScapeResults() 
+        {
+            return debugConfig != null && debugConfig.MockScapeResults();
+        }
+
+        /// <summary>
+        /// Check whether debug session is in use
+        /// </summary>
+        /// <returns>
+        /// boolean indicating user has made use of a debug config object
+        /// </returns>
+        private bool HaveDebugSupport() 
+        {
+            return debugConfig != null;
+        }
+
+        /// <summary>
+        /// A struct to hold all info required in instantiate scape camera,
+        /// and therefore the rest of the scene
+        /// </summary>
+        internal struct ScapeCameraExt
+        {
+            /// <summary>
+            /// coords usually returned by scapeMeasuremnts
+            /// </summary>
+            public LatLng Coords;
+
+            /// <summary>
+            /// altitude calcualted by arkit/core
+            /// </summary>
+            public double Altitude;
+
+            /// <summary>
+            /// heading usually returned by scapeMeasuremnts
+            /// </summary>
+            public double Heading;
+
+            /// <summary>
+            /// check whether all fields have been assigned yet
+            /// </summary>
+            /// <returns>
+            /// boolean indicating the struct is ready to be used
+            /// </returns>
+            public bool IsValid()
+            {
+                return this.Coords.Latitude != -1.0 && this.Coords.Longitude != -1.0 
+                            && this.Altitude != -1.0 && this.Heading != -1.0;
+            }
+
+            /// <summary>
+            /// reset values to null defaults
+            /// </summary>
+            public void Reset()
+            {
+                this.Coords = new LatLng { Longitude = -1.0, Latitude = -1.0 };
+                this.Altitude = -1.0;
+                this.Heading = -1.0;
+            }
         }
     }
 }

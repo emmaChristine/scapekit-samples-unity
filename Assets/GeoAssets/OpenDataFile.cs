@@ -59,8 +59,7 @@ public class OpenDataFile : MonoBehaviour
             // After the GeoAnchor starts it will deactivate the GameObject until the ScapeCamera
             // localizes. 
         	var anchor = obj.AddComponent(typeof(GeoAnchor)) as GeoAnchor;
-        	anchor.Longitude = streetObject.LatLng.Longitude;
-        	anchor.Latitude = streetObject.LatLng.Latitude;
+        	anchor.LatLng = streetObject.LatLng;
 
             // we set scale here.
             // note setting position here would have no effect because the GeoAnchor will set 

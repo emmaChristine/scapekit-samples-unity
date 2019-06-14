@@ -30,17 +30,6 @@ namespace ScapeKitUnity
         private Text textField;
 
         /// <summary>
-        /// always allow text to stay on screen before updating
-        /// </summary>
-        [SerializeField]
-        private float textDelay = 5.0f;
-
-        /// <summary>
-        /// counter to hold last text update
-        /// </summary>
-        private float textTime = 0.0f;
-
-        /// <summary>
         /// The text to be updated
         /// </summary>
         private string newText;
@@ -56,8 +45,6 @@ namespace ScapeKitUnity
         /// </summary>
         public void Start() 
         {
-            textTime = -textDelay;
-
             InitScape();
         }
 
@@ -66,11 +53,10 @@ namespace ScapeKitUnity
         /// </summary>
         public void Update()
         {
-            if (updateText && (textTime + textDelay) < Time.fixedTime) 
+            if (updateText) 
             {
                 textField.text = newText;
                 updateText = false;
-                textTime = Time.fixedTime;
             }
         }
 
@@ -91,7 +77,7 @@ namespace ScapeKitUnity
         /// </summary>
         private void OnGetMeasurements()
         {
-            newText = "Fetching...";
+            newText = textField.text + "\n\nFetching...";
             updateText = true;
         }
 

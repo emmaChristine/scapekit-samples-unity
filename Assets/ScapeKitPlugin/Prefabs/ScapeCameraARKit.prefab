@@ -40,10 +40,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1377608549}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5078d65dfeb0947cf8787a9ef0249b34, type: 3}
+  m_Script: {fileID: 11500000, guid: 462d46d2423bb4f738d2497a397b1590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_camera: {fileID: 8066437702077331398}
+  m_camera: {fileID: 0}
   startAlignment: 0
   planeDetection: 1
   getPointCloud: 0
@@ -102,7 +102,6 @@ GameObject:
   - component: {fileID: 8066437702077331451}
   - component: {fileID: 8066437702077331450}
   - component: {fileID: 8066437702077331449}
-  - component: {fileID: 8066437702077331448}
   - component: {fileID: 8066437702077331399}
   m_Layer: 0
   m_Name: Main Camera
@@ -200,22 +199,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8066437702077331397}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 954449cecdefd4561b4fcc786bc51a74, type: 3}
+  m_Script: {fileID: 11500000, guid: ce437cef046e841aabd6070890e79d41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8066437702077331448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8066437702077331397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0eb9c22c136245e18e7cdf35186df3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ClearMaterial: {fileID: 2100000, guid: c243f6711f2f24970be9c59f2d381d94, type: 2}
 --- !u!114 &8066437702077331399
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -92,7 +92,6 @@ static ScapeClientUnity* _ScapeClientUnity;
 extern "C" {
     void _withApiKey(const char* apiKey)
     {
-        std::cout << __func__ << "/n";
         NSString* apiKeyStr = [NSString stringWithUTF8String:apiKey];
         [[ScapeClientUnity sharedInstance] withApiKey:apiKeyStr];
     }
@@ -104,25 +103,21 @@ extern "C" {
 
     void _start()
     {
-        std::cout << __func__ << "/n";
         [[ScapeClientUnity sharedInstance] start];
     }
 
     void _stop()
     {
-        std::cout << __func__ << "/n";
         [[ScapeClientUnity sharedInstance] stop];
     }
 
     bool _isStarted()
     {
-        std::cout << __func__ << "/n";
         return [[ScapeClientUnity sharedInstance] isStarted];
     }
 
     void _terminate()
     {
-        std::cout << __func__ << "/n";
         [[ScapeClientUnity sharedInstance] terminate];
     }
 }
