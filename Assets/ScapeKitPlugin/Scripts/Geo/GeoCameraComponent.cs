@@ -9,7 +9,9 @@
 
 namespace ScapeKitUnity
 {
+    using GoogleARCore;
     using UnityEngine;
+    using UnityEngine.EventSystems;
     using UnityEngine.UI;
     using UnityEngine.XR;
 
@@ -24,18 +26,18 @@ namespace ScapeKitUnity
     public class GeoCameraComponent : MonoBehaviour
     {
         /// <summary>
+        /// The worldTransformObject is used to convert the local camera's space (typically set by ARKit/Core)
+        /// to the world space. That is a space relative to the S2 cell being used as the point of origin for the scene
+        /// and the direction being relative to north.
+        /// The world transform object is made the camera's parent transform.
+        /// </summary>
+        private static GameObject worldTransformObject;
+
+        /// <summary>
         /// The main camera to apply the scape global transform too
         /// </summary>
         [SerializeField]
         private Camera theCamera;
-
-        /// <summary>
-        /// The worldTransformObject is used to convert the local camera's space (typically set by ARKit/Core)
-        /// to the global reference space. That is a space relative to the S2 cell being used as the point of origin for the scene
-        /// and the direction being relative to north.
-        /// The world transform object is made the camera's parent transform.
-        /// </summary>
-        private GameObject worldTransformObject = null;
 
         /// <summary>
         /// The camera position at which point scape measurements last were taken
@@ -69,6 +71,27 @@ namespace ScapeKitUnity
         private bool updateRoot = false;
 
         /// <summary>
+        /// Gets the world transform. This is the transform that takes the camera
+        /// from ar space to "real world" space.
+        /// The inverse of this transform can be used to take an object position in world space 
+        /// and covert it back to ar space for use with ar specific functions eg Ar.Session.RayCast
+        /// Additionally an object in world space prior to a scape measurement, can be converted to the "new"
+        /// world space after a scape measurement is returned by multiplying it's transform with this one
+        /// (or by parenting itself to this one)
+        /// </summary>
+        public static Transform WorldTransform
+        {
+            get 
+            { 
+                return worldTransformObject.transform; 
+            }
+
+            private set 
+            {
+            }
+        }
+
+        /// <summary>
         /// used to save the camera's position and orientation at the point the Scape Measurements are taken
         /// </summary>
         public void HoldCameraPose()
@@ -90,7 +113,7 @@ namespace ScapeKitUnity
         /// </summary>
         public void Update()
         {
-            UpdateRoot();
+            UpdateWorldTransform();
         }
 
         /// <summary>
@@ -104,7 +127,11 @@ namespace ScapeKitUnity
         /// <param name="heading">
         /// The compass heading given by scape measurements
         /// </param>        
-        public void SynchronizeARCamera(LatLng coordinates, float heading) 
+        /// <param name="altitude">
+        /// The the altitude from the ground the camera is at. This is currently supplied by 
+        /// ARKit/Core using the GroundTracker
+        /// </param>        
+        public void SynchronizeARCamera(LatLng coordinates, float heading, float altitude) 
         {
             ScapeLogging.LogDebug(message: "SynchronizeARCamera() LatLngCoordinates = " + ScapeUtils.CoordinatesToString(coordinates));
 
@@ -116,7 +143,7 @@ namespace ScapeKitUnity
             cameraS2Position = ScapeUtils.WgsToLocal(
                                                     coordinates.Latitude, 
                                                     coordinates.Longitude, 
-                                                    0.0, 
+                                                    altitude, 
                                                     GeoAnchorManager.Instance.S2CellId);
             
             // the world transform direction corrects the camera's Heading to be relative to North.
@@ -151,6 +178,7 @@ namespace ScapeKitUnity
             var cameraParent = theCamera.transform.parent;
 
             worldTransformObject = new GameObject();
+
             theCamera.transform.SetParent(worldTransformObject.transform, false);
 
             if (cameraParent) 
@@ -162,13 +190,13 @@ namespace ScapeKitUnity
         /// <summary>
         /// update the world transform object having been given new scape measurements
         /// </summary>
-        private void UpdateRoot() 
+        private void UpdateWorldTransform() 
         {
             if (updateRoot) 
             {
                 PrintError();
 
-                ScapeLogging.LogDebug(message: "GeoCameraComponent::UpdateRoot()");
+                ScapeLogging.LogDebug(message: "GeoCameraComponent::UpdateWorldTransform()");
 
                 worldTransformObject.transform.rotation = Quaternion.AngleAxis(worldTransformDirection, Vector3.up);
                 worldTransformObject.transform.position = worldTransformPosition;

@@ -75,7 +75,20 @@ namespace ScapeKitUnity
             }
             else 
             {
-                Debug.Log("Error: No DebugSession");
+                Debug.Log("SetLogConfig Error: No DebugSession");
+            }
+        }
+
+        public void MockGPSCoordinates(double latitude, double longitude) 
+        {
+            AndroidJavaObject debugSession = ScapeClientAndroid.Instance.GetDebugSession();
+            if(debugSession != null) 
+            {
+                debugSession.Call("mockGPSCoordinates", latitude, longitude);
+            }
+            else 
+            {
+                Debug.Log("MockGPSCoordinates Error: No DebugSession");
             }
         }
 #elif UNITY_IPHONE && !UNITY_EDITOR
@@ -86,9 +99,22 @@ namespace ScapeKitUnity
         {
             _setLogConfig((int)level, (int)output);
         }
+
+        [DllImport("__Internal")]
+        public static extern void _mockGPSCoordinates(double latitude, double longitude);
+
+        public void MockGPSCoordinates(double latitude, double longitude)
+        {
+            _mockGPSCoordinates(latitude, longitude);
+        }
 #else 
-        public void SetLogConfig(LogLevel level, LogOutput output) {
-        	Debug.Log(message: "_setLogConfig not implemented on desktop");
+        public void SetLogConfig(LogLevel level, LogOutput output) 
+        {
+        	Debug.Log(message: "SetLogConfig not implemented on desktop");
+        }
+        public void MockGPSCoordinates(double latitude, double longitude) 
+        {
+            Debug.Log(message: "MockGPSCoordinates not implemented on desktop");
         }
 #endif
 

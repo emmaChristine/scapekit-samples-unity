@@ -6,7 +6,7 @@ namespace ScapeKitUnity
     internal class DocsWindow : EditorWindow
     {
         WebViewHook webView;
-        string url = "https://developer-docs.scape.io/site/unity/";
+        string url = "https://developer-docs.scape.io/site/unity/requirements/";
 
         [MenuItem("ScapeKit/Docs %#d", false, 3)]
         static void Load()

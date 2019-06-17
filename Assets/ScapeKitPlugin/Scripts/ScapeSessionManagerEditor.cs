@@ -19,9 +19,7 @@ namespace ScapeKitUnity
     class ScapeSessionManagerEditor : Editor 
     {
         SerializedProperty theCameraProp;
-        SerializedProperty debugSupportProp;
-        SerializedProperty logLevelProp;
-        SerializedProperty logOutputProp;
+        SerializedProperty debugConfigProp;
         SerializedProperty confidenceThresholdProp;
         SerializedProperty checkCameraPointsUpProp;
         SerializedProperty useGPSFallbackProp;
@@ -32,9 +30,7 @@ namespace ScapeKitUnity
         public void OnEnable()
         {
             theCameraProp = serializedObject.FindProperty("theCamera");
-            debugSupportProp = serializedObject.FindProperty("debugSupport");
-            logLevelProp = serializedObject.FindProperty("logLevel");
-            logOutputProp = serializedObject.FindProperty("logOutput");
+            debugConfigProp = serializedObject.FindProperty("debugConfig");
             confidenceThresholdProp = serializedObject.FindProperty("confidenceThreshold");
             checkCameraPointsUpProp = serializedObject.FindProperty("checkCameraPointsUp");
             useGPSFallbackProp = serializedObject.FindProperty("useGPSFallback");
@@ -50,17 +46,11 @@ namespace ScapeKitUnity
             theCameraGUI.tooltip = "must be set in order to use scape measurements with AR Camera";
             EditorGUILayout.PropertyField(theCameraProp, theCameraGUI);
 
-            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-            var debugSupportGUI = new GUIContent("Debug Support");
-            debugSupportGUI.tooltip = "enables logging";
-            EditorGUILayout.PropertyField(debugSupportProp, debugSupportGUI);
-            var logLevelGUI = new GUIContent("Log Level");
-            logLevelGUI.tooltip = "controls the amount of logging that gets output";
-            EditorGUILayout.PropertyField(logLevelProp, logLevelGUI);
-            var logOutputGUI = new GUIContent("Log Output");
-            logOutputGUI.tooltip = "controls where the logging gets output";
-            EditorGUILayout.PropertyField(logOutputProp, logOutputGUI);
+            var debugConfigGUI = new GUIContent("Debug Config");
+            debugConfigGUI.tooltip = "A scriptable object which can be optionally added to provide runtime debug support features." + 
+            "Create a new instance of this object via menu Assets/Create/ScapeKit/ScapeDebugConfig";
+            EditorGUILayout.PropertyField(debugConfigProp, debugConfigGUI);
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
@@ -76,25 +66,25 @@ namespace ScapeKitUnity
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
             var autoUpdateGUI = new GUIContent("Auto Update");
-            autoUpdateGUI.tooltip = "tells this object to control the calling of GetMeasurements()";
+            autoUpdateGUI.tooltip = "If set to true the client will repeatedly update scape measurements throughout the session." +
+            "Otherwise the client will effectively stop after the first successful measurement is returned.";
             EditorGUILayout.PropertyField(autoUpdateProp, autoUpdateGUI);
 
             if (autoUpdateProp.boolValue)
             {
-                var checkCameraPointsUpGUI = new GUIContent("checkCameraPointsUpProp");
-                checkCameraPointsUpGUI.tooltip = "only attempts to send image when camera is pointing above horizontal";
-                EditorGUILayout.PropertyField(checkCameraPointsUpProp, checkCameraPointsUpGUI);
-                var timeoutUpdateGUI = new GUIContent("timeoutUpdateProp");
+                var timeoutUpdateGUI = new GUIContent("Timeout Update Prop");
                 timeoutUpdateGUI.tooltip = "controls when another GetMeasurement gets called due to timeout";
                 EditorGUILayout.PropertyField(timeoutUpdateProp, timeoutUpdateGUI);
-                var distanceUpdateGUI = new GUIContent("distanceUpdateProp");
+                var distanceUpdateGUI = new GUIContent("Distance Update Prop");
                 distanceUpdateGUI.tooltip = "controls when another GetMeasurement gets called due to camera movement";
                 EditorGUILayout.PropertyField(distanceUpdateProp, distanceUpdateGUI);
             }
-            else 
-            {
-                checkCameraPointsUpProp.boolValue = false;
-            }
+            
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+            var checkCameraPointsUpGUI = new GUIContent("Check Camera Points Up Prop");
+            checkCameraPointsUpGUI.tooltip = "only attempts to send image when camera is pointing above horizontal";
+            EditorGUILayout.PropertyField(checkCameraPointsUpProp, checkCameraPointsUpGUI);
 
             serializedObject.ApplyModifiedProperties ();
         }

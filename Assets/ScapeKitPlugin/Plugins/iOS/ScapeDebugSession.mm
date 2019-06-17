@@ -15,6 +15,17 @@ void _setLogConfig(int level, int output)
     }
 }
 
+void _mockGPSCoordinates(double latitude, double longitude)
+{
+    id <SCKDebugSession> debugSession = [[[ScapeClientUnity sharedInstance] scapeClient] debugSession];
+    if(debugSession != nullptr) {
+        [debugSession mockGPSCoordinates:latitude longitude:longitude];
+    }
+    else {
+        [SCKLog log:SCKLogLevelLogError tag:@"SCKDebugSession" msg:@"_mockGPSCoordinates no debug session found, did you run client with debug support enabled?"];
+    }
+
+}
 void _log(int level, const char* tag, const char* message) 
 {
     NSString* tagStr = [NSString stringWithUTF8String:tag];

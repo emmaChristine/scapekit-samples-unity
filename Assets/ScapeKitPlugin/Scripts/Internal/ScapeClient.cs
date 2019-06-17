@@ -16,8 +16,6 @@ namespace ScapeKitUnity
 
     public sealed class ScapeClient : MonoBehaviourSingleton<ScapeClient>
     {
-        private bool isDebugSupported = false;
-
         internal event Action ClientStartedEvent, ClientStoppedEvent;
         internal event Action<string> ClientFailedEvent;
 
@@ -25,14 +23,20 @@ namespace ScapeKitUnity
         static string resPath = "Assets/Resources/";
         string apiKey = "XXX";
 
+        private static bool setAndroidClientEvents = false;
+
         public static ScapeClient Instance
         {
             get
             {
                 var scapeClientInstance = BehaviourInstance as ScapeClient;
 #if UNITY_ANDROID && !UNITY_EDITOR
-                var instance = ScapeClientAndroid.Instance;
-                instance.SetClientEvents(scapeClientInstance.ClientStartedEvent, scapeClientInstance.ClientStoppedEvent, scapeClientInstance.ClientFailedEvent);
+                if(setAndroidClientEvents == false) {
+                    Debug.Log("instance.SetClientEvents");
+                    var instance = ScapeClientAndroid.Instance;
+                    instance.SetClientEvents(scapeClientInstance.ClientStartedEvent, scapeClientInstance.ClientStoppedEvent, scapeClientInstance.ClientFailedEvent);
+                    setAndroidClientEvents = true;
+                }
 #endif
                 return scapeClientInstance;
             }
@@ -90,10 +94,9 @@ namespace ScapeKitUnity
         public ScapeClient WithDebugSupport(bool isSupported)
         {
             ScapeLogging.LogDebug(message: "With debug support " + isSupported);
-            this.isDebugSupported = isSupported;
 
 #if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR
-            ScapeClientBridge._withDebugSupport(this.isDebugSupported);
+            ScapeClientBridge._withDebugSupport(isSupported);
 #endif
             return Instance;
         }
@@ -128,7 +131,6 @@ namespace ScapeKitUnity
 #if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR
             isStarted = ScapeClientBridge._isStarted();  
 #endif
-            ScapeLogging.LogDebug(message: "Scape Client isStarted: " + isStarted);
             return isStarted;
         }
 

@@ -19,9 +19,9 @@ namespace ScapeKitUnity
     /// for the origin of the Unity scene. 
     /// This class activates the GeoAnchored components the first time a successful Scape Measurement is
     /// received by the ScapeSessionManager.
-    /// This is implementd as a [MonoBehaviour](https://docs.unity3d.com/ScriptReference/MonoBehaviour.html),
+    /// This is implemented as a [MonoBehaviour](https://docs.unity3d.com/ScriptReference/MonoBehaviour.html),
     /// in order to be used in Unity. The [GameObject](https://docs.unity3d.com/ScriptReference/GameObject.html) is
-    /// irrelevant to it's functionlity.
+    /// irrelevant to it's functionality.
     /// </summary>
     public class GeoAnchorManager : MonoBehaviour
     {
@@ -145,13 +145,14 @@ namespace ScapeKitUnity
         {
             if (doOriginEvent) 
             {
+                ScapeLogging.LogDebug(message: "GeoAnchorManager::geoOriginEvent()");
                 geoOriginEvent();
                 doOriginEvent = false;
             }
         }
 
         /// <summary>
-        /// SetWorldOrigin is called by the main camera when a successful scape meaasurements event happens.
+        /// InstantiateOrigin is called by the main camera when a successful scape meaasurements event happens.
         /// The Coordinates passed in are the Geo Location of Unity's origin.
         /// </summary>
         /// <param name="rootSessionCoords">
@@ -159,6 +160,7 @@ namespace ScapeKitUnity
         /// </param>
         public void InstantiateOrigin(LatLng rootSessionCoords) 
         {
+            ScapeLogging.LogDebug(message: "GeoAnchorManager::InstantiateOrigin()");
             if (longitude == -1.0 || latitude == -1.0) 
             {
                 ScapeLogging.LogDebug(message: "Longitude and Latitude coordinates not set, " +
@@ -180,31 +182,26 @@ namespace ScapeKitUnity
 
         /// <summary>
         /// Each GeoAnchored GameObject registers itself to the GeoAnchorManager singleton.
-        /// This sets it's "OriginEvent" function to be called when a successful scape measurenment comes in.        
+        /// This sets it's "OriginEvent" function to be called when a successful scape measurement comes in.        
         /// </summary>
-        /// <param name="geoAnchor">
-        /// The GeoAnchor component registering itself with the GeoAnchorManager
+        /// <param name="geoOrigin">
+        /// The object implementing GeoOriginInterface registering itself with the GeoAnchorManager
         /// </param>
-        public void RegisterGeoAnchor(GeoAnchor geoAnchor)
+        public void RegisterGeoInterface(IGeoOrigin geoOrigin)
         {
             // append the GeoAnchor's OriginEvent function to the GeoOriginEvent action
-            geoOriginEvent += geoAnchor.OriginEvent;
+            geoOriginEvent += geoOrigin.OriginEvent;
 
-            if (!isInstantiated) 
+            // if we already have received a scape measurement we immediately call 
+            // the OriginEvent.
+            if (isInstantiated)
             {
-                geoAnchor.gameObject.SetActive(false);
+                geoOrigin.OriginEvent();
             }
-            else 
-            {
-                geoAnchor.OriginEvent();
-                geoAnchor.gameObject.SetActive(geoAnchor.WithinMaxDistance());
-            }
-
-            ScapeLogging.LogDebug(message: "GeoAnchorManager::RegisterGeoAnchor() " + geoAnchor.gameObject.name);
         }
 
         /// <summary>
-        /// Initialzes the GeoAnchorManager, should only haoppen once
+        /// Initializes the GeoAnchorManager, should only happen once
         /// Sets the S2Cell if the user has given GPS coordinates, other wise that is done later
         /// when the ScapeMeasurement comes in.
         /// </summary>

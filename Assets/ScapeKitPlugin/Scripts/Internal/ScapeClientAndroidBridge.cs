@@ -21,17 +21,16 @@ namespace ScapeKitUnity
 #if UNITY_ANDROID && !UNITY_EDITOR
     internal sealed class ScapeClientAndroid
     {
-        // Explicit static constructor to tell C# compiler
-        // not to mark type as beforefieldinit
-        static ScapeClientAndroid()
-        {
-        }
-
-        private static readonly ScapeClientAndroid instance = new ScapeClientAndroid();
+        internal static ScapeClientAndroid instance;
         internal static ScapeClientAndroid Instance
         {
             get
             {
+                if(instance == null) {
+
+                    Debug.Log("init instance");
+                    instance = new ScapeClientAndroid();
+                }
                 return instance;
             }
         }
@@ -49,7 +48,7 @@ namespace ScapeKitUnity
 
         private ScapeClientAndroid()
         {
-            ScapeLogging.LogDebug(message: " Create ScapeClientAndroid instance");
+            Debug.Log("Create ScapeClientAndroid instance");
 
             using (var unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
             {

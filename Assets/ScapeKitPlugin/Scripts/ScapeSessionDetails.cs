@@ -160,14 +160,14 @@ namespace ScapeKitUnity
     public struct LatLng
     {
         /// <summary>
-        /// the longitude in degrees
-        /// </summary>
-        public double Longitude;
-
-        /// <summary>
         /// the latitude in degrees
         /// </summary>
         public double Latitude;
+     
+        /// <summary>
+        /// the longitude in degrees
+        /// </summary>
+        public double Longitude;
     }
 
     /// <summary>
