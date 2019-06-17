@@ -32,7 +32,10 @@ namespace ScapeKitUnity
     /// </summary>
     public class GeoAnchor : MonoBehaviour, IGeoOrigin
     {
-
+        /// <summary>
+        /// The latLng coordinates that anchor the game object this component is attached to 
+        /// to a real world location
+        /// </summary>
         [SerializeField]
         private LatLng latLng;
 

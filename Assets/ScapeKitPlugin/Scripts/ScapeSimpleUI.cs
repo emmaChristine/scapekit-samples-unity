@@ -30,6 +30,17 @@ namespace ScapeKitUnity
         private Text textField;
 
         /// <summary>
+        /// The button to trigger get measurements
+        /// </summary>
+        [SerializeField]
+        private Button button;
+
+        /// <summary>
+        /// set button enabled in main thread
+        /// </summary>
+        private bool setButtonEnabled = true;
+
+        /// <summary>
         /// The text to be updated
         /// </summary>
         private string newText;
@@ -58,6 +69,11 @@ namespace ScapeKitUnity
                 textField.text = newText;
                 updateText = false;
             }
+
+            if (button.enabled != setButtonEnabled)
+            {
+                button.enabled = setButtonEnabled;
+            }
         }
 
         /// <summary>
@@ -77,8 +93,10 @@ namespace ScapeKitUnity
         /// </summary>
         private void OnGetMeasurements()
         {
-            newText = textField.text + "\n\nFetching...";
+            newText = textField.text + "\nFetching...";
             updateText = true;
+
+            setButtonEnabled = false;
         }
 
         /// <summary>
@@ -99,6 +117,7 @@ namespace ScapeKitUnity
                 "confidenceScore: " + scapeMeasurements.ConfidenceScore + "\n" + 
                 "measurementsStatus: " + scapeMeasurements.MeasurementsStatus + "\n\n";
             updateText = true;
+            setButtonEnabled = true;
         }
 
         /// <summary>
@@ -112,6 +131,7 @@ namespace ScapeKitUnity
             // Handle an erroneous ScapeSessionError
             newText = "OnScapeSessionError:\n" + scapeDetails.State + "\n" + scapeDetails.Message + "\n";
             updateText = true;
+            setButtonEnabled = true;
         }
     }
 }

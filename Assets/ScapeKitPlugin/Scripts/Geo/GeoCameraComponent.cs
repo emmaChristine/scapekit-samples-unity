@@ -127,6 +127,10 @@ namespace ScapeKitUnity
         /// <param name="heading">
         /// The compass heading given by scape measurements
         /// </param>        
+        /// <param name="altitude">
+        /// The the altitude from the ground the camera is at. This is currently supplied by 
+        /// ARKit/Core using the GroundTracker
+        /// </param>        
         public void SynchronizeARCamera(LatLng coordinates, float heading, float altitude) 
         {
             ScapeLogging.LogDebug(message: "SynchronizeARCamera() LatLngCoordinates = " + ScapeUtils.CoordinatesToString(coordinates));

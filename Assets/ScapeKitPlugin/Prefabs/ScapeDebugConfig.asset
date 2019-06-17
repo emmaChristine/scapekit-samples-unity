@@ -21,6 +21,6 @@ MonoBehaviour:
   mockScapeResults: 0
   mockScapeLatLng:
     Latitude: 51.524059
-    Longitude: -0.083087
+    Longitude: -0.083037
   mockScapeHeading: 90
-  mockScapeMeasurementsDelay: 1
+  mockScapeMeasurementsDelay: 15

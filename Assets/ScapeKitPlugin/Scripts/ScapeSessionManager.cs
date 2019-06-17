@@ -183,6 +183,22 @@ namespace ScapeKitUnity
         }
 
         /// <summary>
+        /// public function to trigger taking measurements
+        /// </summary>
+        public void TakeMeasurements()
+        {
+            ScapeLogging.LogDebug(message: "ScapeSessionManager::TakeMeasurements()");
+            if (state == UpdateState.HaveMeasurements)
+            {
+                ChangeState(UpdateState.NeedsMeasurements);
+            }
+            else
+            {
+                ScapeLogging.LogDebug(message: "didnt respond " + state);
+            }
+        }
+
+        /// <summary>
         /// update state machine
         /// </summary>
         public void Update()
@@ -230,8 +246,6 @@ namespace ScapeKitUnity
 
                         if (ScapeClient.Instance.ScapeSession || MockScapeResults()) 
                         {
-                            ScapeLogging.LogDebug(message: "ScapeSessionManager UpdateState.NeedsMeasurements");
-
                             if (!MockScapeResults()) 
                             {
                                 ScapeClient.Instance.ScapeSession.GetMeasurements();
@@ -322,9 +336,14 @@ namespace ScapeKitUnity
                     }
                 }
 
-                ScapeLogging.LogDebug(message: "ScapeSessionManager client Started");
-
-                ChangeState(UpdateState.NeedsMeasurements);   
+                if (autoUpdate) 
+                {
+                    ChangeState(UpdateState.NeedsMeasurements);   
+                }
+                else
+                {
+                    ChangeState(UpdateState.HaveMeasurements); 
+                }
             }
         }
 
@@ -504,7 +523,10 @@ namespace ScapeKitUnity
         {
             ScapeLogging.LogDebug(message: scapeDetails.State.ToString() + ": " + scapeDetails.Message);
             
-            ChangeState(UpdateState.NeedsMeasurements);
+            if (state == UpdateState.TakingMeasurements)
+            {
+                ChangeState(UpdateState.NeedsMeasurements);
+            }
 
             resetUpdateVars = true;
         }

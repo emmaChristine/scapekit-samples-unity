@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 462d46d2423bb4f738d2497a397b1590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_camera: {fileID: 0}
+  m_camera: {fileID: 8066437702077331398}
   startAlignment: 0
   planeDetection: 1
   getPointCloud: 0
@@ -80,11 +80,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8546833185999197663}
+  - {fileID: 8719841306540605569}
   - {fileID: 8416093558710256985}
   - {fileID: 8066437702077331453}
   - {fileID: 1377608551}
-  - {fileID: 7068214319490516451}
+  - {fileID: 9014038275882895910}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 8066437702077331450}
   - component: {fileID: 8066437702077331449}
   - component: {fileID: 8066437702077331399}
+  - component: {fileID: 6592670741454863820}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -215,6 +216,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   theCamera: {fileID: 8066437702077331398}
+--- !u!114 &6592670741454863820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8066437702077331397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b58ecea7a196242dd879c814ac05084c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ClearMaterial: {fileID: 2100000, guid: f1d9352050a75486f878ab19fa578f16, type: 2}
 --- !u!1001 &7077793489312766541
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -290,7 +304,7 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7077793489312766541}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &8085515014456208626
+--- !u!1001 &8014892647161684791
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -300,7 +314,7 @@ PrefabInstance:
     - target: {fileID: 1306838187807615248, guid: 8603bc70897e74261a45191b126c1ff5,
         type: 3}
       propertyPath: m_Name
-      value: ScapeTextScreenLog
+      value: ScapeUI
       objectReference: {fileID: 0}
     - target: {fileID: 1306838187807615249, guid: 8603bc70897e74261a45191b126c1ff5,
         type: 3}
@@ -407,18 +421,23 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1306838187194934983, guid: 8603bc70897e74261a45191b126c1ff5,
+    - target: {fileID: 4065947338452157956, guid: 8603bc70897e74261a45191b126c1ff5,
         type: 3}
-      propertyPath: textDelay
-      value: 5
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8719841306540605579}
+    - target: {fileID: 4065947338452157956, guid: 8603bc70897e74261a45191b126c1ff5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TakeMeasurements
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8603bc70897e74261a45191b126c1ff5, type: 3}
---- !u!224 &7068214319490516451 stripped
+--- !u!224 &9014038275882895910 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1306838187807615249, guid: 8603bc70897e74261a45191b126c1ff5,
     type: 3}
-  m_PrefabInstance: {fileID: 8085515014456208626}
+  m_PrefabInstance: {fileID: 8014892647161684791}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8719841306540605586
 PrefabInstance:
@@ -527,11 +546,29 @@ PrefabInstance:
       propertyPath: autoUpdate
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1125735014728799564, guid: 82d25aaf988cf43428f3b79c462dd1c5,
+        type: 3}
+      propertyPath: debugConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: aede8a22c95fa450bb499d8129bbf1be,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82d25aaf988cf43428f3b79c462dd1c5, type: 3}
---- !u!4 &8546833185999197663 stripped
+--- !u!4 &8719841306540605569 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1125735014728799565, guid: 82d25aaf988cf43428f3b79c462dd1c5,
     type: 3}
   m_PrefabInstance: {fileID: 8719841306540605586}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8719841306540605579 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1125735014728799564, guid: 82d25aaf988cf43428f3b79c462dd1c5,
+    type: 3}
+  m_PrefabInstance: {fileID: 8719841306540605586}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc8ef2a1f76bf44ff8a950c7e336474c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
