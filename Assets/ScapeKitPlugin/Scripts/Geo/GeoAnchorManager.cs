@@ -11,6 +11,7 @@ namespace ScapeKitUnity
 {
     using System;
     using UnityEngine;
+    using UnityEngine.Events;
 
     /// <summary>
     /// There must be one and only one instance of this class in a scene 
@@ -26,12 +27,7 @@ namespace ScapeKitUnity
     public class GeoAnchorManager : MonoBehaviour
     {
         /// <summary>
-        /// The GeoOriginEvent action is used to broadcast the ScapeMeasurements updates to the GeoAnchor components
-        /// </summary>
-        private static Action geoOriginEvent;
-
-        /// <summary>
-        /// The Coordinates of the S2Cell being used as the origin of the Unity scene.
+        /// The Coordinates of the middle of the S2Cell which are taken to be the origin of the Unity scene.
         /// </summary>
         private static LatLng s2CellCoordinates;
 
@@ -41,18 +37,10 @@ namespace ScapeKitUnity
         private static GeoAnchorManager geoAnchorManager = null;
 
         /// <summary>
-        /// The GPS Longitude in degrees used to define the root of the Unity Scene.
-        /// If the default value (-1.0), is used the root is decided at the first Scape Measurement
+        /// The GeoOriginEvent action is used to broadcast the ScapeMeasurements updates to the GeoAnchor components
         /// </summary>
         [SerializeField]
-        private double longitude = -1.0;
-
-        /// <summary>
-        /// The GPS Latitude in degrees used to define the root of the Unity Scene.
-        /// If the default value (-1.0), is used the root is decided at the first Scape Measurement
-        /// </summary>
-        [SerializeField]
-        private double latitude = -1.0;
+        private UnityEvent geoOriginEvent;
 
         /// <summary>
         /// The S2Cell id for the GeoAnchorManager.
@@ -146,7 +134,7 @@ namespace ScapeKitUnity
             if (doOriginEvent) 
             {
                 ScapeLogging.LogDebug(message: "GeoAnchorManager::geoOriginEvent()");
-                geoOriginEvent();
+                geoOriginEvent.Invoke();
                 doOriginEvent = false;
             }
         }
@@ -161,18 +149,12 @@ namespace ScapeKitUnity
         public void InstantiateOrigin(LatLng rootSessionCoords) 
         {
             ScapeLogging.LogDebug(message: "GeoAnchorManager::InstantiateOrigin()");
-            if (longitude == -1.0 || latitude == -1.0) 
+            if (isInstantiated == false) 
             {
-                ScapeLogging.LogDebug(message: "Longitude and Latitude coordinates not set, " +
-                    "using coordinates returned form Scape Measurements for root s2cell");
+                FindS2CellCoordinates(rootSessionCoords);
 
-                longitude = rootSessionCoords.Longitude;
-                latitude = rootSessionCoords.Latitude;
-
-                FindS2CellCoordinates();
+                isInstantiated = true;
             }
-
-            isInstantiated = true;
 
             if (geoOriginEvent != null) 
             {
@@ -190,7 +172,7 @@ namespace ScapeKitUnity
         public void RegisterGeoInterface(IGeoOrigin geoOrigin)
         {
             // append the GeoAnchor's OriginEvent function to the GeoOriginEvent action
-            geoOriginEvent += geoOrigin.OriginEvent;
+            geoOriginEvent.AddListener(geoOrigin.OriginEvent);
 
             // if we already have received a scape measurement we immediately call 
             // the OriginEvent.
@@ -217,20 +199,18 @@ namespace ScapeKitUnity
             {
                 geoAnchorManager = this;
             }
-
-            if (longitude != -1.0 && latitude != -1.0) 
-            {
-                FindS2CellCoordinates();
-            }
         }
 
         /// <summary>
         /// Identify which S2Cell will be used for the root. 
         /// Find the S2Cell's GPS Coordinates.
         /// </summary>
-        private void FindS2CellCoordinates() 
+        /// <param name="latLng">
+        /// the LatLng coordinates from the first scape measurement
+        /// </param>
+        private void FindS2CellCoordinates(LatLng latLng) 
         {
-            S2CellId = ScapeUtils.CellIdForWgs(latitude, longitude);
+            S2CellId = ScapeUtils.CellIdForWgs(latLng.Latitude, latLng.Longitude);
 
             S2CellCoordinates = ScapeUtils.LocalToWgs(new Vector3(0, 0, 0), S2CellId);
 

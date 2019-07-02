@@ -97,6 +97,11 @@ namespace ScapeKitUnity
         public void HoldCameraPose()
         {
             positionAtScapeMeasurements = theCamera.transform.localPosition;
+
+        #if UNITY_IPHONE
+            positionAtScapeMeasurements.y = 0.0f;
+        #endif
+
             rotationAtScapeMeasurements = theCamera.transform.localRotation.eulerAngles;
         }
 

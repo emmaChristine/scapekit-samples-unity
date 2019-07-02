@@ -80,7 +80,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8719841306540605569}
+  - {fileID: 8546833185999197663}
   - {fileID: 8416093558710256985}
   - {fileID: 8066437702077331453}
   - {fileID: 1377608551}
@@ -425,7 +425,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 8719841306540605579}
+      objectReference: {fileID: 8546833185999197662}
     - target: {fileID: 4065947338452157956, guid: 8603bc70897e74261a45191b126c1ff5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -436,6 +436,12 @@ PrefabInstance:
 --- !u!224 &9014038275882895910 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1306838187807615249, guid: 8603bc70897e74261a45191b126c1ff5,
+    type: 3}
+  m_PrefabInstance: {fileID: 8014892647161684791}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2498790220315360169 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5591186031503972510, guid: 8603bc70897e74261a45191b126c1ff5,
     type: 3}
   m_PrefabInstance: {fileID: 8014892647161684791}
   m_PrefabAsset: {fileID: 0}
@@ -508,6 +514,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1125735014728799564, guid: 82d25aaf988cf43428f3b79c462dd1c5,
         type: 3}
+      propertyPath: onGroundDetected.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1125735014728799564, guid: 82d25aaf988cf43428f3b79c462dd1c5,
+        type: 3}
       propertyPath: theCamera
       value: 
       objectReference: {fileID: 8066437702077331398}
@@ -552,15 +563,40 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: aede8a22c95fa450bb499d8129bbf1be,
         type: 2}
+    - target: {fileID: 1125735014728799564, guid: 82d25aaf988cf43428f3b79c462dd1c5,
+        type: 3}
+      propertyPath: onGroundDetected.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1125735014728799564, guid: 82d25aaf988cf43428f3b79c462dd1c5,
+        type: 3}
+      propertyPath: onGroundDetected.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1125735014728799564, guid: 82d25aaf988cf43428f3b79c462dd1c5,
+        type: 3}
+      propertyPath: onGroundDetected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2498790220315360169}
+    - target: {fileID: 1125735014728799564, guid: 82d25aaf988cf43428f3b79c462dd1c5,
+        type: 3}
+      propertyPath: onGroundDetected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 1125735014728799564, guid: 82d25aaf988cf43428f3b79c462dd1c5,
+        type: 3}
+      propertyPath: onGroundDetected.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82d25aaf988cf43428f3b79c462dd1c5, type: 3}
---- !u!4 &8719841306540605569 stripped
+--- !u!4 &8546833185999197663 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1125735014728799565, guid: 82d25aaf988cf43428f3b79c462dd1c5,
     type: 3}
   m_PrefabInstance: {fileID: 8719841306540605586}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8719841306540605579 stripped
+--- !u!114 &8546833185999197662 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1125735014728799564, guid: 82d25aaf988cf43428f3b79c462dd1c5,
     type: 3}

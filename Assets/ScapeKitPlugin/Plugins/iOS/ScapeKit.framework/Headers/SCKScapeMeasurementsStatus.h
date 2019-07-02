@@ -4,7 +4,7 @@
 #import <Foundation/Foundation.h>
 
 /**
- * (public)
+ * (public) -
  * The Scape Vision Engine measurements status
  */
 typedef NS_ENUM(NSInteger, SCKScapeMeasurementsStatus)

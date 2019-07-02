@@ -10,7 +10,7 @@
 
 
 /**
- * (public)
+ * (public) -
  * Observer for all ScapeSession related callbacks
  */
 @protocol SCKScapeSessionObserver
@@ -35,9 +35,5 @@
 /** Called when new scape measurements are available */
 - (void)onScapeMeasurementsUpdated:(nullable SCKScapeSession *)session
                       measurements:(nullable SCKScapeMeasurements *)measurements;
-
-/** Called when a new camera transform is available */
-- (void)onCameraTransformUpdated:(nullable SCKScapeSession *)session
-                       transform:(nullable NSArray<NSNumber *> *)transform;
 
 @end

@@ -64,7 +64,12 @@ namespace ScapeKitUnity
                     Rect DevID = EditorGUILayout.BeginHorizontal("box");
                     {
                         GUILayout.Label("Enter your Scape API Key here:");
-                        apiKey = EditorGUILayout.TextField(apiKey);
+                        var newKey = EditorGUILayout.TextField(apiKey);
+                        if (newKey != apiKey) 
+                        {
+                            apiKey = newKey;
+                            ScapeClient.SaveApiKeyToResource(apiKey);
+                        }
                     }
                     EditorGUILayout.EndHorizontal();
 

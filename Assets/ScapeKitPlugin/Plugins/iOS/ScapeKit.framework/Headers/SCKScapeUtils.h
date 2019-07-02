@@ -5,7 +5,7 @@
 
 
 /**
- * (internal)
+ * (internal) -
  * Utils class: allows conversion between WGS coordinates to local as well as computing the distance
  * between coordinates
  */

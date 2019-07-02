@@ -36,9 +36,15 @@ namespace ScapeKitUnity
         private Button button;
 
         /// <summary>
-        /// set button enabled in main thread
+        /// The Loading Circles to show localisation processing
         /// </summary>
-        private bool setButtonEnabled = true;
+        [SerializeField]
+        private GameObject loadingCircles;
+
+       /// <summary>
+       /// set button enabled in main thread
+       /// </summary>
+       private bool setButtonEnabled = true;
 
         /// <summary>
         /// The text to be updated
@@ -49,6 +55,11 @@ namespace ScapeKitUnity
         /// a boolean to signal a text update on the main thread
         /// </summary>
         private bool updateText = false;
+
+        /// <summary>
+        /// a boolean to activate loading circles
+        /// </summary>
+        private bool showLoadingCicles = false;
 
         /// <summary>
         /// at startup check for location permissions on android
@@ -70,10 +81,15 @@ namespace ScapeKitUnity
                 updateText = false;
             }
 
-            if (button.enabled != setButtonEnabled)
-            {
-                button.enabled = setButtonEnabled;
-            }
+           if (button.interactable != setButtonEnabled)
+           {
+               button.interactable = setButtonEnabled;
+           }
+
+           if (loadingCircles.active != showLoadingCicles) 
+           {  
+                loadingCircles.SetActive(showLoadingCicles);
+           }
         }
 
         /// <summary>
@@ -93,9 +109,9 @@ namespace ScapeKitUnity
         /// </summary>
         private void OnGetMeasurements()
         {
-            newText = textField.text + "\nFetching...";
+            newText = newText + "\nFetching...";
+            showLoadingCicles = true;
             updateText = true;
-
             setButtonEnabled = false;
         }
 
@@ -107,17 +123,22 @@ namespace ScapeKitUnity
         /// </param>
         private void OnScapeMeasurementsEvent(ScapeMeasurements scapeMeasurements)
         {
-            // Use the scape scape position
-            newText = "OnScapeMeasurementsEvent:\n" +
-                "timestamp: " + scapeMeasurements.Timestamp + "\n" + 
-                "coordinates: " + scapeMeasurements.LatLng.Longitude + " " + scapeMeasurements.LatLng.Latitude + "\n" + 
-                "heading: " + scapeMeasurements.Heading + "\n" +  
-                "orientation: " + scapeMeasurements.Orientation.X + " " + scapeMeasurements.Orientation.Y + " " + scapeMeasurements.Orientation.Z + " " + scapeMeasurements.Orientation.W + "\n" + 
-                "rawHeightEstimate: " + scapeMeasurements.RawHeightEstimate + "\n" + 
-                "confidenceScore: " + scapeMeasurements.ConfidenceScore + "\n" + 
-                "measurementsStatus: " + scapeMeasurements.MeasurementsStatus + "\n\n";
-            updateText = true;
-            setButtonEnabled = true;
+            if (scapeMeasurements.MeasurementsStatus == ScapeMeasurementStatus.ResultsFound)
+            {
+                // Use the scape scape position
+                newText = "OnScapeMeasurementsEvent:\n" +
+                    "timestamp: " + scapeMeasurements.Timestamp + "\n" + 
+                    "coordinates: " + scapeMeasurements.LatLng.Longitude + " " + scapeMeasurements.LatLng.Latitude + "\n" + 
+                    "heading: " + scapeMeasurements.Heading + "\n" +  
+                    "orientation: " + scapeMeasurements.Orientation.X + " " + scapeMeasurements.Orientation.Y + " " + scapeMeasurements.Orientation.Z + " " + scapeMeasurements.Orientation.W + "\n" + 
+                    "rawHeightEstimate: " + scapeMeasurements.RawHeightEstimate + "\n" + 
+                    "confidenceScore: " + scapeMeasurements.ConfidenceScore + "\n" + 
+                    "measurementsStatus: " + scapeMeasurements.MeasurementsStatus + "\n\n";
+                
+                updateText = true;
+                setButtonEnabled = true;
+                showLoadingCicles = false;
+            }
         }
 
         /// <summary>
@@ -128,10 +149,10 @@ namespace ScapeKitUnity
         /// </param>
         private void OnScapeSessionError(ScapeSessionError scapeDetails)
         {
-            // Handle an erroneous ScapeSessionError
+            // print a ScapeSessionError
             newText = "OnScapeSessionError:\n" + scapeDetails.State + "\n" + scapeDetails.Message + "\n";
             updateText = true;
-            setButtonEnabled = true;
+            showLoadingCicles = false;
         }
     }
 }

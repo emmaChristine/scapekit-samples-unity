@@ -13,8 +13,9 @@ namespace ScapeKitUnity
     using System.IO;
     using System.Runtime.InteropServices;
     using UnityEngine;
+    using UnityEditor;
 
-    public sealed class ScapeClient : MonoBehaviourSingleton<ScapeClient>
+    public sealed class ScapeClient
     {
         internal event Action ClientStartedEvent, ClientStoppedEvent;
         internal event Action<string> ClientFailedEvent;
@@ -25,20 +26,26 @@ namespace ScapeKitUnity
 
         private static bool setAndroidClientEvents = false;
 
+        private static ScapeClient _instance = null;
         public static ScapeClient Instance
         {
             get
             {
-                var scapeClientInstance = BehaviourInstance as ScapeClient;
+                if(_instance == null)
+                {
+                    Debug.Log("ScapeClient create instance");
+                    _instance = new ScapeClient();
+                }
+
 #if UNITY_ANDROID && !UNITY_EDITOR
                 if(setAndroidClientEvents == false) {
                     Debug.Log("instance.SetClientEvents");
                     var instance = ScapeClientAndroid.Instance;
-                    instance.SetClientEvents(scapeClientInstance.ClientStartedEvent, scapeClientInstance.ClientStoppedEvent, scapeClientInstance.ClientFailedEvent);
+                    instance.SetClientEvents(_instance.ClientStartedEvent, _instance.ClientStoppedEvent, _instance.ClientFailedEvent);
                     setAndroidClientEvents = true;
                 }
 #endif
-                return scapeClientInstance;
+                return _instance;
             }
         }
 
@@ -106,7 +113,7 @@ namespace ScapeKitUnity
         /// </summary>
         public void StartClient()
         {
-            ScapeLogging.LogDebug(message: "Start Scape Client");
+            Debug.Log("Start Scape Client");
 #if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR
             ScapeClientBridge._start();
 #endif
@@ -117,7 +124,7 @@ namespace ScapeKitUnity
         /// </summary>
         public void StopClient()
         {
-            ScapeLogging.LogDebug(message: "Stop Scape Client");
+            Debug.Log(message: "Stop Scape Client");
 #if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR
             ScapeClientBridge._stop();
 #endif
@@ -158,13 +165,20 @@ namespace ScapeKitUnity
         {
             try
             {
+                if(apiKey.Length == 0) 
+                {
+                    return;
+                }
                 if (!Directory.Exists(resPath))
                 {
                     Directory.CreateDirectory(resPath);
                 }
-                StreamWriter writer = new StreamWriter(resPath + apikeyFileName + ".txt", false);
-                writer.WriteLine(apiKey.Trim());
-                writer.Close();
+                
+                using (StreamWriter writer = new StreamWriter(resPath + apikeyFileName + ".txt", false))
+                {
+                    writer.WriteLine(apiKey.Trim());
+                    ScapeLogging.LogDebug(message: "SaveApiKeyToResource() " + apiKey.Trim());
+                }
             }
             catch(Exception e)
             {
@@ -174,11 +188,26 @@ namespace ScapeKitUnity
 
         public static string RetrieveKeyFromResources()
         {
+            ScapeLogging.LogDebug(message: "RetrieveKeyFromResources()");
+            
             try
             {
+            #if UNITY_EDITOR
+                using (StreamReader streamReader = new StreamReader(resPath + apikeyFileName + ".txt")) 
+                {
+                    string apiKey = streamReader.ReadLine();
+                
+                    ScapeLogging.LogDebug(message: "RetrieveKeyFromResources() = " + apiKey);
+                
+                    return apiKey;
+                }
+            #else
                 string apiKey = Resources.Load<TextAsset>(apikeyFileName).ToString();
+            
+                ScapeLogging.LogDebug(message: "RetrieveKeyFromResources() = " + apiKey);
 
                 return apiKey;
+            #endif
             }
             catch (Exception ex)
             {

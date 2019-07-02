@@ -7,18 +7,16 @@
 #import <Foundation/Foundation.h>
 
 /**
- * (public)
+ * (public) -
  * Raw measurements read from device's sensors (gyroscope, accelerometer, gps, magnetometer) and Scape Vision Engine.
  */
 @interface SCKMeasurements : NSObject
 - (nonnull instancetype)initWithDeviceLocationMeasurements:(nonnull SCKLocationMeasurements *)deviceLocationMeasurements
                                   deviceMotionMeasurements:(nonnull SCKMotionMeasurements *)deviceMotionMeasurements
-                                         scapeMeasurements:(nonnull SCKScapeMeasurements *)scapeMeasurements
-                                           cameraTransform:(nonnull NSArray<NSNumber *> *)cameraTransform;
+                                         scapeMeasurements:(nonnull SCKScapeMeasurements *)scapeMeasurements;
 + (nonnull instancetype)measurementsWithDeviceLocationMeasurements:(nonnull SCKLocationMeasurements *)deviceLocationMeasurements
                                           deviceMotionMeasurements:(nonnull SCKMotionMeasurements *)deviceMotionMeasurements
-                                                 scapeMeasurements:(nonnull SCKScapeMeasurements *)scapeMeasurements
-                                                   cameraTransform:(nonnull NSArray<NSNumber *> *)cameraTransform;
+                                                 scapeMeasurements:(nonnull SCKScapeMeasurements *)scapeMeasurements;
 
 /** Device's location-related measurements */
 @property (nonatomic, readonly, nonnull) SCKLocationMeasurements * deviceLocationMeasurements;
@@ -28,8 +26,5 @@
 
 /** Scape-related measurements */
 @property (nonatomic, readonly, nonnull) SCKScapeMeasurements * scapeMeasurements;
-
-/** Camera transform matrix4x4 representing the current translation and rotation of the device computed from ARKit/ARCore */
-@property (nonatomic, readonly, nonnull) NSArray<NSNumber *> * cameraTransform;
 
 @end
