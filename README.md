@@ -1,4 +1,4 @@
-# ScapeKit Samples Unity (using ScapeKit 1.0.2)
+# ScapeKit Samples Unity (using ScapeKit 1.0.3)
 
 Sample scenes demonstrating usage of the SceneKit SDK in Unity
 
