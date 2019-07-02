@@ -26,6 +26,7 @@ namespace ScapeKitUnity
         SerializedProperty autoUpdateProp;
         SerializedProperty timeoutUpdateProp;
         SerializedProperty distanceUpdateProp;
+        SerializedProperty onGroundDetectedProp;
 
         public void OnEnable()
         {
@@ -37,6 +38,7 @@ namespace ScapeKitUnity
             autoUpdateProp = serializedObject.FindProperty("autoUpdate");
             timeoutUpdateProp = serializedObject.FindProperty("timeoutUpdate");
             distanceUpdateProp = serializedObject.FindProperty("distanceUpdate");
+            onGroundDetectedProp = serializedObject.FindProperty("onGroundDetected");
         } 
         public override void OnInspectorGUI() 
         {
@@ -59,9 +61,14 @@ namespace ScapeKitUnity
             "The confidence score is a value between 0-5. Putting a 4 here will only accept measurements with high confidence. " +
             "Putting 0 will use all successfully returned responses.";
             EditorGUILayout.PropertyField(confidenceThresholdProp, confidenceThresholdGUI);
+
             var useGPSFallbackGUI = new GUIContent("Use GPS Fall back");
             useGPSFallbackGUI.tooltip = "makes use of GPS readings until ScapeMeasuremnets are returned.";
             EditorGUILayout.PropertyField(useGPSFallbackProp, useGPSFallbackGUI);
+
+            var onGroundDetectedGUI = new GUIContent("On Ground Detected Event");
+            onGroundDetectedGUI.tooltip = "gets fired the first time the ground plane is detected.";
+            EditorGUILayout.PropertyField(onGroundDetectedProp, onGroundDetectedGUI);
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 

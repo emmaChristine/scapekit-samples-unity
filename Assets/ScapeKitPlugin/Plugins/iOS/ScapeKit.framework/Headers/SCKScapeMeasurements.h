@@ -7,7 +7,7 @@
 #import <Foundation/Foundation.h>
 
 /**
- * (public)
+ * (public) -
  * The Scape Vision Engine measurements
  */
 @interface SCKScapeMeasurements : NSObject
@@ -26,7 +26,7 @@
                                        confidenceScore:(nullable NSNumber *)confidenceScore
                                     measurementsStatus:(SCKScapeMeasurementsStatus)measurementsStatus;
 
-/** # The time at which these scape measurements were determined */
+/** The time at which these scape measurements were determined */
 @property (nonatomic, readonly, nullable) NSNumber * timestamp;
 
 /** Current camera-based device's coordinates computed from the camera's device */
@@ -41,7 +41,7 @@
 /** Current height estimate computed from the camera's device: can be used to estimate where the ground is located */
 @property (nonatomic, readonly, nullable) NSNumber * rawHeightEstimate;
 
-/** Percentage indicating how likely the current area is recognized by Scape Vision Engine */
+/** Score from 1 to 5 indicating how likely the current area is recognized by Scape Vision Engine */
 @property (nonatomic, readonly, nullable) NSNumber * confidenceScore;
 
 /** Current status */

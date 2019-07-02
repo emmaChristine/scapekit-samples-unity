@@ -4,7 +4,7 @@
 #import <Foundation/Foundation.h>
 
 /**
- * (public)
+ * (public) -
  * Scape orientation representing the current translation and rotation of the device (in North East Down reference frame)
  */
 @interface SCKScapeOrientation : NSObject

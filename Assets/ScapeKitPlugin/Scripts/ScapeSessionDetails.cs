@@ -137,6 +137,11 @@ namespace ScapeKitUnity
         MotionSensorsError,
 
         /// <summary>
+        /// the ImageSensorsError
+        /// </summary>
+        ImageSensorsError,
+
+        /// <summary>
         /// the LockingPositionError
         /// </summary>
         LockingPositionError,
@@ -145,6 +150,11 @@ namespace ScapeKitUnity
         /// the AuthenticationError
         /// </summary>
         AuthenticationError,
+
+        /// <summary>
+        /// the NetworkError
+        /// </summary>
+        NetworkError,
 
         /// <summary>
         /// the UnexpectedError

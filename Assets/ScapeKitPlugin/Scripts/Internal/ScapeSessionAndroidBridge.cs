@@ -59,23 +59,26 @@ namespace ScapeKitUnity
 
             using (GoogleARCore.CameraImageBytes image = GoogleARCore.Frame.CameraImage.AcquireCameraImageBytes())
             {
-                if (!image.IsAvailable)
-                {
-                    ScapeLogging.LogDebug(message: "Cannot find scape scapeposition, reason: Unity ARCore Image is not available");
-                    return;
-                }
-
-                int width = image.Width;
-                int height = image.Height;
-                IntPtr yPixelBuffer = image.Y;
-
-                float xFocalLength = GoogleARCore.Frame.CameraImage.ImageIntrinsics.FocalLength.x;
-                float yFocalLength = GoogleARCore.Frame.CameraImage.ImageIntrinsics.FocalLength.y;
-                float xPrincipalPoint = GoogleARCore.Frame.CameraImage.ImageIntrinsics.PrincipalPoint.x;
-                float yPrincipalPoint = GoogleARCore.Frame.CameraImage.ImageIntrinsics.PrincipalPoint.y;
 
                 using (AndroidJavaClass scapeSessionUtils = new AndroidJavaClass("com.scape.scapekit.ScapeSessionUtils"))
                 {
+                    if (!image.IsAvailable)
+                    {
+                        ScapeLogging.LogDebug(message: "Cannot find scape scapeposition, reason: Unity ARCore Image is not available");
+
+                        scapeSessionUtils.CallStatic("setCurrentYChannel", scapeSession, 0l, 0, 0);
+                        return;
+                    }
+
+                    int width = image.Width;
+                    int height = image.Height;
+                    IntPtr yPixelBuffer = image.Y;
+
+                    float xFocalLength = GoogleARCore.Frame.CameraImage.ImageIntrinsics.FocalLength.x;
+                    float yFocalLength = GoogleARCore.Frame.CameraImage.ImageIntrinsics.FocalLength.y;
+                    float xPrincipalPoint = GoogleARCore.Frame.CameraImage.ImageIntrinsics.PrincipalPoint.x;
+                    float yPrincipalPoint = GoogleARCore.Frame.CameraImage.ImageIntrinsics.PrincipalPoint.y;
+
                     scapeSessionUtils.CallStatic("setCameraIntrins", scapeSession, xFocalLength, yFocalLength, xPrincipalPoint, yPrincipalPoint);
                     scapeSessionUtils.CallStatic("setCurrentYChannel", scapeSession, yPixelBuffer.ToInt64(), width, height);
                 }
@@ -117,8 +120,10 @@ namespace ScapeKitUnity
             {"NO_ERROR", ScapeSessionState.NoError},
             {"LOCATION_SENSORS_ERROR", ScapeSessionState.LocationSensorsError},
             {"MOTION_SENSORS_ERROR", ScapeSessionState.MotionSensorsError},
+            {"IMAGE_SENSORS_ERROR", ScapeSessionState.ImageSensorsError},
             {"LOCKING_POSITION_ERROR", ScapeSessionState.LockingPositionError},
             {"AUTHENTICATION_ERROR", ScapeSessionState.AuthenticationError},
+            {"NETWORK_ERROR", ScapeSessionState.NetworkError},
             {"UNEXPECTED_ERROR", ScapeSessionState.UnexpectedError}
         };
 
@@ -245,6 +250,7 @@ namespace ScapeKitUnity
 
         public void onScapeSessionError(AndroidJavaObject scapeSession, AndroidJavaObject state, string message)
         {   
+            ScapeLogging.LogDebug(message: "ScapeSessionAndroid::onScapeSessionError");
             if(this.ScapeSessionErrorEvent != null) 
             {      
                 this.ScapeSessionErrorEvent(new ScapeSessionError() 
@@ -252,6 +258,9 @@ namespace ScapeKitUnity
                     State = GetScapeSessionStateFromJava(state),
                     Message = message
                 });
+
+
+                ScapeLogging.LogDebug(message: "ScapeSessionAndroid::onScapeSessionError - SENT");
             }
         }
 

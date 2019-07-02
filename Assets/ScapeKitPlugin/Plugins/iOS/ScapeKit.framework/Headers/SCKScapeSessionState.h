@@ -4,7 +4,7 @@
 #import <Foundation/Foundation.h>
 
 /**
- * (public)
+ * (public) -
  * Current session state
  */
 typedef NS_ENUM(NSInteger, SCKScapeSessionState)
@@ -15,10 +15,14 @@ typedef NS_ENUM(NSInteger, SCKScapeSessionState)
     SCKScapeSessionStateLocationSensorsError,
     /** Motion sensors (gyro, magnetometer) error */
     SCKScapeSessionStateMotionSensorsError,
+    /** image sensors (ar image read) error */
+    SCKScapeSessionStateImageSensorsError,
     /** Locking position and orientation error */
     SCKScapeSessionStateLockingPositionError,
-    /** Authentication error */
+    /** Authentication error (api key) */
     SCKScapeSessionStateAuthenticationError,
+    /** Network error */
+    SCKScapeSessionStateNetworkError,
     /** Fetching measurements resulted in an unexpected error */
     SCKScapeSessionStateUnexpectedError,
 };

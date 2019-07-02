@@ -13,6 +13,7 @@ namespace ScapeKitUnity
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
+    using UnityEngine.Events;
 #if UNITY_ANDROID
     using UnityEngine.Android;
 #endif
@@ -80,6 +81,12 @@ namespace ScapeKitUnity
         [SerializeField]
         private float distanceUpdate = -1.0f;
 
+        /// <summary> 
+        /// event that gets called when ground is detected
+        /// </summary>
+        [SerializeField]
+        private UnityEvent onGroundDetected;
+
         /// <summary>
         /// timeSinceUpdate, counter for timeout
         /// </summary>
@@ -134,6 +141,11 @@ namespace ScapeKitUnity
         /// a class used to ascertain the height of the ground from ARKit/Core 
         /// </summary>
         private GroundTracker groundTracker = null;
+
+        /// <summary>
+        /// boolean to signify ground plane has been detected
+        /// </summary>
+        private bool isGroundDetected = false;
 
         /// <summary>
         /// controls state of Session update
@@ -212,6 +224,16 @@ namespace ScapeKitUnity
                 if (success)
                 {
                     scapeCameraExt.Altitude = -groundHeight;
+
+                    if (!isGroundDetected)
+                    {
+                        if (onGroundDetected != null)
+                        {
+                            onGroundDetected.Invoke();
+                        }
+                        
+                        isGroundDetected = true;
+                    }
                 }
             }
 
@@ -612,6 +634,14 @@ namespace ScapeKitUnity
                 this.Coords = new LatLng { Longitude = -1.0, Latitude = -1.0 };
                 this.Altitude = -1.0;
                 this.Heading = -1.0;
+            }
+
+            /// <summary>
+            /// shutdown client on app quit
+            /// </summary>
+            public void OnApplicationQuit()
+            {
+                ScapeClient.Instance.Terminate();
             }
         }
     }

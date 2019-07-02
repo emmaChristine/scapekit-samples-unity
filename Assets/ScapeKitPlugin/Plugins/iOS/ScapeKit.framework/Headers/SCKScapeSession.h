@@ -3,11 +3,10 @@
 
 #import <Foundation/Foundation.h>
 @protocol SCKScapeSessionObserver;
-@protocol SCKVideoFrame;
 
 
 /**
- * (public)
+ * (public) -
  * ScapeKit's main service: gets measurements from the raw device's built-in sensors as well as Scape Vision Engine
  */
 @interface SCKScapeSession : NSObject
@@ -36,12 +35,6 @@
 
 /**
  * (public)
- * Set the video frame manually
- */
-- (void)setRawVideoFrame:(nullable id<SCKVideoFrame>)frame;
-
-/**
- * (public)
  * Set the Y channel manually
  */
 - (void)setYChannelPtr:(int64_t)pointer
@@ -56,11 +49,5 @@
                yFocalLength:(double)yFocalLength
             xPrincipalPoint:(double)xPrincipalPoint
             yPrincipalPoint:(double)yPrincipalPoint;
-
-/**
- * (public)
- * Set camera transform manually
- */
-- (void)setCameraTransform:(nonnull NSArray<NSNumber *> *)transform;
 
 @end

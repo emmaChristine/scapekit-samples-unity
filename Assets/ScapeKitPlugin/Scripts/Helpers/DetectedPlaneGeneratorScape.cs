@@ -22,6 +22,7 @@
 
 namespace GoogleARCore.Examples.Common
 {
+    using System;
     using System.Collections.Generic;
     using GoogleARCore;
     using ScapeKitUnity;
@@ -44,18 +45,13 @@ namespace GoogleARCore.Examples.Common
         /// </summary>
         private List<DetectedPlane> newPlanes = new List<DetectedPlane>();
 
-        /// <summary> 
-        /// A list of the instantiated plane objects
-        /// </summary>
-        private List<GameObject> gamePlanes = new List<GameObject>();
-
         /// <summary>
-        /// a boolean to hol dwhether teh scape measurement has come in yet
+        /// a boolean to hold whether the scape measurement has come in yet
         /// </summary>
         private bool hadOriginEvent = false;
 
-        /// <summary> 
-        /// register to listen for scape measurements
+        /// <summary>
+        /// register self with GeoAnchorManager so made aware when measurement is taken 
         /// </summary>
         public void Start()
         {
@@ -77,7 +73,6 @@ namespace GoogleARCore.Examples.Common
             for (int i = 0; i < newPlanes.Count; i++)
             {
                 ScapeLogging.LogDebug(message: "new plane!");
-
                 Transform parent = GeoCameraComponent.WorldTransform;
                 if (hadOriginEvent) 
                 {
@@ -88,8 +83,6 @@ namespace GoogleARCore.Examples.Common
                     Instantiate(detectedPlanePrefab, Vector3.zero, Quaternion.identity, parent);
 
                 planeObject.GetComponent<DetectedPlaneVisualizer>().Initialize(newPlanes[i]);
-
-                gamePlanes.Add(planeObject);
             }
         }
 
