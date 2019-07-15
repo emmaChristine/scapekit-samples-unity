@@ -33,5 +33,16 @@ void _log(int level, const char* tag, const char* message)
     [SCKLog log:(SCKLogLevel)level tag:tagStr msg:messageStr];
 }
 
+void _saveImages(bool save)
+{
+    id <SCKDebugSession> debugSession = [[[ScapeClientUnity sharedInstance] scapeClient] debugSession];
+    if(debugSession != nullptr) {
+        [debugSession saveImages:save];
+    }
+    else {
+        [SCKLog log:SCKLogLevelLogError tag:@"SCKDebugSession" msg:@"_saveImages no debug session found, did you run client with debug support enabled?"];
+    }
+}
+
 }
 

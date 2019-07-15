@@ -40,7 +40,7 @@ namespace ScapeKitUnity
         /// The GeoOriginEvent action is used to broadcast the ScapeMeasurements updates to the GeoAnchor components
         /// </summary>
         [SerializeField]
-        private UnityEvent geoOriginEvent;
+        private UnityEvent geoOriginEvent = new UnityEvent();
 
         /// <summary>
         /// The S2Cell id for the GeoAnchorManager.

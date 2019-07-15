@@ -67,6 +67,12 @@ namespace ScapeKitUnity
         /// </summary>
         [SerializeField]
         private float mockScapeMeasurementsDelay = 3.0f;
+
+        /// <summary> 
+        /// If used images sent to scape's back end are also saved to local device storage
+        /// </summary>
+        [SerializeField]
+        private bool saveImages = false;
         
         /// <summary>
         /// Gets or sets mockScapeMeasurementsDelay
@@ -99,7 +105,12 @@ namespace ScapeKitUnity
             if (debugMockGPS) 
             {
                 ScapeDebugSession.Instance.MockGPSCoordinates(mockGPSLatLng.Latitude, mockGPSLatLng.Longitude);
-            } 
+            }
+            
+            if (saveImages)
+            {
+                ScapeDebugSession.Instance.SaveImages(saveImages);
+            }
         }
 
         /// <summary>

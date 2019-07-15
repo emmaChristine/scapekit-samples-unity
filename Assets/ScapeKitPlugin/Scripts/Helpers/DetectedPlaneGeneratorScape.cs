@@ -74,10 +74,6 @@ namespace GoogleARCore.Examples.Common
             {
                 ScapeLogging.LogDebug(message: "new plane!");
                 Transform parent = GeoCameraComponent.WorldTransform;
-                if (hadOriginEvent) 
-                {
-                    parent = transform;
-                }
 
                 GameObject planeObject =
                     Instantiate(detectedPlanePrefab, Vector3.zero, Quaternion.identity, parent);

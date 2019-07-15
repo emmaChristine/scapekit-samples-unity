@@ -77,7 +77,6 @@ namespace ScapeKitUnity
         public ScapeClient WithResApiKey()
         {
             string apiKey = RetrieveKeyFromResources();
-            ScapeLogging.LogDebug("Retrieved ApiKey = " + apiKey);
             return WithApiKey(apiKey);
         }
 
@@ -86,7 +85,6 @@ namespace ScapeKitUnity
         /// </summary>
         public ScapeClient WithApiKey(string apiKey)
         {
-            ScapeLogging.LogDebug(message: "With api key " + apiKey);
             this.apiKey = apiKey;
 
 #if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR
@@ -177,19 +175,16 @@ namespace ScapeKitUnity
                 using (StreamWriter writer = new StreamWriter(resPath + apikeyFileName + ".txt", false))
                 {
                     writer.WriteLine(apiKey.Trim());
-                    ScapeLogging.LogDebug(message: "SaveApiKeyToResource() " + apiKey.Trim());
                 }
             }
             catch(Exception e)
             {
-                ScapeLogging.LogDebug(message: "Failed to save apikey to '" + resPath + "'");
+                ScapeLogging.LogError(message: "Failed to save apikey to '" + resPath + "'");
             }
         }
 
         public static string RetrieveKeyFromResources()
         {
-            ScapeLogging.LogDebug(message: "RetrieveKeyFromResources()");
-            
             try
             {
             #if UNITY_EDITOR
@@ -197,21 +192,17 @@ namespace ScapeKitUnity
                 {
                     string apiKey = streamReader.ReadLine();
                 
-                    ScapeLogging.LogDebug(message: "RetrieveKeyFromResources() = " + apiKey);
-                
                     return apiKey;
                 }
             #else
                 string apiKey = Resources.Load<TextAsset>(apikeyFileName).ToString();
-            
-                ScapeLogging.LogDebug(message: "RetrieveKeyFromResources() = " + apiKey);
 
                 return apiKey;
             #endif
             }
             catch (Exception ex)
             {
-                ScapeLogging.LogDebug("Exception retrieving apikey: " + ex.ToString());
+                ScapeLogging.LogError("Exception retrieving apikey: " + ex.ToString());
                 return "";
             }
         }
