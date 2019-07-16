@@ -11,10 +11,8 @@
 namespace ScapeKitUnity
 {
     using System.Collections.Generic;
-    using GoogleARCore;
     using UnityEngine;
-    using UnityEngine.XR.iOS;
-
+    
 	/// <summary>
 	/// A class for monitoring plane tracking using ar platforms
 	/// </summary>

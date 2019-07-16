@@ -28,6 +28,7 @@ namespace ScapeKitUnity
         SerializedProperty mockScapeLatitudeProp;
         SerializedProperty mockScapeHeadingProp;
         SerializedProperty mockScapeMeasurementsDelayProp;
+        SerializedProperty saveImagesProp;
 
         public void OnEnable()
         {            
@@ -41,6 +42,7 @@ namespace ScapeKitUnity
             mockScapeLatitudeProp = serializedObject.FindProperty("mockScapeLatLng.Latitude");
             mockScapeHeadingProp = serializedObject.FindProperty("mockScapeHeading");
             mockScapeMeasurementsDelayProp = serializedObject.FindProperty("mockScapeMeasurementsDelay");
+            saveImagesProp = serializedObject.FindProperty("saveImages");
         }
 
         public override void OnInspectorGUI() 
@@ -93,6 +95,12 @@ namespace ScapeKitUnity
                 mockScapeMeasurementsDelayGUI.tooltip = "Delay in seconds. When using mocked scape measurements it is more realistic to have the measurements return after some delay.";
                 EditorGUILayout.PropertyField(mockScapeMeasurementsDelayProp, mockScapeMeasurementsDelayGUI);
             }
+
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+            var saveImagesGUI = new GUIContent("Save Images");
+            saveImagesGUI.tooltip = "If used images sent to scape's back end are also saved to local device storage";
+            EditorGUILayout.PropertyField(saveImagesProp, saveImagesGUI);
         
             serializedObject.ApplyModifiedProperties ();
         }

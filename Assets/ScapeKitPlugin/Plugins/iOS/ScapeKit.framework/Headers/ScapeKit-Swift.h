@@ -366,7 +366,7 @@ SWIFT_PROTOCOL("_TtP8ScapeKit15SCKGeoSceneView_")
 /// Show debug options
 @property (nonatomic) BOOL showDebugOptions;
 /// (public) -
-/// The current SCKGeoCamera representing the geo camera used for the entire scene.
+/// The current SCKGeoCamera representing the scene’s camera used for the entire scene.
 @property (nonatomic, readonly, strong) id <SCKGeoCamera> _Nullable geoCamera;
 /// (public) -
 /// The current SCKGeoSceneRenderer representing the underlying SCNSceneRenderer

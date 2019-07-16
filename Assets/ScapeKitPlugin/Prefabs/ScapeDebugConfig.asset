@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccf6d871853424a32a485708e7abd91b, type: 3}
   m_Name: ScapeDebugConfig
   m_EditorClassIdentifier: 
-  logLevel: 2
+  logLevel: 1
   logOutput: 3
   debugMockGPS: 0
   mockGPSLatLng:
@@ -24,3 +24,4 @@ MonoBehaviour:
     Longitude: -0.0831
   mockScapeHeading: 90
   mockScapeMeasurementsDelay: 10
+  saveImages: 0

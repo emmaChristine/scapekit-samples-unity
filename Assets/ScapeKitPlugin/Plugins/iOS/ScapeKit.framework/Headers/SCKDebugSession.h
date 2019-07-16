@@ -31,4 +31,10 @@
 /** return mocked coordinate, if set */
 - (nullable SCKLatLng *)getMockedGPSCoordinates;
 
+/** save images sent to backend */
+- (void)saveImages:(BOOL)save;
+
+/** get whether images are being saved */
+- (BOOL)getSaveImages;
+
 @end

@@ -91,6 +91,19 @@ namespace ScapeKitUnity
                 Debug.Log("MockGPSCoordinates Error: No DebugSession");
             }
         }
+
+        public void SaveImages(bool save) 
+        {
+            AndroidJavaObject debugSession = ScapeClientAndroid.Instance.GetDebugSession();
+            if(debugSession != null) 
+            {
+                debugSession.Call("saveImages", save);
+            }
+            else 
+            {
+                Debug.Log("MockGPSCoordinates Error: No DebugSession");
+            }
+        }
 #elif UNITY_IPHONE && !UNITY_EDITOR
         [DllImport("__Internal")]
         public static extern void _setLogConfig(int level, int output);
@@ -107,6 +120,14 @@ namespace ScapeKitUnity
         {
             _mockGPSCoordinates(latitude, longitude);
         }
+
+        [DllImport("__Internal")]
+        public static extern void _saveImages(bool save);
+
+        public void SaveImages(bool save)
+        {
+            _saveImages(save);
+        }
 #else 
         public void SetLogConfig(LogLevel level, LogOutput output) 
         {
@@ -115,6 +136,10 @@ namespace ScapeKitUnity
         public void MockGPSCoordinates(double latitude, double longitude) 
         {
             Debug.Log(message: "MockGPSCoordinates not implemented on desktop");
+        }
+        public void SaveImages(bool save)
+        {
+            Debug.Log(message: "SaveImages not implemented on desktop");
         }
 #endif
 

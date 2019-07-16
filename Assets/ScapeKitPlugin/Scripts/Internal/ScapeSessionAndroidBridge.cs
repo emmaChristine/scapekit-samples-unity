@@ -15,8 +15,22 @@ namespace ScapeKitUnity
     using UnityEngine;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
+
+
     internal sealed class ScapeSessionAndroid : AndroidJavaProxy
     {
+        public struct ARImage 
+        {
+            public int Width;
+            public int Height;
+            public IntPtr YPixelBuffer;
+            public float XFocalLength;
+            public float YFocalLength;
+            public float XPrincipalPoint;
+            public float YPrincipalPoint;
+            public bool IsAvailable;
+        }
+
         private static ScapeSessionAndroid instance = null; 
         internal static ScapeSessionAndroid Instance 
         { 
@@ -37,6 +51,13 @@ namespace ScapeKitUnity
 
         public void GetMeasurements()
         {
+            ARImage arImage = AcquireImageFromARCore();
+
+            GetMeasurements(arImage);
+        }
+
+        public void GetMeasurements(ARImage image)
+        {
             ScapeLogging.LogDebug(message: "GetMeasurements");
 
             if(ScapeClientAndroid.Instance.ScapeClientJava == null) 
@@ -47,41 +68,53 @@ namespace ScapeKitUnity
 
             using (AndroidJavaObject scapeSession = ScapeClientAndroid.Instance.ScapeClientJava.Call<AndroidJavaObject>("getScapeSession"))
             {
-                SetYChannel(scapeSession);
+                SetYChannel(scapeSession, image);
 
                 scapeSession.Call("getMeasurements", this);
             }
         }
 
-        private void SetYChannel(AndroidJavaObject scapeSession) {
-
-            //ScapeLogging.LogDebug(message: "SetYChannel");
+        public ARImage AcquireImageFromARCore()
+        {
+            ARImage arImage = new ARImage();
 
             using (GoogleARCore.CameraImageBytes image = GoogleARCore.Frame.CameraImage.AcquireCameraImageBytes())
             {
-
-                using (AndroidJavaClass scapeSessionUtils = new AndroidJavaClass("com.scape.scapekit.ScapeSessionUtils"))
+                if (image.IsAvailable)
                 {
-                    if (!image.IsAvailable)
-                    {
-                        ScapeLogging.LogDebug(message: "Cannot find scape scapeposition, reason: Unity ARCore Image is not available");
+                    arImage.Width = image.Width;
+                    arImage.Height = image.Height;
+                    arImage.YPixelBuffer = image.Y;
+                    arImage.XFocalLength = GoogleARCore.Frame.CameraImage.ImageIntrinsics.FocalLength.x;
+                    arImage.YFocalLength = GoogleARCore.Frame.CameraImage.ImageIntrinsics.FocalLength.y;
+                    arImage.XPrincipalPoint = GoogleARCore.Frame.CameraImage.ImageIntrinsics.PrincipalPoint.x;
+                    arImage.YPrincipalPoint = GoogleARCore.Frame.CameraImage.ImageIntrinsics.PrincipalPoint.y;
+                    arImage.IsAvailable = true;
 
-                        scapeSessionUtils.CallStatic("setCurrentYChannel", scapeSession, 0l, 0, 0);
-                        return;
-                    }
-
-                    int width = image.Width;
-                    int height = image.Height;
-                    IntPtr yPixelBuffer = image.Y;
-
-                    float xFocalLength = GoogleARCore.Frame.CameraImage.ImageIntrinsics.FocalLength.x;
-                    float yFocalLength = GoogleARCore.Frame.CameraImage.ImageIntrinsics.FocalLength.y;
-                    float xPrincipalPoint = GoogleARCore.Frame.CameraImage.ImageIntrinsics.PrincipalPoint.x;
-                    float yPrincipalPoint = GoogleARCore.Frame.CameraImage.ImageIntrinsics.PrincipalPoint.y;
-
-                    scapeSessionUtils.CallStatic("setCameraIntrins", scapeSession, xFocalLength, yFocalLength, xPrincipalPoint, yPrincipalPoint);
-                    scapeSessionUtils.CallStatic("setCurrentYChannel", scapeSession, yPixelBuffer.ToInt64(), width, height);
+                    ScapeLogging.LogDebug(message:"\nCamera Intrisics:\n" +
+                        "arImage.XFocalLength = " + arImage.XFocalLength + "\n" + 
+                        "arImage.YFocalLength = " + arImage.YFocalLength + "\n" + 
+                        "arImage.XPrincipalPoint = " + arImage.XPrincipalPoint + "\n" + 
+                        "arImage.YPrincipalPoint = " + arImage.YPrincipalPoint + "\n");
                 }
+            }
+            return arImage;
+        }
+
+        private void SetYChannel(AndroidJavaObject scapeSession, ARImage image) {
+
+
+            using (AndroidJavaClass scapeSessionUtils = new AndroidJavaClass("com.scape.scapekit.ScapeSessionUtils"))
+            {
+                scapeSessionUtils.CallStatic("setCameraIntrins", scapeSession, 
+                                                                image.XFocalLength, 
+                                                                image.YFocalLength, 
+                                                                image.XPrincipalPoint, 
+                                                                image.YPrincipalPoint );
+
+                scapeSessionUtils.CallStatic("setCurrentYChannel", scapeSession, 
+                                                                    image.YPixelBuffer.ToInt64(), 
+                                                                    image.Width, image.Height);
             }
         }
         internal event Action<double>               ScapeMeasurementsRequestedEvent;

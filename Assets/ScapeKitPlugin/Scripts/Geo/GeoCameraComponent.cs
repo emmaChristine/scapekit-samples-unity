@@ -9,11 +9,9 @@
 
 namespace ScapeKitUnity
 {
-    using GoogleARCore;
     using UnityEngine;
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
-    using UnityEngine.XR;
 
     /// <summary>
     /// GeoCameraComponent. Can be added to any camera component to apply the Scape functionality too. 
@@ -88,6 +86,22 @@ namespace ScapeKitUnity
 
             private set 
             {
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the ar camera
+        /// </summary>
+        public Camera TheCamera
+        {
+            get
+            {
+                return theCamera;
+            }
+
+            set
+            {
+                theCamera = value;
             }
         }
 
