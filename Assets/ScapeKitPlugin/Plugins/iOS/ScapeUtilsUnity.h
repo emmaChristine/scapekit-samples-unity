@@ -11,6 +11,6 @@ void _wgsToLocal(double latitude, double longitude, double altitude, long cell_i
 
 void _localToWgs(double x, double y, double z, long cell_id, double* result);
 
-long _cellIdForWgs(double latitude, double longitude);
+long _cellIdForWgs(double latitude, double longitude, int s2CellLevel);
 
 }

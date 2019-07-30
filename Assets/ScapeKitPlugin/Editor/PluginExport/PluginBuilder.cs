@@ -10,8 +10,7 @@ namespace ScapeKitUnity
         {
             string[] assetPaths = new string[]
             {
-              "Assets/ScapeKitPlugin/Plugins/iOS", // ios framework is here
-              "Assets/ScapeKitPlugin/Plugins/Android", // android aar module is here
+              "Assets/ScapeKitPlugin/Plugins", // native libs for all platforms here
               "Assets/Plugins/Android", // custom gradle file is here
               "Assets/ScapeKitPlugin/Scripts",
               "Assets/ScapeKitPlugin/Examples",

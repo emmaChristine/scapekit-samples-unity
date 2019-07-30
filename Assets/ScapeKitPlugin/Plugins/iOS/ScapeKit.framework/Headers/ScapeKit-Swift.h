@@ -168,6 +168,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #endif
 @import ARKit;
 @import CoreGraphics;
+@import CoreVideo;
 @import Foundation;
 @import ObjectiveC;
 @import SceneKit;
@@ -564,6 +565,12 @@ SWIFT_PROTOCOL("_TtP8ScapeKit22SCKScapeClientObserver_")
 /// (public) -
 /// Set the ar frame manually
 - (void)setARFrame:(ARFrame * _Nonnull)arFrame;
+/// (public) -
+/// Set the pixel buffer manually
+/// The preferred resolution of the image is 1280px<em>720px, to ensure a highly accurate localization.
+/// The minimum accepted resolution is 640px</em>480px, but please use a resolution as high as possible for a better
+/// localization result.
+- (void)setPixelBuffer:(CVPixelBufferRef _Nonnull)buffer;
 @end
 
 

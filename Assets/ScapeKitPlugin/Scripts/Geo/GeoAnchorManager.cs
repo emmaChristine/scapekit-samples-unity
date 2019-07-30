@@ -37,6 +37,12 @@ namespace ScapeKitUnity
         private static GeoAnchorManager geoAnchorManager = null;
 
         /// <summary>
+        /// The S2 Cell level in use.
+        /// </summary>
+        [SerializeField]
+        private static int s2CellLevel = 19;
+
+        /// <summary>
         /// The GeoOriginEvent action is used to broadcast the ScapeMeasurements updates to the GeoAnchor components
         /// </summary>
         [SerializeField]
@@ -56,6 +62,23 @@ namespace ScapeKitUnity
         /// Used to do the Origin event updates on the main thread
         /// </summary>
         private bool doOriginEvent = false;
+
+        /// <summary>
+        /// Gets or sets the s2CellLevel.
+        /// A lower level s2 cell corresponds to a larger area.  
+        /// </summary>
+        public static int S2CellLevel 
+        {
+            get 
+            {
+                return s2CellLevel;
+            }
+            
+            set 
+            {
+                s2CellLevel = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the LatLng of the origin.
@@ -210,7 +233,7 @@ namespace ScapeKitUnity
         /// </param>
         private void FindS2CellCoordinates(LatLng latLng) 
         {
-            S2CellId = ScapeUtils.CellIdForWgs(latLng.Latitude, latLng.Longitude);
+            S2CellId = ScapeUtils.CellIdForWgs(latLng.Latitude, latLng.Longitude, s2CellLevel);
 
             S2CellCoordinates = ScapeUtils.LocalToWgs(new Vector3(0, 0, 0), S2CellId);
 

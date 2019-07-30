@@ -11,8 +11,6 @@
 #include "IUnityGraphics.h"
 #include "IUnityInterface.h"
 
-#include <iostream>
-
 UIViewController* UnityGetGLViewController();
 UIWindow* UnityGetMainWindow();
 
