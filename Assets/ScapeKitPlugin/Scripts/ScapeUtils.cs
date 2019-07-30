@@ -48,21 +48,25 @@ namespace ScapeKitUnity
             }
         }
 
-#elif UNITY_IPHONE && !UNITY_EDITOR
-        [DllImport("__Internal")]       
+#elif UNITY_IPHONE || UNITY_EDITOR
+        #if UNITY_IPHONE && !UNITY_EDITOR
+            private const string LIBSCAPEBOX_LIBNAME = "__Internal";
+        #elif UNITY_EDITOR_LINUX
+            private const string LIBSCAPEBOX_LIBNAME = "scapebox_c";
+        #elif UNITY_EDITOR_OSX || UNITY_EDITOR_WIN
+            private const string LIBSCAPEBOX_LIBNAME = "libscapebox_c";
+        #endif
+        [DllImport(LIBSCAPEBOX_LIBNAME)]
+        public static extern long _cellIdForWgs(double latitude, double longitude, int s2CellLevel);
+        [DllImport(LIBSCAPEBOX_LIBNAME)]
         public static extern double _metersBetweenCoordinates(double latitude1, double longitude1, double latitude2, double longitude2);
-
-        [DllImport("__Internal")]
+        [DllImport(LIBSCAPEBOX_LIBNAME)]
         public static extern double _angleBetweenCoordinates(double latitude1, double longitude1, double latitude2, double longitude2);
-
-        [DllImport("__Internal")]
+        [DllImport(LIBSCAPEBOX_LIBNAME)]
         public static extern void _wgsToLocal(double latitude, double longitude, double altitude, long cellId, double[] result);
-
-        [DllImport("__Internal")]
+        [DllImport(LIBSCAPEBOX_LIBNAME)]
         public static extern void _localToWgs(double x, double y, double z, long cellId, double[] result);
 
-        [DllImport("__Internal")]
-        public static extern long _cellIdForWgs(double latitude, double longitude);
 #endif
 
         /// <summary>
@@ -87,10 +91,8 @@ namespace ScapeKitUnity
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
             return ScapeUtils.ProxyInstance.CallStatic<double>("metersBetweenCoordinates", latitude1, longitude1, latitude2, longitude2);
-#elif UNITY_IPHONE && !UNITY_EDITOR
+#else
             return _metersBetweenCoordinates(latitude1, longitude1, latitude2, longitude2);
-#else 
-            return 0.0;
 #endif
         }
 
@@ -116,10 +118,8 @@ namespace ScapeKitUnity
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
             return ScapeUtils.ProxyInstance.CallStatic<double>("angleBetweenCoordinates", latitude1, longitude1, latitude2, longitude2);
-#elif UNITY_IPHONE && !UNITY_EDITOR
-            return _angleBetweenCoordinates(latitude1, longitude1, latitude2, longitude2);
 #else
-            return 0.0;
+            return _angleBetweenCoordinates(latitude1, longitude1, latitude2, longitude2);
 #endif
         }
 
@@ -159,7 +159,7 @@ namespace ScapeKitUnity
                     }
                 }
             }
-#elif UNITY_IPHONE && !UNITY_EDITOR
+#else
             double[] result = new double[3];
             _wgsToLocal(latitude, longitude, altitude, s2CellId, result);
             vec3.Set((float)result[0], (float)result[1], (float)result[2]);
@@ -168,7 +168,7 @@ namespace ScapeKitUnity
         }
 
         /// <summary>
-        /// localToWsg, given a Unity position vector3 and s2 cell id, retuns a LatLng coordinate.
+        /// localToWsg, given a Unity position vector3 and s2 cell id, returns a LatLng coordinate.
         /// The Unity scene uses an S2 Cell's center to define it's origin.
         /// In this way by taking the world position of an object in the Unity scene
         /// and combining it with the Cell id defined in the GeoAnchorManager, the world coordinate of that
@@ -207,7 +207,7 @@ namespace ScapeKitUnity
                 }
             }
 
-#elif UNITY_IPHONE && !UNITY_EDITOR
+#else
             double[] result = new double[3];
             _localToWgs(localVec3.x, localVec3.y, localVec3.z, s2CellId, result);
             coords = new LatLng() 
@@ -224,7 +224,7 @@ namespace ScapeKitUnity
         /// S2 Cells are areas's on the Earth's surface.
         /// In a Scape integrated Unity scene the center of one such cell is always used as the
         /// scene's origin.
-        /// This function is used by teh GeoAnchorManager to ascertain the S2 Cell for the current scene. 
+        /// This function is used by the GeoAnchorManager to ascertain the S2 Cell for the current scene. 
         /// </summary>
         /// <param name="latitude">
         /// latitude in degrees
@@ -232,17 +232,18 @@ namespace ScapeKitUnity
         /// <param name="longitude">
         /// longitude in degrees
         /// </param>
+        /// <param name="s2CellLevel">
+        /// An S2 Cell Level
+        /// </param>
         /// <returns>
         /// ID of s2 cell containing GPS coordinate.
         /// </returns>
-        public static long CellIdForWgs(double latitude, double longitude) 
+        public static long CellIdForWgs(double latitude, double longitude, int s2CellLevel) 
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            return ScapeUtils.ProxyInstance.CallStatic<long>("cellIdForWgs", latitude, longitude);
-#elif UNITY_IPHONE && !UNITY_EDITOR
-            return _cellIdForWgs(latitude, longitude);
+            return ScapeUtils.ProxyInstance.CallStatic<long>("cellIdForWgs", latitude, longitude, s2CellLevel);
 #else
-            return 0;
+            return _cellIdForWgs(latitude, longitude, s2CellLevel);
 #endif
         }
     }
