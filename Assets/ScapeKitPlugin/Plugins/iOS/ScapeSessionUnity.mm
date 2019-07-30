@@ -9,9 +9,6 @@
 #import "ScapeClientUnity.h"
 #import "NSObject+ObjectMap.h"
 
-#include <iostream>
-#include <string>
-
 static ScapeSessionUnity* _ScapeSessionUnity;
 
 @implementation ScapeSessionUnity

@@ -32,6 +32,7 @@
                                      cellId:(int64_t)cellId;
 
 + (int64_t)cellIdForWgs:(double)latitude
-              longitude:(double)longitude;
+              longitude:(double)longitude
+            s2CellLevel:(int32_t)s2CellLevel;
 
 @end
