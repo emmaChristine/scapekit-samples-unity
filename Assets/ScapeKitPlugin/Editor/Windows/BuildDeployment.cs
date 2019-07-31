@@ -79,7 +79,7 @@ namespace ScapeKitUnity
                 if (GUILayout.Button("Acquire API Key!"))
                 {
                     this.Close();
-                    Application.OpenURL("https://developer.scape.io/download/");
+                    Application.OpenURL("https://developer.scape.io/dashboard/");
                 }
             }
         }

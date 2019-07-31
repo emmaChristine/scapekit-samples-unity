@@ -34,7 +34,7 @@ namespace ScapeKitUnity
             if (GUILayout.Button("Developer Portal"))
             {
                 this.Close();
-                Application.OpenURL("https://developer.scape.io/download/");
+                Application.OpenURL("https://developer.scape.io");
             }
 
             GUILayout.Space(5);
