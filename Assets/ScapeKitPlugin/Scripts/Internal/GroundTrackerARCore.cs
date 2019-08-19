@@ -23,7 +23,7 @@ namespace ScapeKitUnity
 		private bool haveArPlanes = false;
 		private float groundHeight = 0.0f;
 
-		public override void update() 
+		public override void Update() 
 		{
 			if(haveArPlanes) 
 			{

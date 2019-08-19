@@ -6,7 +6,7 @@
 #include "stdlib.h"
 #include "UnityAppController.h"
 #include "ARKitDefines.h"
-#import "ScapeSessionUnity.h"
+#include "scape_client_interface.h"
 
 // These don't all need to be static data, but no other better place for them at the moment.
 static id <MTLTexture> s_CapturedImageTextureY = NULL;
@@ -19,9 +19,6 @@ static float s_ShaderScale;
 
 static float unityCameraNearZ;
 static float unityCameraFarZ;
-
-
-
 
 static inline UnityARTrackingState GetUnityARTrackingStateFromARTrackingState(ARTrackingState trackingState)
 {
@@ -291,6 +288,32 @@ inline void UnityLightDataFromARFrame(UnityLightData& lightData, ARFrame *arFram
     
 }
 
+void sendImageToScapeSession(ARFrame* frame)
+{
+    CVPixelBufferRef imageBuffer = frame.capturedImage;
+
+    CVReturn rt = CVPixelBufferLockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
+
+    if (rt == kCVReturnSuccess) {
+
+        double xFocalLength = frame.camera.intrinsics.columns[0].x;
+        double yFocalLength = frame.camera.intrinsics.columns[1].y;
+        double xPrincipalPoint = frame.camera.intrinsics.columns[2].x;
+        double yPrincipalPoint = frame.camera.intrinsics.columns[2].y;
+        UInt8 *bufferPtr = (UInt8 *)CVPixelBufferGetBaseAddressOfPlane(imageBuffer,0);
+        size_t width = CVPixelBufferGetWidth(imageBuffer);
+        size_t height = CVPixelBufferGetHeight(imageBuffer);
+        
+        void* client = citf_getGlobalScapeClient();
+        if(client) {
+            citf_setYChannelPtr(client, (int64_t)bufferPtr, (int32_t)width, (int32_t)height);
+            citf_setCameraIntrinsics(client, xFocalLength, yFocalLength, xPrincipalPoint, yPrincipalPoint);
+        }
+        
+        CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
+    }
+}
+
 
 @interface UnityARAnchorCallbackWrapper : NSObject <UnityARAnchorEventDispatcher>
 {
@@ -475,11 +498,13 @@ static UnityPixelBuffer s_UnityPixelBuffers;
 
 static CGAffineTransform s_CurAffineTransform;
 
+
 - (void)session:(ARSession *)session didUpdateFrame:(ARFrame *)frame
 {
     @synchronized(self) {
         if(session.currentFrame != nil) {
-            [[ScapeSessionUnity sharedInstance] setARFrame:frame];
+            
+            sendImageToScapeSession(frame);
         }
     }
 

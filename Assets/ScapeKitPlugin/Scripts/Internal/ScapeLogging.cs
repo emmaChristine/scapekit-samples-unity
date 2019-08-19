@@ -19,11 +19,7 @@ namespace ScapeKitUnity
         {
             if(ScapeClient.Instance.IsStarted()) 
             {
-    #if UNITY_IPHONE && !UNITY_EDITOR
-                ScapeLoggingBridge._log((int)LogLevel.LOG_DEBUG, tag, message);
-    #elif UNITY_ANDROID && !UNITY_EDITOR
                 ScapeLoggingBridge._log(LogLevel.LOG_DEBUG, tag, message);
-    #endif
             }
             else {
                 Debug.Log(tag + " [Debug] : " + message);
@@ -33,11 +29,7 @@ namespace ScapeKitUnity
         {
             if(ScapeClient.Instance.IsStarted()) 
             {
-#if UNITY_IPHONE && !UNITY_EDITOR
-                ScapeLoggingBridge._log((int)LogLevel.LOG_ERROR, tag, message);
-#elif UNITY_ANDROID && !UNITY_EDITOR
                 ScapeLoggingBridge._log(LogLevel.LOG_ERROR, tag, message);
-#endif
             }
             else {
                 Debug.Log(tag + " [Error] : " + message);
@@ -46,10 +38,7 @@ namespace ScapeKitUnity
 
         private static class ScapeLoggingBridge
         {
-#if UNITY_IPHONE && !UNITY_EDITOR
-            [DllImport("__Internal")]
-            public static extern void _log(int level, [MarshalAs(UnmanagedType.LPStr)]string tag, [MarshalAs(UnmanagedType.LPStr)]string message);
-#elif UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR && false
             private static AndroidJavaClass loggingUtils;
             internal static void _log(LogLevel level, string tag, string message)
             {
@@ -66,6 +55,20 @@ namespace ScapeKitUnity
                     loggingUtils.CallStatic("log", (int)level, tag, message);
                 }
             }
+
+#elif UNITY_IPHONE && !UNITY_EDITOR && !SCAPE_C_INTERFACE
+            [DllImport("__Internal")]
+            private static extern void _log(int level, [MarshalAs(UnmanagedType.LPStr)]string tag, [MarshalAs(UnmanagedType.LPStr)]string message);
+            internal static void _log(LogLevel level, string tag, string message)
+            {
+                _log((int)level, tag, message);
+            }
+#else 
+            internal static void _log(LogLevel level, string tag, string message)
+            {
+                ScapeCInterface.citf_log((int)level, tag, message);
+            }
+
 #endif
         }
     }

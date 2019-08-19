@@ -9,19 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccf6d871853424a32a485708e7abd91b, type: 3}
+  m_Script: {fileID: 11500000, guid: 51f8e06a266f141d191ccb322bd00770, type: 3}
   m_Name: ScapeDebugConfig
   m_EditorClassIdentifier: 
-  logLevel: 1
-  logOutput: 3
+  logLevel: 2
+  logOutput: 1
   debugMockGPS: 0
   mockGPSLatLng:
-    Latitude: 0
-    Longitude: 0
+    Latitude: 32.748364
+    Longitude: -97.091243
   mockScapeResults: 0
   mockScapeLatLng:
-    Latitude: 51.524059
-    Longitude: -0.0831
-  mockScapeHeading: 90
-  mockScapeMeasurementsDelay: 10
+    Latitude: 0
+    Longitude: 0
+  mockScapeHeading: 0
+  mockScapeMeasurementsDelay: 3
   saveImages: 0

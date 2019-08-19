@@ -332,6 +332,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3695727581117221327, guid: 7836257f124174fb3b15b87083f555ad,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8546833185999197662, guid: 7836257f124174fb3b15b87083f555ad,
         type: 3}
       propertyPath: onGroundDetected.m_PersistentCalls.m_Calls.Array.size
@@ -518,11 +523,11 @@ PrefabInstance:
         type: 3}
       propertyPath: geoOriginEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 17129307}
+      objectReference: {fileID: 0}
     - target: {fileID: 8416093558710256986, guid: 7836257f124174fb3b15b87083f555ad,
         type: 3}
       propertyPath: geoOriginEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8416093558710256986, guid: 7836257f124174fb3b15b87083f555ad,
         type: 3}
