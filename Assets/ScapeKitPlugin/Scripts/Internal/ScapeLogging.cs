@@ -19,11 +19,7 @@ namespace ScapeKitUnity
         {
             if(ScapeClient.Instance.IsStarted()) 
             {
-    #if UNITY_IPHONE && !UNITY_EDITOR
-                ScapeLoggingBridge._log((int)LogLevel.LOG_DEBUG, tag, message);
-    #elif UNITY_ANDROID && !UNITY_EDITOR
-                ScapeLoggingBridge._log(LogLevel.LOG_DEBUG, tag, message);
-    #endif
+                ScapeCInterface.citf_log((int)LogLevel.LOG_DEBUG, tag, message);
             }
             else {
                 Debug.Log(tag + " [Debug] : " + message);
@@ -33,40 +29,11 @@ namespace ScapeKitUnity
         {
             if(ScapeClient.Instance.IsStarted()) 
             {
-#if UNITY_IPHONE && !UNITY_EDITOR
-                ScapeLoggingBridge._log((int)LogLevel.LOG_ERROR, tag, message);
-#elif UNITY_ANDROID && !UNITY_EDITOR
-                ScapeLoggingBridge._log(LogLevel.LOG_ERROR, tag, message);
-#endif
+                ScapeCInterface.citf_log((int)LogLevel.LOG_ERROR, tag, message);
             }
             else {
                 Debug.Log(tag + " [Error] : " + message);
             }
-        }
-
-        private static class ScapeLoggingBridge
-        {
-#if UNITY_IPHONE && !UNITY_EDITOR
-            [DllImport("__Internal")]
-            public static extern void _log(int level, [MarshalAs(UnmanagedType.LPStr)]string tag, [MarshalAs(UnmanagedType.LPStr)]string message);
-#elif UNITY_ANDROID && !UNITY_EDITOR
-            private static AndroidJavaClass loggingUtils;
-            internal static void _log(LogLevel level, string tag, string message)
-            {
-                if(loggingUtils == null) 
-                {
-                    loggingUtils = new AndroidJavaClass("com.scape.scapekit.internal.utils.LoggingUtils");
-                    if(loggingUtils == null) 
-                    {
-                        Debug.Log("Failed to find Scapekit LoggingUtils");
-                    }
-                }
-                if(loggingUtils != null)
-                {
-                    loggingUtils.CallStatic("log", (int)level, tag, message);
-                }
-            }
-#endif
         }
     }
 }

@@ -25,7 +25,7 @@ namespace ScapeKitUnity
 
         private UnityARAnchorManager unityARAnchorManager;
 
-		public override void update()
+		public override void Update()
 		{
 			if(haveArPlanes)
 			{

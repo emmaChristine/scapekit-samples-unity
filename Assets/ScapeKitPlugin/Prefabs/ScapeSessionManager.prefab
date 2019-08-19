@@ -40,16 +40,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1125735014728799555}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc8ef2a1f76bf44ff8a950c7e336474c, type: 3}
+  m_Script: {fileID: 11500000, guid: 04eff18023a0f4149be3231369e087ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   theCamera: {fileID: 0}
-  debugSupport: 0
-  logLevel: 5
-  logOutput: 1
-  confidenceThreshold: 3
-  checkCameraPointsUp: 0
+  debugConfig: {fileID: 11400000, guid: aede8a22c95fa450bb499d8129bbf1be, type: 2}
+  confidenceThreshold: 4
+  checkCameraPointsUp: 1
   useGPSFallback: 0
-  autoUpdate: 0
+  autoUpdate: 1
   timeoutUpdate: -1
   distanceUpdate: -1
+  onGroundDetected:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
