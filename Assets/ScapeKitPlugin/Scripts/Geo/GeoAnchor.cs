@@ -10,12 +10,6 @@
 namespace ScapeKitUnity
 {
     using UnityEngine;
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-    using GoogleARCore;
-#elif UNITY_IPHONE && !UNITY_EDITOR
-    using UnityEngine.XR.iOS;
-#endif
  
     /// <summary>
     /// When attached to a [GameObject](https://docs.unity3d.com/ScriptReference/GameObject.html) 
@@ -61,12 +55,7 @@ namespace ScapeKitUnity
         /// <summary>
         /// Keeps track of whether the object has been instantiated yet.
         /// </summary>
-        private bool isInstantiated = false; 
-
-        /// <summary>
-        /// keep looking for ground position
-        /// </summary>
-        private bool needsGroundPos = false;
+        private bool isInstantiated = false;
 
         /// <summary>
         /// Gets or sets the LatLng. 

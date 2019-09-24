@@ -14,6 +14,7 @@ namespace ScapeKitUnity
     using UnityEngine.Events;
 
     /// <summary>
+    /// This component works best attached the the same GameObject as the ScapeClient
     /// There must be one and only one instance of this class in a scene 
     /// that uses Scapekit's GeoAnchor components.
     /// This class holds the id of an S2Cell, the center of which defines the World Coordinate 
@@ -37,10 +38,9 @@ namespace ScapeKitUnity
         private static GeoAnchorManager geoAnchorManager = null;
 
         /// <summary>
-        /// The S2 Cell level in use.
+        /// The S2Cell id for the GeoAnchorManager.
         /// </summary>
-        [SerializeField]
-        private static int s2CellLevel = 19;
+        private long s2CellId = 0;
 
         /// <summary>
         /// The GeoOriginEvent action is used to broadcast the ScapeMeasurements updates to the GeoAnchor components
@@ -49,36 +49,9 @@ namespace ScapeKitUnity
         private UnityEvent geoOriginEvent = new UnityEvent();
 
         /// <summary>
-        /// The S2Cell id for the GeoAnchorManager.
-        /// </summary>
-        private long s2CellId = 0;
-
-        /// <summary>
         /// isInstantiated. Becomes true after the first Scape Measurement comes in.
         /// </summary>
         private bool isInstantiated = false;
-
-        /// <summary>
-        /// Used to do the Origin event updates on the main thread
-        /// </summary>
-        private bool doOriginEvent = false;
-
-        /// <summary>
-        /// Gets or sets the s2CellLevel.
-        /// A lower level s2 cell corresponds to a larger area.  
-        /// </summary>
-        public static int S2CellLevel 
-        {
-            get 
-            {
-                return s2CellLevel;
-            }
-            
-            set 
-            {
-                s2CellLevel = value;
-            }
-        }
 
         /// <summary>
         /// Gets or sets the LatLng of the origin.
@@ -149,40 +122,11 @@ namespace ScapeKitUnity
         }
 
         /// <summary>
-        /// After a ScapeMeasurement has come in, update all GeoAnchors by calling the GeoOriginEvent action
-        /// This must be done on Unity's main thread.
+        /// Register the ScapeMeasurements callback. 
         /// </summary>
-        public void Update() 
+        public void Start()
         {
-            if (doOriginEvent) 
-            {
-                ScapeLogging.LogDebug(message: "GeoAnchorManager::geoOriginEvent()");
-                geoOriginEvent.Invoke();
-                doOriginEvent = false;
-            }
-        }
-
-        /// <summary>
-        /// InstantiateOrigin is called by the main camera when a successful scape meaasurements event happens.
-        /// The Coordinates passed in are the Geo Location of Unity's origin.
-        /// </summary>
-        /// <param name="rootSessionCoords">
-        /// The GPS coordinates for the oriing of the Unity scene,
-        /// </param>
-        public void InstantiateOrigin(LatLng rootSessionCoords) 
-        {
-            ScapeLogging.LogDebug(message: "GeoAnchorManager::InstantiateOrigin()");
-            if (isInstantiated == false) 
-            {
-                FindS2CellCoordinates(rootSessionCoords);
-
-                isInstantiated = true;
-            }
-
-            if (geoOriginEvent != null) 
-            {
-                doOriginEvent = true;
-            }
+            ScapeClient.Instance.ScapeSession.ScapeMeasurementsEvent += OnScapeMeasurementsEvent;
         }
 
         /// <summary>
@@ -206,6 +150,29 @@ namespace ScapeKitUnity
         }
 
         /// <summary>
+        /// InstantiateOrigin is called by the main camera when a successful scape meaasurements event happens.
+        /// The Coordinates passed in are the Geo Location of Unity's origin.
+        /// </summary>
+        /// <param name="rootSessionCoords">
+        /// The GPS coordinates for the origin of the Unity scene,
+        /// </param>
+        public void InstantiateOrigin(LatLng rootSessionCoords) 
+        {
+            ScapeLogging.LogDebug(message: "GeoAnchorManager::InstantiateOrigin()");
+            if (isInstantiated == false) 
+            {
+                FindS2CellCoordinates(rootSessionCoords);
+
+                isInstantiated = true;
+            }
+
+            if (geoOriginEvent != null) 
+            {
+                geoOriginEvent.Invoke();
+            }
+        }
+
+        /// <summary>
         /// Initializes the GeoAnchorManager, should only happen once
         /// Sets the S2Cell if the user has given GPS coordinates, other wise that is done later
         /// when the ScapeMeasurement comes in.
@@ -225,6 +192,20 @@ namespace ScapeKitUnity
         }
 
         /// <summary>
+        /// Instantiates origin when scape measurements are returned
+        /// </summary> 
+        /// <param name="scapeMeasurements">
+        /// The scapeMesurements struct returned from the API
+        /// </param>
+        private void OnScapeMeasurementsEvent(ScapeMeasurements scapeMeasurements)
+        {
+            if (scapeMeasurements.MeasurementsStatus == ScapeMeasurementStatus.ResultsFound) 
+            {
+                InstantiateOrigin(scapeMeasurements.LatLng);
+            }
+        }
+
+        /// <summary>
         /// Identify which S2Cell will be used for the root. 
         /// Find the S2Cell's GPS Coordinates.
         /// </summary>
@@ -233,7 +214,7 @@ namespace ScapeKitUnity
         /// </param>
         private void FindS2CellCoordinates(LatLng latLng) 
         {
-            S2CellId = ScapeUtils.CellIdForWgs(latLng.Latitude, latLng.Longitude, s2CellLevel);
+            S2CellId = ScapeUtils.CellIdForWgs(latLng.Latitude, latLng.Longitude, ScapeUtils.S2CellLevel);
 
             S2CellCoordinates = ScapeUtils.LocalToWgs(new Vector3(0, 0, 0), S2CellId);
 

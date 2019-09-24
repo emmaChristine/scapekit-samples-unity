@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ScapeDebugConfig
   m_EditorClassIdentifier: 
   logLevel: 2
-  logOutput: 1
+  logOutput: 3
   debugMockGPS: 0
   mockGPSLatLng:
     Latitude: 32.748364
@@ -24,4 +24,4 @@ MonoBehaviour:
     Longitude: 0
   mockScapeHeading: 0
   mockScapeMeasurementsDelay: 3
-  saveImages: 0
+  saveImages: 1
