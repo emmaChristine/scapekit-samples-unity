@@ -1,4 +1,4 @@
-﻿//  <copyright file="ScapeClient.cs" company="Scape Technologies Limited">
+//  <copyright file="ScapeClient.cs" company="Scape Technologies Limited">
 //
 //  ScapeClient.cs
 //  ScapeKitUnity
@@ -14,22 +14,21 @@ namespace ScapeKitUnity
     using System.Runtime.InteropServices;
     using UnityEditor;
     using UnityEngine;
+    using UnityEngine.XR.ARFoundation;
 
+    #if PLATFORM_ANDROID
+    using UnityEngine.Android;
+    #endif
+    
     /// <summary>
     /// class encapsualting all scapekit functionality
     /// </summary>
-    public abstract class ScapeClient : MonoBehaviour
+    public class ScapeClient : MonoBehaviour
     {
         /// <summary>
         /// static instance of the client
         /// </summary>
         private static ScapeClient instance = null;
-
-        /// <summary>
-        /// static bool init flag
-        /// Unity overrides == operator for MonoBehaviour
-        /// </summary>
-        private static bool instanceIsInitialized = false;
 
         /// <summary>
         /// the filename containing the scapeAPIkey
@@ -42,26 +41,38 @@ namespace ScapeKitUnity
         private static string resPath = "Assets/Resources/";
 
         /// <summary>
+        /// The interface to the underlying native lib
+        /// </summary>
+        private ScapeClientNative nativeClient = null;
+
+        /// <summary>
+        /// The ScapeSession object
+        /// THe underlying implementation of the ScapeSession obj is only initialized
+        /// when ScapeClient Impl is,
+        /// however the events can be registered too before then.
+        /// </summary>
+        private ScapeSession scapeSession = new ScapeSession();
+
+        /// <summary>
         /// the scape api key.
         /// This should be entered through the unity gui
         /// Unity Menu SCapekit -> Account  
         /// </summary>
         private string apiKey = "XXX";     
+        
+        /// <summary>
+        /// theCamera, main camera object of Unity scene.
+        /// Must be set in order to use scape measurements with AR Camera
+        /// </summary>
+        [SerializeField]
+        private ARCameraManager arCameraManager;
 
         /// <summary>
-        /// event to listen ClientStartedEvent
+        /// A scriptable object which can be optionally added to provide 
+        /// debug support options
         /// </summary>
-        public event Action ClientStartedEvent;
-        
-        /// <summary>
-        /// event to listen ClientStoppedEvent
-        /// </summary>
-        public event Action ClientStoppedEvent;
-        
-        /// <summary>
-        /// event to listen ClientFailedEvent
-        /// </summary>
-        public event Action<string> ClientFailedEvent;
+        [SerializeField]
+        private ScapeDebugConfig debugConfig;
 
         /// <summary>
         /// Gets static instance of the client
@@ -70,30 +81,50 @@ namespace ScapeKitUnity
         {
             get
             {
-                if (instanceIsInitialized == false)
-                {
-                    instance = ScapeClientCInterface.create();
-                    instanceIsInitialized = true;
-                }
-
                 return instance;
             }
         }
 
         /// <summary>
         /// Gets the instance of the ScapeSession
+        /// There is always a ScapeSession available, even before the underlying
+        /// native client has been started. 
         /// </summary>
-        public abstract ScapeSession ScapeSession
+        public ScapeSession ScapeSession
         {
-            get;
+            get
+            {
+                return scapeSession;
+            } 
         }
 
         /// <summary>
         /// Gets the instance of the DebugSession
+        /// A debug session is only available after the native client has been started
+        /// and if a ScapeDebugConfig was applied to this ScapeClient
         /// </summary>
-        public abstract DebugSession DebugSession
+        public DebugSession DebugSession
         {
-            get;
+            get 
+            {
+                return nativeClient.DebugSession;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the DebugConfig
+        /// </summary>
+        public ScapeDebugConfig DebugConfig
+        {
+            get
+            {
+                return debugConfig;
+            }
+
+            set
+            {
+                debugConfig = value;
+            }
         }
 
         /// <summary>
@@ -175,107 +206,104 @@ namespace ScapeKitUnity
         }
 
         /// <summary>
-        /// shuts down the client on application quit
+        /// init permissions before scene load
+        /// ensures location works first time
         /// </summary>
-        public void OnApplicationQuit()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        public static void InitPermissions()
         {
-            this.Terminate();
-        }
-
-        /// <summary>
-        /// Terminate ScapeClient
-        /// </summary>
-        public virtual void Terminate()
-        {
-        }
-
-        /// <summary>
-        /// configures the client to use the scapeAPIkey saved using the Unity GUI
-        /// </summary>
-        /// <returns>
-        /// returns this ScapeClient to allow for single line builder pattern
-        /// </returns>
-        public ScapeClient WithResApiKey()
-        {
-            this.WithApiKey(ScapeClient.RetrieveKeyFromResources());
-            return this;
-        }
-
-        /// <summary>
-        /// configrue api key to use
-        /// </summary>
-        /// <param name="apiKey">
-        /// input apiKey as string
-        /// </param>
-        /// <returns>
-        /// returns this ScapeClient to allow for single line builder pattern
-        /// </returns>
-        public abstract ScapeClient WithApiKey(string apiKey);
-
-        /// <summary>
-        /// create the DebugSession to use
-        /// </summary>
-        /// <param name="isSupported">
-        /// boolean to specify whether to create the DebugSession or not.
-        /// </param>
-        /// <returns>
-        /// returns this ScapeClient to allow for single line builder pattern
-        /// </returns>
-        public abstract ScapeClient WithDebugSupport(bool isSupported);
-
-        /// <summary>
-        /// start the client
-        /// </summary>
-        public abstract void StartClient();
-
-        /// <summary>
-        /// stop the client [deprecated]
-        /// </summary>
-        public abstract void StopClient();
-
-        /// <summary>
-        /// check whether the client has been started
-        /// this must be true before the DebugSession or ScapeSession can be used
-        /// </summary>
-        /// <returns>
-        /// boolean indicating whether the client is ready to be used
-        /// </returns>
-        public abstract bool IsStarted();
-
-        /// <summary>
-        /// OnClientStartedEvent function called by subclass to trigger event
-        /// </summary>
-        internal void OnClientStartedEvent()
-        {
-            if (this.ClientStartedEvent != null)
+#if PLATFORM_ANDROID
+            if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
             {
-                this.ClientStartedEvent();
+                Permission.RequestUserPermission(Permission.FineLocation);
+            }
+            if (!Permission.HasUserAuthorizedPermission(Permission.Camera))
+            {
+                Permission.RequestUserPermission(Permission.Camera);
+            }
+#endif
+        }
+
+        /// <summary>
+        /// A public function to request ScapeMeasurements anytime
+        /// </summary>
+        public void TakeMeasurements() 
+        {
+            Instance.ScapeSession.GetMeasurements();
+        }
+
+        /// <summary>
+        /// create c interface on awake
+        /// </summary>
+        public void Awake()
+        {
+            if (instance != null) 
+            {
+                Debug.Log("ERROR: There should only be one ScapeClient in a scene!");
+                return;
+            }
+            
+            instance = this;
+            nativeClient = new ScapeClientNative();
+        }
+
+        /// <summary>
+        /// start c core 
+        /// </summary>
+        public void Start()
+        {
+            nativeClient.StartClient(RetrieveKeyFromResources(), debugConfig != null);
+
+            if (debugConfig != null)
+            {
+                debugConfig.ConfigureDebugSession(nativeClient.DebugSession);
+            }
+
+            scapeSession.SetNative(nativeClient.ScapeSessionNative);
+
+            if (arCameraManager != null)
+            {
+                scapeSession.SetCameraManager(arCameraManager);
             }
         }
 
         /// <summary>
-        /// OnClientStoppedEvent function called by subclass to trigger event
+        /// update ScapeSession in main thread
         /// </summary>
-        internal void OnClientStoppedEvent()
+        public void Update() 
         {
-            if (this.ClientStoppedEvent != null)
+            if (nativeClient != null)
             {
-                this.ClientStoppedEvent();
+                nativeClient.Update();
             }
+            
+            scapeSession.Update();
         }
 
         /// <summary>
-        /// OnClientFailedEvent function called by subclass to trigger event
+        /// terminate client on scene
         /// </summary>
-        /// <param name="err">
-        /// A string detailing reason for client error
-        /// </param>
-        internal void OnClientFailedEvent(string err)
+        public void OnDestroy()
         {
-            if (this.ClientFailedEvent != null)
+            nativeClient.Terminate();
+
+            instance = null;
+        }
+
+        /// <summary>
+        /// returnws whether the client has started
+        /// </summary>
+        /// <returns>
+        /// boolean value
+        /// </returns>
+        public bool IsStarted()
+        {
+            if (nativeClient != null)
             {
-                this.ClientFailedEvent(err);
+                return nativeClient.IsStarted();
             }
+
+            return false;
         }
     }
 }

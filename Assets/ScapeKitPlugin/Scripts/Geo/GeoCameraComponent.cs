@@ -32,10 +32,11 @@ namespace ScapeKitUnity
         private static GameObject worldTransformObject;
 
         /// <summary>
-        /// The main camera to apply the scape global transform too
-        /// </summary>
+        /// Use the AR system to find a ground plane and use that to determine camera's height in 
+        /// the real world. The height measurement returned from scape is not reliable
+        /// </summary> 
         [SerializeField]
-        private Camera theCamera;
+        private GroundTrackerARFoundation groundTracker;
 
         /// <summary>
         /// The camera position at which point scape measurements last were taken
@@ -66,7 +67,44 @@ namespace ScapeKitUnity
         /// <summary>
         /// used to update worldTransform in Unity main thread
         /// </summary>
-        private bool updateRoot = false;
+        private bool updateWorldTransform = false;
+
+        /// <summary>
+        /// time at last measurements update
+        /// </summary>
+        private float updateStartTime = 0.0f;
+
+        /// <summary>
+        /// previous direction value. Zero denotes unset
+        /// </summary>
+        private float previousYDirection = 0.0f;
+
+        /// <summary>
+        /// previous position value. Zero denotes unset
+        /// </summary>
+        private Vector3 previousPosition = new Vector3(0.0f, 0.0f, 0.0f);
+
+        /// <summary>
+        /// the currently set direction of the worldTransform
+        /// </summary>
+        private float lerpDirection = 0.0f;
+
+        /// <summary>
+        /// the currently set position of the worldTransform
+        /// </summary>
+        private Vector3 lerpPosition = new Vector3(0.0f, 0.0f, 0.0f);
+
+        /// <summary>
+        /// Update world transform object over some time 
+        /// to make smoother transition between world position updates.
+        /// </summary>
+        [SerializeField]
+        private float updateTransformTime = 0.0f;
+
+        /// <summary>
+        /// The S2Cell id for the GeoCamera, this should be the same as the one calculated for GeoAnchorManager.
+        /// </summary>
+        private long s2CellId = 0;
 
         /// <summary>
         /// Gets the world transform. This is the transform that takes the camera
@@ -90,33 +128,13 @@ namespace ScapeKitUnity
         }
 
         /// <summary>
-        /// Gets or sets the ar camera
-        /// </summary>
-        public Camera TheCamera
-        {
-            get
-            {
-                return theCamera;
-            }
-
-            set
-            {
-                theCamera = value;
-            }
-        }
-
-        /// <summary>
         /// used to save the camera's position and orientation at the point the Scape Measurements are taken
         /// </summary>
         public void HoldCameraPose()
         {
-            positionAtScapeMeasurements = theCamera.transform.localPosition;
+            positionAtScapeMeasurements = transform.localPosition;
 
-        #if UNITY_IPHONE
-            positionAtScapeMeasurements.y = 0.0f;
-        #endif
-
-            rotationAtScapeMeasurements = theCamera.transform.localRotation.eulerAngles;
+            rotationAtScapeMeasurements = transform.localRotation.eulerAngles;
         }
 
         /// <summary>
@@ -125,6 +143,9 @@ namespace ScapeKitUnity
         public void Start() 
         {
             SetupCameraParent();
+
+            ScapeClient.Instance.ScapeSession.ScapeMeasurementsEvent += OnScapeMeasurementsEvent;
+            ScapeClient.Instance.ScapeSession.ScapeMeasurementsRequested += OnScapeMeasurementsRequested;
         }
 
         /// <summary>
@@ -152,18 +173,37 @@ namespace ScapeKitUnity
         /// </param>        
         public void SynchronizeARCamera(LatLng coordinates, float heading, float altitude) 
         {
+            if (groundTracker) 
+            {
+                bool success = false;
+                float height = groundTracker.GetGroundHeight(out success);
+                if (success) 
+                {
+                    altitude = -height;
+                }
+                else 
+                {
+                    ScapeLogging.LogError(message: "groundTracker.getHeight not found before ScapeMeasurement, falling back to Scape's RawMeasurementEstimate");
+                }
+            }
+
             ScapeLogging.LogDebug(message: "SynchronizeARCamera() LatLngCoordinates = " + ScapeUtils.CoordinatesToString(coordinates));
 
             ScapeLogging.LogDebug(message: "SynchronizeARCamera() ARHeading = " + rotationAtScapeMeasurements.y);
             ScapeLogging.LogDebug(message: "SynchronizeARCamera() ARPosition = " + positionAtScapeMeasurements.ToString());
-         
+            
+            if (s2CellId == 0) 
+            {
+                FindS2CellId(coordinates);
+            }
+
             // the Unity position the camera should be in, that is it's position relative to the S2 cell based on it's
             // gps coordinates
             cameraS2Position = ScapeUtils.WgsToLocal(
                                                     coordinates.Latitude, 
                                                     coordinates.Longitude, 
                                                     altitude, 
-                                                    GeoAnchorManager.Instance.S2CellId);
+                                                    s2CellId);
             
             // the world transform direction corrects the camera's Heading to be relative to North.
             worldTransformDirection = heading - rotationAtScapeMeasurements.y;
@@ -181,7 +221,45 @@ namespace ScapeKitUnity
             worldTransformPosition = cameraS2Position - positionAtScapeMeasurementsRotated;
             ScapeLogging.LogDebug(message: "SynchronizeARCamera() worldTransformPosition = " + worldTransformPosition.ToString());
 
-            updateRoot = true;
+            if (updateWorldTransform)
+            {
+                previousYDirection = lerpDirection;
+                previousPosition = lerpPosition;
+            }
+
+            updateWorldTransform = true;
+
+            updateStartTime = Time.time;
+        }
+
+        /// <summary>
+        /// Synchronize camera from scape measurements
+        /// </summary>
+        /// <param name="scapeMeasurements">
+        /// The scapeMesurements struct returned from the API
+        /// </param>
+        private void OnScapeMeasurementsEvent(ScapeMeasurements scapeMeasurements)
+        {
+            if (scapeMeasurements.MeasurementsStatus == ScapeMeasurementStatus.ResultsFound) 
+            {
+                SynchronizeARCamera(
+                                    scapeMeasurements.LatLng, 
+                                    (float)scapeMeasurements.Heading, 
+                                    (float)scapeMeasurements.RawHeightEstimate);
+            }
+        }
+
+        /// <summary>
+        /// At the point the core requests the event (this can be later than the client requesting it due
+        /// to the time taken to acquire and process the image), the camera records it's current position in
+        /// AR space.
+        /// </summary>
+        /// <param name="timestamp">
+        /// The timestamp at which the measurement is being taken, ignored here
+        /// </param>
+        private void OnScapeMeasurementsRequested(double timestamp)
+        {
+            HoldCameraPose();
         }
 
         /// <summary>
@@ -189,16 +267,11 @@ namespace ScapeKitUnity
         /// </summary>
         private void SetupCameraParent()
         {
-            if (!theCamera) 
-            {
-                theCamera = Camera.main;
-            }
-
-            var cameraParent = theCamera.transform.parent;
+            var cameraParent = transform.parent;
 
             worldTransformObject = new GameObject();
 
-            theCamera.transform.SetParent(worldTransformObject.transform, false);
+            transform.SetParent(worldTransformObject.transform, false);
 
             if (cameraParent) 
             {
@@ -211,16 +284,31 @@ namespace ScapeKitUnity
         /// </summary>
         private void UpdateWorldTransform() 
         {
-            if (updateRoot) 
+            if (updateWorldTransform) 
             {
-                PrintError();
-
                 ScapeLogging.LogDebug(message: "GeoCameraComponent::UpdateWorldTransform()");
 
-                worldTransformObject.transform.rotation = Quaternion.AngleAxis(worldTransformDirection, Vector3.up);
-                worldTransformObject.transform.position = worldTransformPosition;
-                
-                updateRoot = false;
+                float elapsed = Time.time - updateStartTime;
+
+                float lerpDirection = worldTransformDirection;
+                Vector3 lerpPosition = worldTransformPosition;
+                if (elapsed >= updateTransformTime || previousYDirection == 0.0f) 
+                {
+                    previousYDirection = worldTransformDirection;
+                    previousPosition = worldTransformPosition;
+                    updateWorldTransform = false;
+                }
+                else 
+                {
+                    float lerp = elapsed / updateTransformTime;
+                    lerpDirection = Mathf.Lerp(previousYDirection, worldTransformDirection, lerp);
+                    lerpPosition = Vector3.Lerp(previousPosition, worldTransformPosition, lerp);
+                }
+
+                worldTransformObject.transform.rotation = Quaternion.AngleAxis(lerpDirection, Vector3.up);
+                worldTransformObject.transform.position = lerpPosition;
+
+                PrintError();
             }
         }
 
@@ -230,7 +318,18 @@ namespace ScapeKitUnity
         private void PrintError() 
         {
             ScapeLogging.LogDebug(message: "CameraS2Position = " + cameraS2Position.ToString());
-            ScapeLogging.LogDebug(message: "CameraCWPosition = " + theCamera.transform.position.ToString());
+            ScapeLogging.LogDebug(message: "CameraCWPosition = " + transform.position.ToString());
+        }
+
+        /// <summary>
+        /// Identify which S2Cell will be used for the root. 
+        /// </summary>
+        /// <param name="latLng">
+        /// the LatLng coordinates from the first scape measurement
+        /// </param>
+        private void FindS2CellId(LatLng latLng) 
+        {
+            s2CellId = ScapeUtils.CellIdForWgs(latLng.Latitude, latLng.Longitude, ScapeUtils.S2CellLevel);
         }
     }
 }

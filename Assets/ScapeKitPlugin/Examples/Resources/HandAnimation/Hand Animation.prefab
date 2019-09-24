@@ -67,7 +67,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 58f32fb24e9e04466845025d41f60e05, type: 3}
+  m_Texture: {fileID: 2800000, guid: 547faf6900f67458d9facbcb64877d9a, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -82,11 +82,11 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 248654374091050895}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 9070914d75707431c8ebef8b92960dda, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: fd55a207fae2748f0b4f6866c995bf02, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 8400000, guid: 4969ba0220e83c94a926ea4264cdff4a, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TimeReference: 0
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: _MainTex
@@ -115,7 +115,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 248654374091050895}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c46dafe9f93ea4a638b8f23c38039c63, type: 3}
+  m_Script: {fileID: 11500000, guid: a3a08be4621984d6c89172263314b77c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   RawImage: {fileID: 207506033511342635}

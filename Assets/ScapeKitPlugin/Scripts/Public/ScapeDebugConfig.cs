@@ -98,18 +98,21 @@ namespace ScapeKitUnity
         /// <summary>
         /// Apply the debug config options to the DebugSession object 
         /// </summary>
-        public void ConfigureDebugSession() 
+        /// <param name="debugSession">
+        /// pass in a debugSession to be configured by this config object
+        /// </param>
+        public void ConfigureDebugSession(DebugSession debugSession) 
         {
-            ScapeClient.Instance.DebugSession.SetLogConfig(logLevel, logOutput);
+            debugSession.SetLogConfig(logLevel, logOutput);
 
             if (debugMockGPS) 
             {
-                ScapeClient.Instance.DebugSession.MockGPSCoordinates(mockGPSLatLng.Latitude, mockGPSLatLng.Longitude);
+                debugSession.MockGPSCoordinates(mockGPSLatLng.Latitude, mockGPSLatLng.Longitude);
             }
             
             if (saveImages)
             {
-                ScapeClient.Instance.DebugSession.SaveImages(saveImages);
+                debugSession.SaveImages(saveImages);
             }
         }
 

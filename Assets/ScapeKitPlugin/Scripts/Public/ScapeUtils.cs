@@ -21,6 +21,11 @@ namespace ScapeKitUnity
     public class ScapeUtils 
     {
         /// <summary>
+        /// the S2cell Level used thourgh Scape Geo System
+        /// M</summary>
+        public const int S2CellLevel = 19;
+
+        /// <summary>
         /// return coordinates object as string with comma separator
         /// </summary>
         /// <param name="coords">
@@ -54,7 +59,7 @@ namespace ScapeKitUnity
         /// </returns>
         public static double MetersBetweenCoordinates(double latitude1, double longitude1, double latitude2, double longitude2) 
         {
-            return ScapeCInterface._metersBetweenCoordinates(latitude1, longitude1, latitude2, longitude2);
+            return ScapeNative._metersBetweenCoordinates(latitude1, longitude1, latitude2, longitude2);
         }
 
         /// <summary>
@@ -77,7 +82,7 @@ namespace ScapeKitUnity
         /// </returns>
         public static double AngleBetweenCoordinates(double latitude1, double longitude1, double latitude2, double longitude2) 
         {
-            return ScapeCInterface._angleBetweenCoordinates(latitude1, longitude1, latitude2, longitude2);
+            return ScapeNative._angleBetweenCoordinates(latitude1, longitude1, latitude2, longitude2);
         }
 
         /// <summary>
@@ -104,7 +109,7 @@ namespace ScapeKitUnity
             var vec3 = new Vector3();
 
             double[] result = new double[3];
-            ScapeCInterface._wgsToLocal(latitude, longitude, altitude, s2CellId, result);
+            ScapeNative._wgsToLocal(latitude, longitude, altitude, s2CellId, result);
             vec3.Set((float)result[0], (float)result[1], (float)result[2]);
 
             return vec3;
@@ -131,7 +136,7 @@ namespace ScapeKitUnity
             LatLng coords = new LatLng();
 
             double[] result = new double[3];
-            ScapeCInterface._localToWgs(localVec3.x, localVec3.y, localVec3.z, s2CellId, result);
+            ScapeNative._localToWgs(localVec3.x, localVec3.y, localVec3.z, s2CellId, result);
             coords = new LatLng() 
             {
                 Latitude = result[0],
@@ -162,7 +167,7 @@ namespace ScapeKitUnity
         /// </returns>
         public static long CellIdForWgs(double latitude, double longitude, int s2CellLevel) 
         {
-            return ScapeCInterface._cellIdForWgs(latitude, longitude, s2CellLevel);
+            return ScapeNative._cellIdForWgs(latitude, longitude, s2CellLevel);
         }
     }
 }

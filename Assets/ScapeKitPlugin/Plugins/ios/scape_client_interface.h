@@ -61,6 +61,7 @@ extern "C" {
     char os_version[SmallStringSize];
     char api_version[SmallStringSize];
     char write_directory[SmallStringSize];
+    char sdk_version[SmallStringSize];
   };
 
   EXPORT_DLL void* citf_createClient(const char* api_key, int with_debug);

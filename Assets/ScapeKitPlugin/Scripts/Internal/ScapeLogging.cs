@@ -15,21 +15,21 @@ namespace ScapeKitUnity
     
     public static class ScapeLogging
     {
-        public static void LogDebug(string tag = "SCKUnity_", string message = "")
+        public static void LogDebug(string message = "", string tag = "SCKUnity")
         {
             if(ScapeClient.Instance.IsStarted()) 
             {
-                ScapeCInterface.citf_log((int)LogLevel.LOG_DEBUG, tag, message);
+                ScapeNative.citf_log((int)LogLevel.LOG_DEBUG, tag, message);
             }
             else {
                 Debug.Log(tag + " [Debug] : " + message);
             }
         }
-        public static void LogError(string tag = "SCKUnity_", string message = "")
+        public static void LogError(string message = "", string tag = "SCKUnity")
         {
             if(ScapeClient.Instance.IsStarted()) 
             {
-                ScapeCInterface.citf_log((int)LogLevel.LOG_ERROR, tag, message);
+                ScapeNative.citf_log((int)LogLevel.LOG_ERROR, tag, message);
             }
             else {
                 Debug.Log(tag + " [Error] : " + message);

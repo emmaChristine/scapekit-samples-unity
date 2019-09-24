@@ -29,7 +29,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 7003304665359018140}
+  m_Father: {fileID: 7015231464534614880}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -194,7 +194,7 @@ RectTransform:
   - {fileID: 1306838187194934980}
   - {fileID: 7412584088501686310}
   - {fileID: 6661741677518875385}
-  - {fileID: 7003304665359018140}
+  - {fileID: 7015231464534614880}
   - {fileID: 4871267344973184932}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -377,17 +377,20 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
+    m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3569437671866322065}
@@ -742,9 +745,19 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 2.5
       objectReference: {fileID: 0}
+    - target: {fileID: 207506033511342635, guid: 883377a3a196d4deeaa20fec3fcb8064,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 207506033511342635, guid: 883377a3a196d4deeaa20fec3fcb8064,
+        type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 547faf6900f67458d9facbcb64877d9a, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 883377a3a196d4deeaa20fec3fcb8064, type: 3}
---- !u!224 &7003304665359018140 stripped
+--- !u!224 &7015231464534614880 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 30302152642907135, guid: 883377a3a196d4deeaa20fec3fcb8064,
     type: 3}

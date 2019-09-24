@@ -14,30 +14,82 @@ namespace ScapeKitUnity
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
     using UnityEngine;
+    using UnityEngine.XR.ARFoundation;
     
     /// <summary>
     /// A class to handle the scape session request and response
     /// </summary>
-    public abstract class ScapeSession
+    public class ScapeSession
     {
         /// <summary>
-        /// the static instance
+        /// flag to prevent multiple requests to scapemeasurements
+        /// A request to scapeMeasuremnts is guaranteed to always return
+        /// a signal to OnScapeMeasurementsEvent or OnScapeSessionErrorEvent.
         /// </summary>
-        private static ScapeSession instance = null;
+        private bool scapeMeasurementInProgress = false;
+
+        /// <summary>
+        /// Flag to tell ScapeMeasurementsRequested needs to be clled from main thread
+        /// </summary>
+        private bool doScapeMeasurementsRequested;
+
+        /// <summary>
+        /// the last double returned from core implementation
+        /// </summary>
+        private double lastScapeMeasurementsRequested;
+
+        /// <summary>
+        /// Flag to tell ScapeSessionErrorEvent needs to be clled from main thread
+        /// </summary>
+        private bool doScapeSessionErrorEvent;
+
+        /// <summary>
+        /// the last ScapeSessionError returned from core implementation
+        /// </summary>
+        private ScapeSessionError lastScapeSessionError;
+
+        /// <summary>
+        /// Flag to tell DeviceLocationMeasurementsEvent needs to be clled from main thread
+        /// </summary>
+        private bool doDeviceLocationMeasurementsEvent;
+
+        /// <summary>
+        /// the last LocationMeasurements returned from core implementation
+        /// </summary>
+        private LocationMeasurements lastLocationMeasurements;
+
+        /// <summary>
+        /// Flag to tell DeviceMotionMeasurementsEvent needs to be clled from main thread
+        /// </summary>
+        private bool doDeviceMotionMeasurementsEvent;
+
+        /// <summary>
+        /// the last MotionMeasurements returned from core implementation
+        /// </summary>
+        private MotionMeasurements lastMotionMeasurements;
+
+        /// <summary>
+        /// Flag to tell ScapeMeasurementsEvent needs to be clled from main thread
+        /// </summary>
+        private bool doScapeMeasurementsEvent;
+
+        /// <summary>
+        /// the last ScapeMeasurements returned from core implementation
+        /// </summary>
+        private ScapeMeasurements lastScapeMeasurements;
+
+        /// <summary>
+        /// the native implementation of ScapeSession, supplied by the ScapeClient after it has started
+        /// </summary>
+        private ScapeSessionNative scapeSessionNative = null;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="ScapeSession" /> class
         /// </summary>
         internal ScapeSession()
         {
-            if (instance != null) 
-            {
-                Debug.Log("There should only be one instance of ScapeSession!");
-            }
-
-            instance = this;
         }
-        
+
         /// <summary>
         /// An event that is triggered when a SCape Measurement has been requested
         /// </summary>
@@ -59,29 +111,55 @@ namespace ScapeKitUnity
         public event Action<MotionMeasurements> DeviceMotionMeasurementsEvent;
         
         /// <summary>
-        /// An event that is triggered when the camera transform changes
-        /// </summary>
-        public event Action<List<double>> CameraTransformEvent;
-        
-        /// <summary>
         /// An event that is triggered when a ScapeMeasurement has been returned
         /// </summary>
         public event Action<ScapeMeasurements> ScapeMeasurementsEvent;
 
         /// <summary>
-        /// Gets the static ScapeSession instance
-        /// Should only be used after the ScapeClient has been started.
+        /// The ARCameraManager is needed to acquire the frame to send to scapekit's backend 
         /// </summary>
-        public static ScapeSession Instance 
+        /// <param name="arCameraManager">
+        /// The arCameraManager usually attached to the ARCamera
+        /// </param>
+        public virtual void SetCameraManager(ARCameraManager arCameraManager)
         {
-            get 
+            this.scapeSessionNative.SetCameraManager(arCameraManager);
+        }
+
+        /// <summary>
+        /// calls teh appropriate event on the main thread having been reviously received
+        /// from the Scapekit core plugin
+        /// </summary>
+        public void Update()
+        {
+            if (this.doScapeMeasurementsRequested) 
             {
-                return instance;
+                this.doScapeMeasurementsRequested = false;
+                this.ScapeMeasurementsRequested(this.lastScapeMeasurementsRequested);
             }
 
-            private set 
+            if (this.doScapeSessionErrorEvent) 
             {
-                instance = value;
+                this.doScapeSessionErrorEvent = false;
+                this.ScapeSessionErrorEvent(this.lastScapeSessionError);
+            }
+
+            if (this.doDeviceLocationMeasurementsEvent) 
+            {
+                this.doDeviceLocationMeasurementsEvent = false;
+                this.DeviceLocationMeasurementsEvent(this.lastLocationMeasurements);
+            }
+
+            if (this.doDeviceMotionMeasurementsEvent) 
+            {
+                this.doDeviceMotionMeasurementsEvent = false;
+                this.DeviceMotionMeasurementsEvent(this.lastMotionMeasurements);
+            }
+
+            if (this.doScapeMeasurementsEvent) 
+            {
+                this.doScapeMeasurementsEvent = false;
+                this.ScapeMeasurementsEvent(this.lastScapeMeasurements);
             }
         }
 
@@ -91,20 +169,64 @@ namespace ScapeKitUnity
         /// <param name="image">
         /// the image to be sent to the Scape back end
         /// </param>
-        public abstract void GetMeasurements(ScapeSession.ARImage image);
+        public void GetMeasurements(ScapeSession.ARImage image)
+        {
+            if (this.scapeMeasurementInProgress) 
+            {
+                ScapeLogging.LogError("GetMeasuremnts ignored, scapeMeasurements already in progress");
+                return;
+            }
+
+            if (this.scapeSessionNative != null) 
+            {
+                this.scapeMeasurementInProgress = true;
+                this.scapeSessionNative.GetMeasurements(image);
+            }
+            else 
+            {
+                ScapeLogging.LogError("GetMeasurements called before scapeSessionNative initialized");
+            }
+        }
 
         /// <summary>
         /// The public function to request a ScapeMeasurement.
-        /// The underlying implementation should acquire the image.
         /// </summary>
-        public abstract void GetMeasurements();
+        public void GetMeasurements()
+        {
+            if (this.scapeMeasurementInProgress) 
+            {
+                ScapeLogging.LogError("GetMeasuremnts ignored, scapeMeasurements already in progress");
+                return;
+            }
+
+            if (this.scapeSessionNative != null) 
+            {
+                this.scapeMeasurementInProgress = true;
+                this.scapeSessionNative.GetMeasurements();
+            }
+            else 
+            {
+                ScapeLogging.LogError("GetMeasurements called before scapeSessionNative initialized");
+            }
+        }
+
+        /// <summary>
+        /// set the native impl 
+        /// </summary>
+        /// <param name="in_native">
+        /// The native implementation is passed in from the ScapeClient
+        /// </param>
+        internal void SetNative(ScapeSessionNative in_native)
+        {
+            this.scapeSessionNative = in_native;
+            this.scapeSessionNative.SetFrontEnd(this);
+        }
 
         /// <summary>
         /// Destroy the ScapeSession object
         /// </summary>
         internal void Terminate()
         {
-            instance = null;
         }
 
         /// <summary>
@@ -117,7 +239,8 @@ namespace ScapeKitUnity
         {
             if (this.ScapeMeasurementsRequested != null) 
             {
-                this.ScapeMeasurementsRequested(arg);
+                this.doScapeMeasurementsRequested = true;
+                this.lastScapeMeasurementsRequested = arg;
             }
         }
 
@@ -129,9 +252,12 @@ namespace ScapeKitUnity
         /// </param>
         internal virtual void OnScapeSessionErrorEvent(ScapeSessionError arg)
         {
+            this.scapeMeasurementInProgress = false;
+
             if (this.ScapeSessionErrorEvent != null) 
             {
-                this.ScapeSessionErrorEvent(arg);
+                this.doScapeSessionErrorEvent = true;
+                this.lastScapeSessionError = arg;
             }
         }
 
@@ -145,7 +271,8 @@ namespace ScapeKitUnity
         {
             if (this.DeviceLocationMeasurementsEvent != null) 
             {
-                this.DeviceLocationMeasurementsEvent(arg);
+                this.doDeviceLocationMeasurementsEvent = true;
+                this.lastLocationMeasurements = arg;
             }
         }
 
@@ -159,21 +286,8 @@ namespace ScapeKitUnity
         {
             if (this.DeviceMotionMeasurementsEvent != null) 
             {
-                this.DeviceMotionMeasurementsEvent(arg);
-            }
-        }
-
-        /// <summary>
-        /// An internal function to trigger the CameraTransformEvent from the underlying implementation
-        /// </summary>
-        /// <param name="arg">
-        /// The camera transform returned from the ScapeSession 
-        /// </param>
-        internal virtual void OnCameraTransformEvent(List<double> arg)
-        {
-            if (this.CameraTransformEvent != null) 
-            {
-                this.CameraTransformEvent(arg);
+                this.doDeviceMotionMeasurementsEvent = true;
+                this.lastMotionMeasurements = arg;
             }
         }
         
@@ -185,9 +299,12 @@ namespace ScapeKitUnity
         /// </param>
         internal virtual void OnScapeMeasurementsEvent(ScapeMeasurements sm) 
         {
+            this.scapeMeasurementInProgress = false;
+            
             if (this.ScapeMeasurementsEvent != null) 
             {
-                this.ScapeMeasurementsEvent(sm);
+                this.doScapeMeasurementsEvent = true;
+                this.lastScapeMeasurements = sm;
             }
         }
 
