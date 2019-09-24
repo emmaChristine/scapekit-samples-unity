@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/GeoDataAndroid.unity
-    guid: 38eead8537d704fc7b4086a5531dd30e
-  - enabled: 0
-    path: Assets/Scenes/GeoDataIOS.unity
-    guid: 0c591c07fc1f94d47b0fcbb10b210573
+    path: Assets/ScapeKitPlugin/Examples/Scenes/ScapekitARFoundation.unity
+    guid: 7e35be25e788a6fd7a06f189983771cb
   m_configObjects: {}

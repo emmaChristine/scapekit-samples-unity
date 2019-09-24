@@ -62,17 +62,18 @@ namespace ScapeKitUnity
         private bool showLoadingCicles = false;
 
         /// <summary>
-        /// wait until the client has been started before assigning callbacks
+        /// At start register the callbacks to the scape client session events
         /// </summary>
-        private bool scapeClientInited = false;
+        public void Start()
+        {
+            InitScape();
+        }
 
         /// <summary>
         /// if the text has an update do it here on main thread
         /// </summary>
         public void Update()
         {
-            InitScape();
-
             if (updateText) 
             {
                 textField.text = newText;
@@ -95,18 +96,10 @@ namespace ScapeKitUnity
         /// </summary>
         private void InitScape()
         {   
-            if (!scapeClientInited)
-            {
-                if (ScapeClient.Instance.IsStarted()) 
-                {
-                    // Register callbacks
-                    ScapeClient.Instance.ScapeSession.ScapeMeasurementsRequested += ScapeMeasurementsRequested;
-                    ScapeClient.Instance.ScapeSession.ScapeMeasurementsEvent += OnScapeMeasurementsEvent;
-                    ScapeClient.Instance.ScapeSession.ScapeSessionErrorEvent += OnScapeSessionError;
-
-                    scapeClientInited = true;
-                }
-            }
+            // Register callbacks
+            ScapeClient.Instance.ScapeSession.ScapeMeasurementsRequested += ScapeMeasurementsRequested;
+            ScapeClient.Instance.ScapeSession.ScapeMeasurementsEvent += OnScapeMeasurementsEvent;
+            ScapeClient.Instance.ScapeSession.ScapeSessionErrorEvent += OnScapeSessionError;
         }
 
         /// <summary>
@@ -139,7 +132,6 @@ namespace ScapeKitUnity
                     "timestamp: " + scapeMeasurements.Timestamp + "\n" + 
                     "coordinates: " + scapeMeasurements.LatLng.Longitude + " " + scapeMeasurements.LatLng.Latitude + "\n" + 
                     "heading: " + scapeMeasurements.Heading + "\n" +  
-                    "orientation: " + scapeMeasurements.Orientation.X + " " + scapeMeasurements.Orientation.Y + " " + scapeMeasurements.Orientation.Z + " " + scapeMeasurements.Orientation.W + "\n" + 
                     "rawHeightEstimate: " + scapeMeasurements.RawHeightEstimate + "\n" + 
                     "confidenceScore: " + scapeMeasurements.ConfidenceScore + "\n" + 
                     "measurementsStatus: " + scapeMeasurements.MeasurementsStatus + "\n\n";
@@ -148,6 +140,8 @@ namespace ScapeKitUnity
                 setButtonEnabled = true;
                 showLoadingCicles = false;
             }
+
+            ScapeLogging.LogDebug("ScapeSimpleUI::OnScapeMeasurementsEvent()");
         }
 
         /// <summary>
@@ -162,6 +156,9 @@ namespace ScapeKitUnity
             newText = "OnScapeSessionError:\n" + scapeDetails.State + "\n" + scapeDetails.Message + "\n";
             updateText = true;
             showLoadingCicles = false;
+
+            // try again on failure
+            ScapeClient.Instance.TakeMeasurements();
         }
     }
 }
