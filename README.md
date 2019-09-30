@@ -6,7 +6,7 @@ This repo contains the Scapekit SDK.
 
 These samples were built using Unity 2019.1.+.
 
-See Documentation at:
+See documentation at:
 
 https://developer.scape.io/documentation/#/unity/first-unity-scapekit-app.md
 
